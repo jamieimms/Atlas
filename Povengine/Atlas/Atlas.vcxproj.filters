@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{32bc4d0d-6a48-4b72-9615-f59cc4258da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windowing">
+      <UniqueIdentifier>{78e70eba-fc6f-4f91-8e5c-44e7103a0350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windowing\Win32">
+      <UniqueIdentifier>{152e3890-3c9a-4d15-a643-b4285ae5045a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AtlasManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Windowing</Filter>
+    </ClInclude>
+    <ClInclude Include="Win32Window.h">
+      <Filter>Windowing\Win32</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Win32Window.cpp">
+      <Filter>Windowing\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="AtlasManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
