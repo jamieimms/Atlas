@@ -9,7 +9,7 @@ namespace Atlas
 		Window() {}
 		virtual ~Window() {}
 
-		virtual bool createWindow(std::wstring title) = 0;
+		virtual bool createWindow(std::wstring title, unsigned int width, unsigned int height) = 0;
 	};
 
 }

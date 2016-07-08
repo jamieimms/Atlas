@@ -16,11 +16,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	window->setWindowVariables(hInstance, nCmdShow);
 
-	window->createWindow(L"Test");
+	window->createWindow(L"Test", 800, 600);
 
-	//int retVal = atlasManager.start();
+	atlasManager.Initialise();
 
-	int retVal = window->messageLoop();
+	int retVal = atlasManager.start();
 
 	return retVal;
 }

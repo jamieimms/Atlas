@@ -12,7 +12,7 @@ namespace Atlas
 		virtual ~Win32Window();
 
 		void setWindowVariables(HINSTANCE hInstance, int nCmdShow);
-		bool createWindow(std::wstring title);
+		bool createWindow(std::wstring title, unsigned int width, unsigned int height);
 
 		virtual LRESULT wmPaintHandler(WPARAM wParam, LPARAM lParam);
 		virtual LRESULT wmCommandHandler(WPARAM wParam, LPARAM lParam);
@@ -34,7 +34,7 @@ namespace Atlas
 		HWND getWindowHandle();
 		HINSTANCE getInstance() { return _hInstance; }
 
-		int messageLoop();
+		//int messageLoop();
 
 		static LRESULT CALLBACK staticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		LRESULT CALLBACK wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -47,6 +47,9 @@ namespace Atlas
 		int _nCmdShow;
 
 		HWND _hWnd;
+
+		unsigned int _width;
+		unsigned int _height;
 
 	private:
 

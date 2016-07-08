@@ -14,6 +14,12 @@
     <Filter Include="Windowing\Win32">
       <UniqueIdentifier>{152e3890-3c9a-4d15-a643-b4285ae5045a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windowing\Linux">
+      <UniqueIdentifier>{bd18621d-55d2-424b-8b5c-5641c6e716a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windowing\Common">
+      <UniqueIdentifier>{5f4d3e78-bcb9-4e12-bc9b-bd9ba731caeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -25,10 +31,16 @@
     <ClInclude Include="BaseManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Windowing</Filter>
-    </ClInclude>
     <ClInclude Include="Win32Window.h">
+      <Filter>Windowing\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Windowing\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Win32Renderer.h">
+      <Filter>Windowing\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXRenderer.h">
       <Filter>Windowing\Win32</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,6 +50,12 @@
     </ClCompile>
     <ClCompile Include="AtlasManager.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32Renderer.cpp">
+      <Filter>Windowing\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXRenderer.cpp">
+      <Filter>Windowing\Win32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

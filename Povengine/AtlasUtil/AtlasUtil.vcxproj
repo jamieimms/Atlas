@@ -134,11 +134,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AtlasMessageBox.h" />
     <ClInclude Include="AtlasString.h" />
-    <ClInclude Include="Logger.h" />
+    <ClInclude Include="AtlasTime.h" />
+    <ClInclude Include="AtlasLog.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="AtlasLog.cpp" />
+    <ClCompile Include="AtlasMessageBox.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

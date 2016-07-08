@@ -25,15 +25,17 @@ void Win32Window::setWindowVariables(HINSTANCE hInstance, int nCmdShow)
 
 // createWindow
 // Creates a new window with the given title.
-bool Win32Window::createWindow(std::wstring title)
+bool Win32Window::createWindow(std::wstring title, unsigned int width, unsigned int height)
 {
 	if (!initialiseWindow()) {
 		return false;
 	}
 
 	// Create window
+	_width = width;
+	_height = height;
 
-	RECT rc = { 0, 0, 800, 600 };
+	RECT rc = { 0, 0, _width, _height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 	_hWnd = CreateWindow(MAIN_WINDOW_CLASS_NAME.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, _hInstance,
@@ -152,20 +154,20 @@ HWND Win32Window::getWindowHandle()
 }
 
 
-// MessageLoop
-// Static method of the Window class, will be used for our application message loop.
-int Win32Window::messageLoop()
-{
-	// Main message loop
-	MSG msg = { 0 };
-	while (GetMessage(&msg, NULL, 0, 0))
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-
-	return (int)msg.wParam;
-}
+//// MessageLoop
+//// Static method of the Window class, will be used for our application message loop.
+//int Win32Window::messageLoop()
+//{
+//	// Main message loop
+//	MSG msg = { 0 };
+//	while (GetMessage(&msg, NULL, 0, 0))
+//	{
+//		TranslateMessage(&msg);
+//		DispatchMessage(&msg);
+//	}
+//
+//	return (int)msg.wParam;
+//}
 
 
 LRESULT CALLBACK Win32Window::staticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -173,7 +175,7 @@ LRESULT CALLBACK Win32Window::staticWndProc(HWND hWnd, UINT message, WPARAM wPar
 	Win32Window *window;
 
 	if (message == WM_NCCREATE) {
-		// If we're receiving this message then it's the first, so here is where we should set oour
+		// If we're receiving this message then it's the first, so here is where we should set our
 		// user data so we can call the correct instance version of the wndproc.  We've stored the calling
 		// Window in the lParam of the create window.
 		window = (Win32Window *)((LPCREATESTRUCT)lParam)->lpCreateParams;
