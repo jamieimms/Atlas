@@ -138,6 +138,7 @@
     <ClInclude Include="AtlasString.h" />
     <ClInclude Include="AtlasTime.h" />
     <ClInclude Include="AtlasLog.h" />
+    <ClInclude Include="AtlasTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasLog.cpp" />

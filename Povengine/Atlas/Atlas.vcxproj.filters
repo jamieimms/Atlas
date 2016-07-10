@@ -20,6 +20,9 @@
     <Filter Include="Windowing\Common">
       <UniqueIdentifier>{5f4d3e78-bcb9-4e12-bc9b-bd9ba731caeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{74199839-e546-4be7-90be-5b4d01c6606b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -37,11 +40,17 @@
     <ClInclude Include="Window.h">
       <Filter>Windowing\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Win32Renderer.h">
-      <Filter>Windowing\Common</Filter>
-    </ClInclude>
     <ClInclude Include="DirectXRenderer.h">
       <Filter>Windowing\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGLRenderer.h">
+      <Filter>Windowing\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasRenderer.h">
+      <Filter>Windowing\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -51,11 +60,17 @@
     <ClCompile Include="AtlasManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Win32Renderer.cpp">
-      <Filter>Windowing\Common</Filter>
-    </ClCompile>
     <ClCompile Include="DirectXRenderer.cpp">
       <Filter>Windowing\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLRenderer.cpp">
+      <Filter>Windowing\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="AtlasRenderer.cpp">
+      <Filter>Windowing\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

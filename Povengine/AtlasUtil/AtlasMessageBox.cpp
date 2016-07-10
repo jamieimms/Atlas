@@ -5,7 +5,7 @@
 
 using namespace AtlasUtil;
 
-void AtlasMessageBox::ErrorMessageBox(wchar_t* message, wchar_t* title)
+void AtlasMessageBox::ErrorMessageBox(AtlasChar* message, AtlasChar* title)
 {
 #ifdef WIN32
 	

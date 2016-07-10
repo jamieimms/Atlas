@@ -1,10 +1,10 @@
 #pragma once
-#include "Win32Renderer.h"
+#include "AtlasRenderer.h"
 #include <d3d10.h>
 
 namespace Atlas
 {
-	class DirectXRenderer : public Win32Renderer
+	class DirectXRenderer : public AtlasRenderer
 	{
 	public:
 		DirectXRenderer();

@@ -3,13 +3,14 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include "AtlasString.h"
 
 namespace AtlasUtil
 {
 	class AtlasTime
 	{
 	public:
-		static void getCurrentTimeODBC(std::wstring& out)
+		static void getCurrentTimeODBC(AtlasString& out)
 		{
 			std::time_t now = std::time(nullptr);
 			auto local = std::localtime(&now);

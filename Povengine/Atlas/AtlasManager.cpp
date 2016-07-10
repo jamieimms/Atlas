@@ -1,6 +1,7 @@
 #include "AtlasManager.h"
 #include "Win32Window.h"
 #include "DirectXRenderer.h"
+#include "OpenGLRenderer.h"
 #include "../AtlasUtil/AtlasMessageBox.h"
 
 using namespace Atlas;
@@ -12,8 +13,6 @@ AtlasManager::AtlasManager()
 	_log = new AtlasLog(L"Atlas.log", false, 5);
 
 	_log->Debug(L"Atlas Engine Starting");
-
-	AtlasMessageBox::ErrorMessageBox(L"Test", L"Title");
 }
 
 AtlasManager::~AtlasManager()
@@ -59,7 +58,8 @@ bool AtlasManager::Initialise()
 
 	_log->Debug(L"Creating and initialising renderer (DirectX)");
 
-	_renderer = new DirectXRenderer();
+	//_renderer = new DirectXRenderer();
+	_renderer = new OpenGLRenderer();
 	_renderer->Initialise(800, 600, ((Win32Window*)_applicationWindow)->getWindowHandle());
 }
 

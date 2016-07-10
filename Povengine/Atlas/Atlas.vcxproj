@@ -86,7 +86,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d10.lib;</AdditionalDependencies>
+      <AdditionalDependencies>d3d10.lib;OpenGL32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,14 +143,18 @@
     <ClInclude Include="AtlasManager.h" />
     <ClInclude Include="BaseManager.h" />
     <ClInclude Include="DirectXRenderer.h" />
-    <ClInclude Include="Win32Renderer.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="OpenGLRenderer.h" />
+    <ClInclude Include="AtlasRenderer.h" />
     <ClInclude Include="Win32Window.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasManager.cpp" />
     <ClCompile Include="DirectXRenderer.cpp" />
-    <ClCompile Include="Win32Renderer.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="OpenGLRenderer.cpp" />
+    <ClCompile Include="AtlasRenderer.cpp" />
     <ClCompile Include="Win32Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

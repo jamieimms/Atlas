@@ -12,22 +12,37 @@
     <Filter Include="src">
       <UniqueIdentifier>{58c8d79a-0d81-471c-8bb3-d5a2aef0f989}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\UI">
+      <UniqueIdentifier>{d69289f0-b9d5-41c5-b48b-7bf2339764de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\IO">
+      <UniqueIdentifier>{ae579136-a1c1-4d79-ae36-31a50ce84670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Graphics">
+      <UniqueIdentifier>{ab61bc5c-3128-470f-b124-73152837daf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Time">
+      <UniqueIdentifier>{2a488de3-1816-463f-b2ba-2a157efccd93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AtlasString.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasTime.h">
-      <Filter>include</Filter>
+    <ClInclude Include="AtlasMessageBox.h">
+      <Filter>include\UI</Filter>
     </ClInclude>
     <ClInclude Include="AtlasLog.h">
-      <Filter>include</Filter>
+      <Filter>include\IO</Filter>
     </ClInclude>
-    <ClInclude Include="AtlasMessageBox.h">
-      <Filter>include</Filter>
+    <ClInclude Include="AtlasString.h">
+      <Filter>include\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasTime.h">
+      <Filter>include\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasTimer.h">
+      <Filter>include\Time</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
 
 using namespace AtlasUtil;
 
-AtlasLog::AtlasLog(std::wstring outputFileName, bool truncate, int maxSizeMiB)
+AtlasLog::AtlasLog(AtlasString outputFileName, bool truncate, int maxSizeMiB)
 	:_isInitialised(false),_outputFileName(outputFileName), _outFile(nullptr)
 {
 	Initialise(truncate);
@@ -34,13 +34,15 @@ void AtlasLog::Cleanup()
 	_isInitialised = false;
 }
 
-void AtlasLog::Debug(const std::wstring& message)
+void AtlasLog::Debug(const AtlasString& message)
 {
+	// If not built in debug, this method should do nothing
+//#ifdef debug
 	if (!_isInitialised) {
 		return;
 	}
 
-	std::wstring currentTime;
+	AtlasString currentTime;
 	AtlasTime::getCurrentTimeODBC(currentTime);
 	
 	std::wstringstream ss;
@@ -49,15 +51,16 @@ void AtlasLog::Debug(const std::wstring& message)
 	ss << message;
 
 	Log(ss.str());
+//#endif
 }
 
-void AtlasLog::Error(const std::wstring& message)
+void AtlasLog::Error(const AtlasString& message)
 {
 	if (!_isInitialised) {
 		return;
 	}
 
-	std::wstring currentTime;
+	AtlasString currentTime;
 	AtlasTime::getCurrentTimeODBC(currentTime);
 
 	std::wstringstream ss;
@@ -69,7 +72,7 @@ void AtlasLog::Error(const std::wstring& message)
 }
 
 
-void AtlasLog::Log(const std::wstring& message)
+void AtlasLog::Log(const AtlasString& message)
 {
 	std::lock_guard<std::mutex> lock(_outputMutex);
 

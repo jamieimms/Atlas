@@ -14,7 +14,6 @@ Win32Window::Win32Window()
 }
 
 Win32Window::~Win32Window() {
-
 }
 
 void Win32Window::setWindowVariables(HINSTANCE hInstance, int nCmdShow)

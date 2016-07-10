@@ -1,14 +1,14 @@
-#include "Win32Renderer.h"
+#include "AtlasRenderer.h"
 
 using namespace Atlas;
 
-Win32Renderer::Win32Renderer()
+AtlasRenderer::AtlasRenderer()
 	: _initialised(false), _rendererType(AtlasRendererEnum::Unknown)
 {
 
 }
 
-Win32Renderer::~Win32Renderer()
+AtlasRenderer::~AtlasRenderer()
 {
 
 }

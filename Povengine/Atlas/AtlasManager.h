@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseManager.h"
 #include "Window.h"
-#include "Win32Renderer.h"
+#include "AtlasRenderer.h"
 #include "../AtlasUtil/AtlasLog.h"
 
 namespace Atlas
@@ -25,7 +25,7 @@ namespace Atlas
 		// Members
 		Window* _applicationWindow;	// The desktop window we're rendering inside
 
-		Win32Renderer* _renderer;	// The renderer, TODO: abstract this away from platform if possible
+		AtlasRenderer* _renderer;	// The renderer, TODO: abstract this away from platform if possible
 
 		AtlasUtil::AtlasLog* _log;
 	};

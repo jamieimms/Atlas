@@ -11,11 +11,11 @@ namespace Atlas
 	};
 
 
-	class Win32Renderer
+	class AtlasRenderer
 	{
 	public:
-		Win32Renderer();
-		virtual ~Win32Renderer();
+		AtlasRenderer();
+		virtual ~AtlasRenderer();
 
 		virtual bool Initialise(unsigned int width, unsigned int height, HWND hWnd) = 0;
 

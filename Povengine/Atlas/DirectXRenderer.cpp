@@ -90,11 +90,11 @@ void DirectXRenderer::beginRender()
 	// Just clear the backbuffer
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
 	_d3dDevice->ClearRenderTargetView(_renderTargetView, ClearColor);
-	_swapChain->Present(0, 0);
 
 }
 
 void DirectXRenderer::endRender()
 {
+	_swapChain->Present(0, 0);
 
 }
