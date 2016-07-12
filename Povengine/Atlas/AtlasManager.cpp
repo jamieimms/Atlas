@@ -8,7 +8,7 @@ using namespace Atlas;
 using namespace AtlasUtil;
 
 AtlasManager::AtlasManager()
-	:_applicationWindow(nullptr), _renderer(nullptr)
+	:_applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr)
 {
 	_log = new AtlasLog(L"Atlas.log", false, 5);
 
@@ -18,6 +18,10 @@ AtlasManager::AtlasManager()
 AtlasManager::~AtlasManager()
 {
 	_log->Debug(L"Atlas Engine Stopping");
+
+	if (_currentScene != nullptr) {
+		delete _currentScene;
+	}
 
 	if (_renderer != nullptr) {
 		delete _renderer;
@@ -40,11 +44,11 @@ Window* AtlasManager::getWindow()
 	// Get different windows based on platform?
 #ifdef WIN32
 	_log->Debug(L"Creating new (Win32) window");
-	_applicationWindow = new Win32Window();
+	_applicationWindow = new Win32Window(this);
 #endif
 #ifdef __linux__
 	_log->Debug(L"Creating new (Linux) window");
-	_applicationWindow = new LinuxWindow();
+	_applicationWindow = new LinuxWindow(this);
 #endif
 	return _applicationWindow;
 }
@@ -61,6 +65,8 @@ bool AtlasManager::Initialise()
 	//_renderer = new DirectXRenderer();
 	_renderer = new OpenGLRenderer();
 	_renderer->Initialise(800, 600, ((Win32Window*)_applicationWindow)->getWindowHandle());
+
+	_currentScene = new Scene();
 }
 
 
@@ -93,6 +99,8 @@ void AtlasManager::frameProcessing()
 	_renderer->beginRender();
 
 	// Render game objects
+
+	_currentScene->DrawScene();
 
 	_renderer->endRender();
 

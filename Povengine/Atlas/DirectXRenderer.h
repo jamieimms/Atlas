@@ -11,11 +11,15 @@ namespace Atlas
 		~DirectXRenderer();
 
 		bool Initialise(unsigned int width, unsigned int height, HWND hwnd);
+		void Resize(unsigned int width, unsigned int height);
 
 		void beginRender();
 		void endRender();
 
 	private:
+
+		void Destroy();
+
 
 		D3D10_DRIVER_TYPE       _driverType;
 		ID3D10Device*           _d3dDevice;

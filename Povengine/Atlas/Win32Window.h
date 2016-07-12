@@ -8,7 +8,7 @@ namespace Atlas
 	class Win32Window : public Window
 	{
 	public:
-		Win32Window();
+		Win32Window(AtlasManager* parent);
 		virtual ~Win32Window();
 
 		void setWindowVariables(HINSTANCE hInstance, int nCmdShow);

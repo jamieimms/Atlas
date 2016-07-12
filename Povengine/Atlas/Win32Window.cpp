@@ -1,13 +1,15 @@
 #include <Windows.h>
+#include <cmath>
 #include "Win32Window.h"
+#include "AtlasManager.h"
 
 using namespace Atlas;
 
 std::wstring Win32Window::MAIN_WINDOW_CLASS_NAME = L"AtlasWin32ApplicationClassName";
 
-Win32Window::Win32Window()
+Win32Window::Win32Window(AtlasManager* parent)
+	:Window(parent)
 {
-
 	// Init
 	_hInstance = 0;
 	_hWnd = 0;
@@ -116,6 +118,9 @@ LRESULT Win32Window::wmMouseMoveHandler(WPARAM wParam, LPARAM lParam)
 
 LRESULT Win32Window::wmSizeHandler(WPARAM wParam, LPARAM lParam)
 {
+	auto height = HIWORD(lParam);
+	auto width = LOWORD(lParam);
+
 	return 0;
 }
 

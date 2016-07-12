@@ -10,5 +10,4 @@ AtlasRenderer::AtlasRenderer()
 
 AtlasRenderer::~AtlasRenderer()
 {
-
 }

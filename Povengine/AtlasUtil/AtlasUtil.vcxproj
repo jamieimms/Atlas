@@ -139,10 +139,13 @@
     <ClInclude Include="AtlasTime.h" />
     <ClInclude Include="AtlasLog.h" />
     <ClInclude Include="AtlasTimer.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasLog.cpp" />
     <ClCompile Include="AtlasMessageBox.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

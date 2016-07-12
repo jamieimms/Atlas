@@ -18,6 +18,7 @@ namespace Atlas
 		virtual ~AtlasRenderer();
 
 		virtual bool Initialise(unsigned int width, unsigned int height, HWND hWnd) = 0;
+		virtual void Resize(unsigned int width, unsigned int height) = 0;
 
 		virtual void beginRender() = 0;
 		virtual void endRender() = 0;
@@ -26,10 +27,15 @@ namespace Atlas
 		bool IsInitialised() { return _initialised; }
 		AtlasRendererEnum GetType() { return _rendererType; }
 
-	private:
+	protected:
+
+		virtual void Destroy() = 0;
+
+		unsigned int _width;
+		unsigned int _height;
+
 		AtlasRendererEnum _rendererType;
 
 		bool _initialised;
-
 	};
 }

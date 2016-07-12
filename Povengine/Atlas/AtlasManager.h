@@ -2,6 +2,7 @@
 #include "BaseManager.h"
 #include "Window.h"
 #include "AtlasRenderer.h"
+#include "Scene.h"
 #include "../AtlasUtil/AtlasLog.h"
 
 namespace Atlas
@@ -25,8 +26,10 @@ namespace Atlas
 		// Members
 		Window* _applicationWindow;	// The desktop window we're rendering inside
 
-		AtlasRenderer* _renderer;	// The renderer, TODO: abstract this away from platform if possible
+		AtlasRenderer* _renderer;	// The renderer, could be DirectX (win32 only) or OpenGL (win32 and linux)
 
 		AtlasUtil::AtlasLog* _log;
+
+		Scene* _currentScene;
 	};
 }

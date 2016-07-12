@@ -10,6 +10,12 @@ DirectXRenderer::DirectXRenderer()
 
 DirectXRenderer::~DirectXRenderer()
 {
+	Destroy();
+}
+
+void DirectXRenderer::Destroy()
+{
+	_initialised = false;
 	if (_d3dDevice) _d3dDevice->ClearState();
 
 	if (_renderTargetView) _renderTargetView->Release();
@@ -20,6 +26,10 @@ DirectXRenderer::~DirectXRenderer()
 bool DirectXRenderer::Initialise(unsigned int width, unsigned int height, HWND hwnd)
 {
 	HRESULT hr = S_OK;
+	_initialised = false;
+
+	_width = width;
+	_height = height;
 
 	UINT createDeviceFlags = 0;
 //#ifdef _DEBUG
@@ -81,6 +91,7 @@ bool DirectXRenderer::Initialise(unsigned int width, unsigned int height, HWND h
 	vp.TopLeftY = 0;
 	_d3dDevice->RSSetViewports(1, &vp);
 
+	_initialised = true;
 	return true;
 }
 

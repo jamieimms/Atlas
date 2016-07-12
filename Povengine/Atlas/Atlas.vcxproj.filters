@@ -52,6 +52,9 @@
     <ClInclude Include="AtlasRenderer.h">
       <Filter>Windowing\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="AtlasRenderer.cpp">
       <Filter>Windowing\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

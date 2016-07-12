@@ -5,11 +5,18 @@
 using namespace Atlas;
 
 OpenGLRenderer::OpenGLRenderer() {
-
+	_rendererType = AtlasRendererEnum::OpenGL;
 }
 
 OpenGLRenderer::~OpenGLRenderer()
 {
+	Destroy();
+}
+
+void OpenGLRenderer::Destroy()
+{
+	_initialised = false;
+
 #ifdef WIN32
 
 	wglMakeCurrent(_deviceContext, NULL);
@@ -25,6 +32,11 @@ OpenGLRenderer::~OpenGLRenderer()
 
 bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, HWND hwnd)
 {
+	_width = width;
+	_height = height;
+
+	_initialised = false;
+
 #ifdef WIN32
 	_deviceContext = GetDC(hwnd);
 	/*      Pixel format index
@@ -70,11 +82,40 @@ bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, HWND hw
 	// Linux init code goes here
 #endif
 
+	_initialised = true;
 	return true;
+}
+
+void OpenGLRenderer::Resize(unsigned int width, unsigned int height)
+{
+	_width = width;
+	_height = height;
+
+#ifdef WIN32
+	glViewport(0, 0, _width, _height);
+
+	/*      Set current Matrix to projection*/
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity(); //reset projection matrix
+
+					  /*      Time to calculate aspect ratio of
+					  our window.
+					  */
+	//gluPerspective(54.0f, (GLfloat)width / (GLfloat)height, 1.0f, 1000.0f);
+
+	glMatrixMode(GL_MODELVIEW); //set modelview matrix
+	glLoadIdentity(); //reset modelview matrix
+
+#endif
+#ifdef __linux__
+#endif
+
 }
 
 void OpenGLRenderer::beginRender()
 {
+#ifdef WIN32
+
 	glEnable(GL_DEPTH_TEST);
 
 	glClearColor(0.5f, 0.125f, 0.3f, 1.0f);
@@ -82,9 +123,23 @@ void OpenGLRenderer::beginRender()
 	glLoadIdentity();
 
 	glFlush();
+
+#endif
+#ifdef __linux__
+
+
+#endif
 }
 
 void OpenGLRenderer::endRender()
 {
+#ifdef WIN32
+
 	SwapBuffers(_deviceContext);
+
+#endif
+#ifdef __linux__
+
+
+#endif
 }
