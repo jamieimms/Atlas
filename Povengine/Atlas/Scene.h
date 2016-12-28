@@ -1,24 +1,18 @@
 #pragma once
-#include "..\AtlasUtil\Triangle.h"
+#include <list>
+
+#include "../AtlasUtil/IRenderable.h"
 
 namespace Atlas
 {
-	// Scene
-	//
-	//	The scene class contains all the elements currently being displayed etc.
-	//
-
 	class Scene
 	{
 	public:
-		Scene();
-		~Scene();
+		void LoadScene();
+		void UnloadScene();
 
 		void DrawScene();
-
 	private:
-
-		AtlasUtil::Primitives::Triangle _triangle;
-
+		std::list<IRenderable*> _entities;
 	};
 }

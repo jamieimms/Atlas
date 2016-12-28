@@ -92,7 +92,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Atlas.lib;AtlasUtil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Atlas.lib;AtlasUtil.lib;AtlasAPI.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>S:\Development\Povengine\Povengine\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

@@ -82,6 +82,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -134,18 +138,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AtlasColour.h" />
     <ClInclude Include="AtlasMessageBox.h" />
-    <ClInclude Include="AtlasString.h" />
-    <ClInclude Include="AtlasTime.h" />
     <ClInclude Include="AtlasLog.h" />
     <ClInclude Include="AtlasTimer.h" />
-    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasLog.cpp" />
     <ClCompile Include="AtlasMessageBox.cpp" />
-    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

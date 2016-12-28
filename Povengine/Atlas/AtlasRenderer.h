@@ -19,6 +19,7 @@ namespace Atlas
 
 		virtual bool Initialise(unsigned int width, unsigned int height, HWND hWnd) = 0;
 		virtual void Resize(unsigned int width, unsigned int height) = 0;
+		virtual void SetShader(unsigned int programID) = 0;
 
 		virtual void beginRender() = 0;
 		virtual void endRender() = 0;

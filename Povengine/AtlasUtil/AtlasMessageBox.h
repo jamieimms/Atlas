@@ -1,5 +1,4 @@
 #pragma once
-#include "AtlasString.h"
 
 namespace AtlasUtil
 {
@@ -7,7 +6,7 @@ namespace AtlasUtil
 	{
 
 	public:
-		static void ErrorMessageBox(AtlasChar* message, AtlasChar* title);
+		static void ErrorMessageBox(char* message, char* title);
 
 	};
 }

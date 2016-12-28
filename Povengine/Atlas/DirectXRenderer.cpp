@@ -3,7 +3,7 @@
 using namespace Atlas;
 
 DirectXRenderer::DirectXRenderer()
-	: _driverType(D3D10_DRIVER_TYPE_NULL), _d3dDevice(nullptr), _swapChain(nullptr), _renderTargetView(nullptr)
+	: _driverType(D3D_DRIVER_TYPE_NULL), _d3dDevice(nullptr), _swapChain(nullptr), _renderTargetView(nullptr)
 {
 
 }
@@ -16,10 +16,11 @@ DirectXRenderer::~DirectXRenderer()
 void DirectXRenderer::Destroy()
 {
 	_initialised = false;
-	if (_d3dDevice) _d3dDevice->ClearState();
+	if (_immediateContext) _immediateContext->ClearState();
 
 	if (_renderTargetView) _renderTargetView->Release();
 	if (_swapChain) _swapChain->Release();
+	if (_immediateContext) _immediateContext->Release();
 	if (_d3dDevice) _d3dDevice->Release();
 }
 
@@ -36,12 +37,19 @@ bool DirectXRenderer::Initialise(unsigned int width, unsigned int height, HWND h
 //	createDeviceFlags |= D3D10_CREATE_DEVICE_DEBUG;
 //#endif
 
-	D3D10_DRIVER_TYPE driverTypes[] =
+	D3D_DRIVER_TYPE driverTypes[] =
 	{
-		D3D10_DRIVER_TYPE_HARDWARE,
-		D3D10_DRIVER_TYPE_REFERENCE,
+		D3D_DRIVER_TYPE_HARDWARE,
+		D3D_DRIVER_TYPE_REFERENCE,
 	};
 	UINT numDriverTypes = sizeof(driverTypes) / sizeof(driverTypes[0]);
+
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_1,
+		D3D_FEATURE_LEVEL_11_0,
+	};
+	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
@@ -60,8 +68,8 @@ bool DirectXRenderer::Initialise(unsigned int width, unsigned int height, HWND h
 	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
 	{
 		_driverType = driverTypes[driverTypeIndex];
-		hr = D3D10CreateDeviceAndSwapChain(NULL, _driverType, NULL, createDeviceFlags,
-			D3D10_SDK_VERSION, &sd, &_swapChain, &_d3dDevice);
+		hr = D3D11CreateDeviceAndSwapChain(nullptr, _driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
+			D3D11_SDK_VERSION, &sd, &_swapChain, &_d3dDevice, &_featureLevel, &_immediateContext);
 		if (SUCCEEDED(hr))
 			break;
 	}
@@ -69,8 +77,8 @@ bool DirectXRenderer::Initialise(unsigned int width, unsigned int height, HWND h
 		return false;
 
 	// Create a render target view
-	ID3D10Texture2D* pBackBuffer;
-	hr = _swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*)&pBackBuffer);
+	ID3D11Texture2D* pBackBuffer;
+	hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 	if (FAILED(hr))
 		return false;
 
@@ -79,17 +87,17 @@ bool DirectXRenderer::Initialise(unsigned int width, unsigned int height, HWND h
 	if (FAILED(hr))
 		return false;
 
-	_d3dDevice->OMSetRenderTargets(1, &_renderTargetView, NULL);
+	_immediateContext->OMSetRenderTargets(1, &_renderTargetView, nullptr);
 
 	// Setup the viewport
-	D3D10_VIEWPORT vp;
+	D3D11_VIEWPORT vp;
 	vp.Width = width;
 	vp.Height = height;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	_d3dDevice->RSSetViewports(1, &vp);
+	_immediateContext->RSSetViewports(1, &vp);
 
 	_initialised = true;
 	return true;
@@ -100,12 +108,17 @@ void DirectXRenderer::beginRender()
 {
 	// Just clear the backbuffer
 	float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
-	_d3dDevice->ClearRenderTargetView(_renderTargetView, ClearColor);
+	_immediateContext->ClearRenderTargetView(_renderTargetView, ClearColor);
 
 }
 
 void DirectXRenderer::endRender()
 {
 	_swapChain->Present(0, 0);
+
+}
+
+void DirectXRenderer::Resize(unsigned int width, unsigned int height)
+{
 
 }

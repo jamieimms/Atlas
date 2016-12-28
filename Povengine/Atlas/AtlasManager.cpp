@@ -1,23 +1,36 @@
 #include "AtlasManager.h"
+
+#include <sstream>
+#include <string>
+
 #include "Win32Window.h"
 #include "DirectXRenderer.h"
 #include "OpenGLRenderer.h"
 #include "../AtlasUtil/AtlasMessageBox.h"
+#include "../AtlasAPI/AtlasAPIHelper.h"
 
 using namespace Atlas;
 using namespace AtlasUtil;
 
 AtlasManager::AtlasManager()
-	:_applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr)
+	:_name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr)//, _currentScene(nullptr)
 {
-	_log = new AtlasLog(L"Atlas.log", false, 5);
+	std::stringstream fmt;
+	fmt << AtlasAPI::AtlasAPIHelper::GetUserDataPath() << AtlasAPI::AtlasAPIHelper::GetPathSeparator() << _name;
+	_mainDir = fmt.str();
+	fmt << AtlasAPI::AtlasAPIHelper::GetPathSeparator() << _name << ".log";
 
-	_log->Debug(L"Atlas Engine Starting");
+	AtlasAPI::AtlasAPIHelper::EnsureDirectory(_mainDir);
+	_log = new AtlasLog(fmt.str(), false, 5);
+
+	_log->Debug("Atlas Engine Starting");
+
+	_shaderManager = new ShaderManager(_log, _mainDir);
 }
 
 AtlasManager::~AtlasManager()
 {
-	_log->Debug(L"Atlas Engine Stopping");
+	_log->Debug("Atlas Engine Stopping");
 
 	if (_currentScene != nullptr) {
 		delete _currentScene;
@@ -41,13 +54,13 @@ Window* AtlasManager::getWindow()
 		return _applicationWindow;
 	}
 
-	// Get different windows based on platform?
-#ifdef WIN32
-	_log->Debug(L"Creating new (Win32) window");
+	// Get different windows based on platform, currently only Win32
+#ifdef _WIN32
+	_log->Debug("Creating new (Win32) window");
 	_applicationWindow = new Win32Window(this);
 #endif
 #ifdef __linux__
-	_log->Debug(L"Creating new (Linux) window");
+	_log->Debug("Creating new (Linux) window");
 	_applicationWindow = new LinuxWindow(this);
 #endif
 	return _applicationWindow;
@@ -60,13 +73,22 @@ bool AtlasManager::Initialise()
 		return false;
 	}
 
-	_log->Debug(L"Creating and initialising renderer (DirectX)");
+	_log->Debug("Creating and initialising renderer (DirectX)");
 
 	//_renderer = new DirectXRenderer();
+
 	_renderer = new OpenGLRenderer();
 	_renderer->Initialise(800, 600, ((Win32Window*)_applicationWindow)->getWindowHandle());
 
 	_currentScene = new Scene();
+	_currentScene->LoadScene();
+
+	std::string vertexShader = "S:\\Development\\Povengine\\Povengine\\Debug\\vertexshader.glsl";
+	std::string fragShader = "S:\\Development\\Povengine\\Povengine\\Debug\\fragmentshader.glsl";
+
+	_shaderManager->CreateShaderProgram(vertexShader, fragShader);
+
+	return true;
 }
 
 
@@ -97,11 +119,11 @@ void AtlasManager::frameProcessing()
 	// Update game state
 
 	_renderer->beginRender();
+	_renderer->SetShader(_shaderManager->GetShaderProgramID());
 
 	// Render game objects
-
 	_currentScene->DrawScene();
 
-	_renderer->endRender();
 
+	_renderer->endRender();
 }

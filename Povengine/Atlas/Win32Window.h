@@ -12,7 +12,7 @@ namespace Atlas
 		virtual ~Win32Window();
 
 		void setWindowVariables(HINSTANCE hInstance, int nCmdShow);
-		bool createWindow(std::wstring title, unsigned int width, unsigned int height);
+		bool createWindow(std::string title, unsigned int width, unsigned int height);
 
 		virtual LRESULT wmPaintHandler(WPARAM wParam, LPARAM lParam);
 		virtual LRESULT wmCommandHandler(WPARAM wParam, LPARAM lParam);

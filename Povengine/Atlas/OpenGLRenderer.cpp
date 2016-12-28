@@ -1,6 +1,7 @@
 #include "OpenGLRenderer.h"
+#define GLEW_STATIC
+#include "glew.h"
 #include <gl/GL.h>
-#include <gl/GLU.h>
 
 using namespace Atlas;
 
@@ -17,7 +18,7 @@ void OpenGLRenderer::Destroy()
 {
 	_initialised = false;
 
-#ifdef WIN32
+#ifdef _WIN32
 
 	wglMakeCurrent(_deviceContext, NULL);
 	wglDeleteContext(_renderContext);
@@ -37,7 +38,7 @@ bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, HWND hw
 
 	_initialised = false;
 
-#ifdef WIN32
+#ifdef _WIN32
 	_deviceContext = GetDC(hwnd);
 	/*      Pixel format index
 	*/
@@ -82,16 +83,21 @@ bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, HWND hw
 	// Linux init code goes here
 #endif
 
+	auto result = glewInit();
+
+	_useVer45 = glewIsSupported("GL_VERSION_4_5");
+
 	_initialised = true;
 	return true;
 }
+
 
 void OpenGLRenderer::Resize(unsigned int width, unsigned int height)
 {
 	_width = width;
 	_height = height;
 
-#ifdef WIN32
+#ifdef _WIN32
 	glViewport(0, 0, _width, _height);
 
 	/*      Set current Matrix to projection*/
@@ -114,7 +120,7 @@ void OpenGLRenderer::Resize(unsigned int width, unsigned int height)
 
 void OpenGLRenderer::beginRender()
 {
-#ifdef WIN32
+#ifdef _WIN32
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -133,7 +139,7 @@ void OpenGLRenderer::beginRender()
 
 void OpenGLRenderer::endRender()
 {
-#ifdef WIN32
+#ifdef _WIN32
 
 	SwapBuffers(_deviceContext);
 
@@ -142,4 +148,10 @@ void OpenGLRenderer::endRender()
 
 
 #endif
+}
+
+///
+void OpenGLRenderer::SetShader(unsigned int shaderProgramID)
+{
+	glUseProgram(shaderProgramID);
 }

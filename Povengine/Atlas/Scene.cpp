@@ -1,19 +1,30 @@
 #include "Scene.h"
+#include "glew.h"
+#include "Primitive.h"
 
 using namespace Atlas;
 
-Scene::Scene()
-	: _triangle(0, 0, 0)
+///
+void Scene::LoadScene()
 {
-
+	Primitive* t = new Primitive();
+	_entities.push_back(t);
 }
 
-Scene::Scene()
+///
+void Scene::UnloadScene()
 {
-
+	for (auto i : _entities)
+	{
+		delete i;
+	}
 }
 
+///
 void Scene::DrawScene()
 {
-
+	for (auto i : _entities)
+	{
+		i->Render();
+	}
 }

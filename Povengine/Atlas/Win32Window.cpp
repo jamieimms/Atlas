@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Win32Window.h"
 #include "AtlasManager.h"
+#include "../AtlasAPI/AtlasAPIHelper.h"
 
 using namespace Atlas;
 
@@ -26,7 +27,7 @@ void Win32Window::setWindowVariables(HINSTANCE hInstance, int nCmdShow)
 
 // createWindow
 // Creates a new window with the given title.
-bool Win32Window::createWindow(std::wstring title, unsigned int width, unsigned int height)
+bool Win32Window::createWindow(std::string title, unsigned int width, unsigned int height)
 {
 	if (!initialiseWindow()) {
 		return false;
@@ -36,9 +37,11 @@ bool Win32Window::createWindow(std::wstring title, unsigned int width, unsigned 
 	_width = width;
 	_height = height;
 
+	std::wstring w32Title = L"Atlas Engine";
+
 	RECT rc = { 0, 0, _width, _height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	_hWnd = CreateWindow(MAIN_WINDOW_CLASS_NAME.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW,
+	_hWnd = CreateWindow(MAIN_WINDOW_CLASS_NAME.c_str(), w32Title.c_str(), WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, _hInstance,
 		this);
 	if (!_hWnd) {
@@ -156,22 +159,6 @@ HWND Win32Window::getWindowHandle()
 {
 	return _hWnd;
 }
-
-
-//// MessageLoop
-//// Static method of the Window class, will be used for our application message loop.
-//int Win32Window::messageLoop()
-//{
-//	// Main message loop
-//	MSG msg = { 0 };
-//	while (GetMessage(&msg, NULL, 0, 0))
-//	{
-//		TranslateMessage(&msg);
-//		DispatchMessage(&msg);
-//	}
-//
-//	return (int)msg.wParam;
-//}
 
 
 LRESULT CALLBACK Win32Window::staticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

@@ -23,6 +23,15 @@
     <Filter Include="Entities">
       <UniqueIdentifier>{74199839-e546-4be7-90be-5b4d01c6606b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{8efd63ec-2131-4b74-824a-c486db2ac1a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Graphics">
+      <UniqueIdentifier>{4cf6213e-ba29-4775-a1a9-e42f1fe6ba86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Shapes">
+      <UniqueIdentifier>{19cb1167-ec5d-450e-9147-d314a7cfb30c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -43,9 +52,6 @@
     <ClInclude Include="DirectXRenderer.h">
       <Filter>Windowing\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="OpenGLRenderer.h">
       <Filter>Windowing\Win32</Filter>
     </ClInclude>
@@ -53,6 +59,15 @@
       <Filter>Windowing\Common</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXEntity.h">
+      <Filter>Game\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Game\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
       <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
@@ -66,16 +81,22 @@
     <ClCompile Include="DirectXRenderer.cpp">
       <Filter>Windowing\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="OpenGLRenderer.cpp">
       <Filter>Windowing\Win32</Filter>
     </ClCompile>
     <ClCompile Include="AtlasRenderer.cpp">
       <Filter>Windowing\Common</Filter>
     </ClCompile>
+    <ClCompile Include="DirectXEntity.cpp">
+      <Filter>Game\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Game\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="Scene.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>

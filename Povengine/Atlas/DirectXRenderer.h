@@ -1,6 +1,6 @@
 #pragma once
 #include "AtlasRenderer.h"
-#include <d3d10.h>
+#include <d3d11.h>
 
 namespace Atlas
 {
@@ -16,15 +16,22 @@ namespace Atlas
 		void beginRender();
 		void endRender();
 
+		ID3D11Device* GetDevice() { return _d3dDevice; }
+		ID3D11DeviceContext* GetContext() { return _immediateContext; }
+
 	private:
 
 		void Destroy();
 
+		D3D_FEATURE_LEVEL		_featureLevel;
 
-		D3D10_DRIVER_TYPE       _driverType;
-		ID3D10Device*           _d3dDevice;
+
+		D3D_DRIVER_TYPE       _driverType;
+		ID3D11Device*           _d3dDevice;
 		IDXGISwapChain*         _swapChain;
-		ID3D10RenderTargetView* _renderTargetView;
+		ID3D11RenderTargetView* _renderTargetView;
+		ID3D11DeviceContext*	_immediateContext;
+
 
 	};
 }

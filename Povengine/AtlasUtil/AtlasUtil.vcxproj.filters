@@ -24,9 +24,6 @@
     <Filter Include="include\Time">
       <UniqueIdentifier>{2a488de3-1816-463f-b2ba-2a157efccd93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\Graphics\Primitives">
-      <UniqueIdentifier>{92f27613-5d85-4a53-8082-e847feed0c00}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -38,19 +35,16 @@
     <ClInclude Include="AtlasLog.h">
       <Filter>include\IO</Filter>
     </ClInclude>
-    <ClInclude Include="AtlasString.h">
-      <Filter>include\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasTime.h">
-      <Filter>include\Time</Filter>
-    </ClInclude>
     <ClInclude Include="AtlasTimer.h">
       <Filter>include\Time</Filter>
     </ClInclude>
-    <ClInclude Include="Triangle.h">
-      <Filter>include\Graphics\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
+      <Filter>include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasColour.h">
+      <Filter>include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderable.h">
       <Filter>include\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -60,9 +54,6 @@
     </ClCompile>
     <ClCompile Include="AtlasMessageBox.cpp">
       <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>include\Graphics\Primitives</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

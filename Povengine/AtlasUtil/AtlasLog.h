@@ -1,19 +1,17 @@
 #pragma once
 #include <fstream>
 #include <mutex>
-#include "AtlasString.h"
-
 
 namespace AtlasUtil
 {
 	class AtlasLog
 	{
 	public:
-		AtlasLog(AtlasString outputFileName, bool truncate, int maxSizeMiB);
+		AtlasLog(std::string outputFileName, bool truncate, int maxSizeMiB);
 		~AtlasLog();
 
-		void Debug(const AtlasString& message);
-		void Error(const AtlasString& message);
+		void Debug(const std::string& message);
+		void Error(const std::string& message);
 
 		bool IsInitialised() { return _isInitialised; }
 
@@ -23,11 +21,11 @@ namespace AtlasUtil
 
 		void Cleanup();
 
-		void Log(const AtlasString& message);
+		void Log(const std::string& message);
 
-		AtlasString _outputFileName;
+		std::string _outputFileName;
 
-		std::wofstream* _outFile;
+		std::ofstream* _outFile;
 
 		bool _isInitialised;
 

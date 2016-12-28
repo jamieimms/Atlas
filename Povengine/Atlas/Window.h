@@ -1,5 +1,5 @@
 #pragma once
-#include "..\AtlasUtil\AtlasString.h"
+#include <string>
 
 namespace Atlas
 {
@@ -15,7 +15,7 @@ namespace Atlas
 
 		virtual ~Window() {}
 
-		virtual bool createWindow(AtlasUtil::AtlasString title, unsigned int width, unsigned int height) = 0;
+		virtual bool createWindow(std::string title, unsigned int width, unsigned int height) = 0;
 
 	private:
 

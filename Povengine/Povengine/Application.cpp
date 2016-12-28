@@ -16,7 +16,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	window->setWindowVariables(hInstance, nCmdShow);
 
-	window->createWindow(L"Test", 800, 600);
+	window->createWindow("Atlas Engine", 800, 600);
 
 	atlasManager.Initialise();
 

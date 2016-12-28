@@ -1,10 +1,11 @@
 #include "AtlasLog.h"
 #include <sstream>
-#include "AtlasTime.h"
+#include "..\AtlasAPI\AtlasAPIHelper.h"
 
 using namespace AtlasUtil;
+using namespace std;
 
-AtlasLog::AtlasLog(AtlasString outputFileName, bool truncate, int maxSizeMiB)
+AtlasLog::AtlasLog(string outputFileName, bool truncate, int maxSizeMiB)
 	:_isInitialised(false),_outputFileName(outputFileName), _outFile(nullptr)
 {
 	Initialise(truncate);
@@ -17,7 +18,7 @@ AtlasLog::~AtlasLog()
 
 void AtlasLog::Initialise(bool truncate)
 {
-	_outFile = new std::wofstream(_outputFileName, truncate ? std::ios_base::trunc : std::ios_base::app);
+	_outFile = new std::ofstream(_outputFileName, truncate ? std::ios_base::trunc : std::ios_base::app);
 	if (!_outFile->is_open()) {
 		return;
 	}
@@ -34,45 +35,39 @@ void AtlasLog::Cleanup()
 	_isInitialised = false;
 }
 
-void AtlasLog::Debug(const AtlasString& message)
+void AtlasLog::Debug(const string& message)
 {
-	// If not built in debug, this method should do nothing
+	// If not built in debug, this method should do nothing?
 //#ifdef debug
 	if (!_isInitialised) {
 		return;
 	}
-
-	AtlasString currentTime;
-	AtlasTime::getCurrentTimeODBC(currentTime);
 	
-	std::wstringstream ss;
-	ss << L"[" << currentTime << L" TID: " << std::this_thread::get_id() << L"] ";
-	ss << L"DEBUG: ";
+	std::stringstream ss;
+	ss << "[" << AtlasAPI::AtlasAPIHelper::GetCurrentTimeODBC() << " TID: " << std::this_thread::get_id() << "] ";
+	ss << "DEBUG: ";
 	ss << message;
 
 	Log(ss.str());
 //#endif
 }
 
-void AtlasLog::Error(const AtlasString& message)
+void AtlasLog::Error(const string& message)
 {
 	if (!_isInitialised) {
 		return;
 	}
 
-	AtlasString currentTime;
-	AtlasTime::getCurrentTimeODBC(currentTime);
-
-	std::wstringstream ss;
-	ss << L"[" << currentTime << L" TID: " << std::this_thread::get_id() << L"] ";
-	ss << L"ERROR: ";
+	std::stringstream ss;
+	ss << "[" << AtlasAPI::AtlasAPIHelper::GetCurrentTimeODBC() << " TID: " << std::this_thread::get_id() << "] ";
+	ss << "ERROR: ";
 	ss << message;
 
 	Log(ss.str());
 }
 
 
-void AtlasLog::Log(const AtlasString& message)
+void AtlasLog::Log(const string& message)
 {
 	std::lock_guard<std::mutex> lock(_outputMutex);
 
