@@ -17,7 +17,7 @@ namespace Atlas
 
 		virtual bool createWindow(std::string title, unsigned int width, unsigned int height) = 0;
 
-	private:
+	protected:
 
 		AtlasManager* _parent;
 	};

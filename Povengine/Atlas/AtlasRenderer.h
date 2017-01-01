@@ -28,6 +28,8 @@ namespace Atlas
 		bool IsInitialised() { return _initialised; }
 		AtlasRendererEnum GetType() { return _rendererType; }
 
+		void ToggleWireframe(bool newValue) { _wireframe = newValue; }
+
 	protected:
 
 		virtual void Destroy() = 0;
@@ -36,6 +38,8 @@ namespace Atlas
 		unsigned int _height;
 
 		AtlasRendererEnum _rendererType;
+
+		bool _wireframe;
 
 		bool _initialised;
 	};

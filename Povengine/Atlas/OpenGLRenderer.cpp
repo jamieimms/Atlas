@@ -7,6 +7,7 @@ using namespace Atlas;
 
 OpenGLRenderer::OpenGLRenderer() {
 	_rendererType = AtlasRendererEnum::OpenGL;
+	_wireframe = false;
 }
 
 OpenGLRenderer::~OpenGLRenderer()
@@ -129,6 +130,8 @@ void OpenGLRenderer::beginRender()
 	glLoadIdentity();
 
 	glFlush();
+
+	glPolygonMode(GL_FRONT_AND_BACK, _wireframe ? GL_LINE : GL_FILL);
 
 #endif
 #ifdef __linux__

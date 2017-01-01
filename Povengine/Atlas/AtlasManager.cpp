@@ -13,8 +13,12 @@ using namespace Atlas;
 using namespace AtlasUtil;
 
 AtlasManager::AtlasManager()
-	:_name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr)//, _currentScene(nullptr)
+	:_name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr)
 {
+	for (int i = 0; i < 256; i++) {
+		_keyStates[i] = false;
+	}
+
 	std::stringstream fmt;
 	fmt << AtlasAPI::AtlasAPIHelper::GetUserDataPath() << AtlasAPI::AtlasAPIHelper::GetPathSeparator() << _name;
 	_mainDir = fmt.str();
@@ -114,9 +118,19 @@ int AtlasManager::start()
 #endif
 }
 
+void AtlasManager::HandleKeyPress(unsigned int keyID, bool isDown)
+{
+	if (keyID > 256) {
+		return;
+	}
+
+	_keyStates[keyID] = isDown;
+}
+
 void AtlasManager::frameProcessing()
 {
 	// Update game state
+	inputProcessing();
 
 	_renderer->beginRender();
 	_renderer->SetShader(_shaderManager->GetShaderProgramID());
@@ -124,6 +138,11 @@ void AtlasManager::frameProcessing()
 	// Render game objects
 	_currentScene->DrawScene();
 
-
 	_renderer->endRender();
+}
+
+void AtlasManager::inputProcessing()
+{
+	// Check bindings for key presses
+	_renderer->ToggleWireframe(_keyStates[0x57]);
 }

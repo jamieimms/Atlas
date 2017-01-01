@@ -21,8 +21,11 @@ namespace Atlas
 
 		int start();
 
+		void HandleKeyPress(unsigned int keyID, bool isDown);
+
 	private:
 
+		void inputProcessing();
 		void frameProcessing();
 
 		// Members
@@ -36,8 +39,9 @@ namespace Atlas
 		Scene* _currentScene;
 		DirectXEntity* _testEntity;
 
-
 		std::string _name;
 		std::string _mainDir;
+
+		bool _keyStates[256];
 	};
 }

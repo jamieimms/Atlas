@@ -4,13 +4,13 @@
 using namespace Atlas;
 
 ///
-Primitive::Primitive()
+Primitive::Primitive(float size, float x, float y, float z)
 {
 	// An array of 3 vectors which represents 3 vertices
-	const GLfloat data[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f,  1.0f, 0.0f,
+	const float data[] = {
+		x - size, z - size, z,
+		x + size, z - size, z,
+		x,  size, z,
 	};
 
 	glGenVertexArrays(1, &_vbaID);

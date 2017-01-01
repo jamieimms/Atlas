@@ -6,7 +6,7 @@ namespace Atlas
 	class Primitive : public IRenderable
 	{
 	public:
-		Primitive();
+		Primitive(float size, float x, float y, float z);
 
 		void Render();
 	private:

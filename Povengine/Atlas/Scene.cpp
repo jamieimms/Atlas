@@ -7,8 +7,10 @@ using namespace Atlas;
 ///
 void Scene::LoadScene()
 {
-	Primitive* t = new Primitive();
+	Primitive* t = new Primitive(0.5f, -0.5f, 0, 0);
+	Primitive* u = new Primitive(0.5f, 0.5f, 0, 0);
 	_entities.push_back(t);
+	_entities.push_back(u);
 }
 
 ///
