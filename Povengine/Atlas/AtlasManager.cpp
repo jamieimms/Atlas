@@ -8,10 +8,14 @@
 #include "OpenGLRenderer.h"
 #include "../AtlasUtil/AtlasMessageBox.h"
 #include "../AtlasAPI/AtlasAPIHelper.h"
+#include "Primitive.h"
 
 using namespace Atlas;
 using namespace AtlasUtil;
 
+/// <summary>
+/// Construct the manager
+/// </summary>
 AtlasManager::AtlasManager()
 	:_name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr)
 {
@@ -32,6 +36,9 @@ AtlasManager::AtlasManager()
 	_shaderManager = new ShaderManager(_log, _mainDir);
 }
 
+/// <summary>
+/// Handle retrieving new data from API-based sources
+/// </summary>
 AtlasManager::~AtlasManager()
 {
 	_log->Debug("Atlas Engine Stopping");
@@ -52,6 +59,10 @@ AtlasManager::~AtlasManager()
 	}
 }
 
+/// <summary>
+/// Creates the platform appropriate window and returns it
+/// </summary>
+/// <returns>a platform specific window based on the Window class</returns>
 Window* AtlasManager::getWindow()
 {
 	if (_applicationWindow != nullptr) {
@@ -67,10 +78,14 @@ Window* AtlasManager::getWindow()
 	_log->Debug("Creating new (Linux) window");
 	_applicationWindow = new LinuxWindow(this);
 #endif
+
 	return _applicationWindow;
 }
 
-
+/// <summary>
+/// Initialises the sub-systems of the Atlas Engine
+/// </summary>
+/// <returns>true if initialised successfully, otherwise false</returns>
 bool AtlasManager::Initialise()
 {
 	if (_applicationWindow == nullptr) {
@@ -84,18 +99,24 @@ bool AtlasManager::Initialise()
 	_renderer = new OpenGLRenderer();
 	_renderer->Initialise(800, 600, ((Win32Window*)_applicationWindow)->getWindowHandle());
 
-	_currentScene = new Scene();
-	_currentScene->LoadScene();
-
 	std::string vertexShader = "S:\\Development\\Povengine\\Povengine\\Debug\\vertexshader.glsl";
 	std::string fragShader = "S:\\Development\\Povengine\\Povengine\\Debug\\fragmentshader.glsl";
+	std::string originVertShader = "S:\\Development\\Povengine\\Povengine\\Debug\\originshader.glsl";
 
-	_shaderManager->CreateShaderProgram(vertexShader, fragShader);
+	auto shader1 = _shaderManager->CreateShaderProgram(vertexShader, fragShader);
+	auto shader2 = _shaderManager->CreateShaderProgram(originVertShader, fragShader);
+
+	_currentScene = new Scene();
+	_currentScene->LoadScene(shader1, shader2);
+
 
 	return true;
 }
 
-
+/// <summary>
+/// Starts the engine running by entering the application loop (this may be better moved to the Window classes)
+/// </summary>
+/// <returns>returns the exit code when the application loop finishes</returns>
 int AtlasManager::start()
 {
 #ifdef WIN32
@@ -118,6 +139,11 @@ int AtlasManager::start()
 #endif
 }
 
+/// <summary>
+/// Handles a key press (key up or down) by setting that key's state
+/// </summary>
+/// <param name="keyID">ID of the key to set/unset</param>
+/// <param name="isDown">bool indicating if the new key state is down or up</param>
 void AtlasManager::HandleKeyPress(unsigned int keyID, bool isDown)
 {
 	if (keyID > 256) {
@@ -127,13 +153,15 @@ void AtlasManager::HandleKeyPress(unsigned int keyID, bool isDown)
 	_keyStates[keyID] = isDown;
 }
 
+/// <summary>
+/// Called each time a frame can be processed.
+/// </summary>
 void AtlasManager::frameProcessing()
 {
 	// Update game state
 	inputProcessing();
 
 	_renderer->beginRender();
-	_renderer->SetShader(_shaderManager->GetShaderProgramID());
 
 	// Render game objects
 	_currentScene->DrawScene();
@@ -141,8 +169,18 @@ void AtlasManager::frameProcessing()
 	_renderer->endRender();
 }
 
+/// <summary>
+/// Called once per frame, allows us to process any pending user inputs 
+/// </summary>
 void AtlasManager::inputProcessing()
 {
+	static float yPos = 0.0f;
 	// Check bindings for key presses
 	_renderer->ToggleWireframe(_keyStates[0x57]);
+
+	if (_keyStates[0x26]) {	// Up arrow
+		auto temp = (Primitive*)_currentScene->GetEntity(1);
+		yPos += 0.01f;
+		temp->SetPosition(0, yPos, 0);
+	}
 }

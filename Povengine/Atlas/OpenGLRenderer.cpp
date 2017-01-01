@@ -2,6 +2,9 @@
 #define GLEW_STATIC
 #include "glew.h"
 #include <gl/GL.h>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 using namespace Atlas;
 
@@ -119,6 +122,7 @@ void OpenGLRenderer::Resize(unsigned int width, unsigned int height)
 
 }
 
+
 void OpenGLRenderer::beginRender()
 {
 #ifdef _WIN32
@@ -151,10 +155,4 @@ void OpenGLRenderer::endRender()
 
 
 #endif
-}
-
-///
-void OpenGLRenderer::SetShader(unsigned int shaderProgramID)
-{
-	glUseProgram(shaderProgramID);
 }

@@ -11,7 +11,6 @@ namespace Atlas
 
 		bool Initialise(unsigned int width, unsigned int height, HWND hwnd);
 		void Resize(unsigned int width, unsigned int height);
-		void SetShader(unsigned int shaderProgramID);
 
 		void beginRender();
 		void endRender();

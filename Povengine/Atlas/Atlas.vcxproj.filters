@@ -70,6 +70,12 @@
     <ClInclude Include="Primitive.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Transformable.h">
+      <Filter>Game\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Origin.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -97,6 +103,12 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Transformable.cpp">
+      <Filter>Game\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Origin.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>

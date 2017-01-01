@@ -10,6 +10,7 @@ namespace AtlasAPI
 	public:
 		//Time functions
 		static std::string GetCurrentTimeODBC();
+		static float GetTicks();
 
 		// IO functions
 		static std::string GetUserDataPath();

@@ -36,6 +36,25 @@ std::string AtlasAPIHelper::GetCurrentTimeODBC()
 	return ss.str();
 }
 
+float AtlasAPIHelper::GetTicks()
+{
+#ifdef _WIN32
+	//auto ticks = GetTickCount64();
+	//return ticks / 1000.0f;
+	LARGE_INTEGER ticks, freq;
+	QueryPerformanceCounter(&ticks);
+	QueryPerformanceFrequency(&freq);
+	return ticks.QuadPart / freq.QuadPart;
+#endif
+#ifdef __APPLE__
+	throw APIException(__FILE__, __LINE__, "NOT IMPLEMENTED.");
+#endif
+
+#ifdef __linux__
+	throw APIException(__FILE__, __LINE__, "NOT IMPLEMENTED.");
+#endif
+}
+
 // IO functions
 std::string AtlasAPIHelper::GetUserDataPath()
 {

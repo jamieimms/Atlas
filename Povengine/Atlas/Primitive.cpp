@@ -4,13 +4,18 @@
 using namespace Atlas;
 
 ///
-Primitive::Primitive(float size, float x, float y, float z)
+Primitive::Primitive(float size, float x, float y, float z, unsigned int shaderProgramID)
+	:Transformable(x, y, z), _data(nullptr), _shaderProgramID(shaderProgramID)
 {
+
+	SetUniformScale(size);
+
+	int numVertices = 9;
 	// An array of 3 vectors which represents 3 vertices
-	const float data[] = {
-		x - size, z - size, z,
-		x + size, z - size, z,
-		x,  size, z,
+	_data = new float[numVertices] {
+		-0.5f, -0.5f, 0,
+	     0, 0.5f, 0,
+		 0.5f, -0.5f, 0
 	};
 
 	glGenVertexArrays(1, &_vbaID);
@@ -18,7 +23,14 @@ Primitive::Primitive(float size, float x, float y, float z)
 
 	glGenBuffers(1, &_vbID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices, _data, GL_STATIC_DRAW);
+
+	_transformLoc = glGetUniformLocation(_shaderProgramID, "transform");
+}
+
+Primitive::~Primitive()
+{
+	delete[] _data;
 }
 
 void Primitive::Render()
@@ -34,7 +46,12 @@ void Primitive::Render()
 		(void*)0
 	);
 
+	glUseProgram(_shaderProgramID);
+
+	SetRenderTransform(_transformLoc);
+
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+	
 
 	glDisableVertexAttribArray(0);
 }

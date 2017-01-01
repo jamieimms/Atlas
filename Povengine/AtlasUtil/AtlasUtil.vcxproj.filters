@@ -24,6 +24,9 @@
     <Filter Include="include\Time">
       <UniqueIdentifier>{2a488de3-1816-463f-b2ba-2a157efccd93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Math">
+      <UniqueIdentifier>{a2e61e3f-5def-477e-a076-8d6fe580b30b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="IRenderable.h">
       <Filter>include\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasMath.h">
+      <Filter>include\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

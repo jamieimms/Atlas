@@ -97,10 +97,12 @@ unsigned int ShaderManager::CompileShader(unsigned int shaderType, const char* s
 	int errorLogLength = 0;
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &errorLogLength);
 	if (errorLogLength > 0) {
-		//char *errorMsg = new char[errorLogLength];
-		//glGetShaderInfoLog(shader, errorLogLength, , &FragmentShaderErrorMessage[0]);
-		//printf("%s\n", &FragmentShaderErrorMessage[0]);
-		//_log->Error(errorMsg);
+		char *errorMsg = new char[errorLogLength];
+		int outLen = 0;
+		glGetShaderInfoLog(shader, errorLogLength, &outLen, errorMsg);
+		_log->Error(errorMsg);
+
+		delete[] errorMsg;
 	}
 
 	//check for errors
