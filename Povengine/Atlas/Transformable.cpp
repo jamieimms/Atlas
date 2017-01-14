@@ -51,9 +51,9 @@ void Transformable::SetRenderTransform(unsigned int transformLoc)
 	_transMat = glm::translate(_transMat, glm::vec3(_pos.x, _pos.y, _pos.z));
 
 	// Rotate
-	//_transMat = glm::rotate(_transMat, _rot.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	//_transMat = glm::rotate(_transMat, _rot.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	//_transMat = glm::rotate(_transMat, _rot.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	_transMat = glm::rotate(_transMat, _rot.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	_transMat = glm::rotate(_transMat, _rot.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	_transMat = glm::rotate(_transMat, _rot.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// Scale
 	_transMat = glm::scale(_transMat, glm::vec3(_scale.x, _scale.y, _scale.z));

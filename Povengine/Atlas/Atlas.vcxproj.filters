@@ -49,31 +49,40 @@
     <ClInclude Include="Window.h">
       <Filter>Windowing\Common</Filter>
     </ClInclude>
-    <ClInclude Include="DirectXRenderer.h">
-      <Filter>Windowing\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenGLRenderer.h">
-      <Filter>Windowing\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="AtlasRenderer.h">
       <Filter>Windowing\Common</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="DirectXEntity.h">
-      <Filter>Game\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>Game\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive.h">
-      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Transformable.h">
       <Filter>Game\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Origin.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Game\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGLRenderer.h">
+      <Filter>Windowing\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEntity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone.h">
       <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
@@ -84,17 +93,8 @@
     <ClCompile Include="AtlasManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="DirectXRenderer.cpp">
-      <Filter>Windowing\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenGLRenderer.cpp">
-      <Filter>Windowing\Win32</Filter>
-    </ClCompile>
     <ClCompile Include="AtlasRenderer.cpp">
       <Filter>Windowing\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectXEntity.cpp">
-      <Filter>Game\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Game\Graphics</Filter>
@@ -102,13 +102,31 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Primitive.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Transformable.cpp">
       <Filter>Game\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Origin.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLRenderer.cpp">
+      <Filter>Windowing\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEntity.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Cone.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>

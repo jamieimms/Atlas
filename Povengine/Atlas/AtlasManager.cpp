@@ -4,11 +4,9 @@
 #include <string>
 
 #include "Win32Window.h"
-#include "DirectXRenderer.h"
 #include "OpenGLRenderer.h"
 #include "../AtlasUtil/AtlasMessageBox.h"
 #include "../AtlasAPI/AtlasAPIHelper.h"
-#include "Primitive.h"
 
 using namespace Atlas;
 using namespace AtlasUtil;
@@ -92,23 +90,58 @@ bool AtlasManager::Initialise()
 		return false;
 	}
 
-	_log->Debug("Creating and initialising renderer (DirectX)");
-
-	//_renderer = new DirectXRenderer();
+	_log->Debug("Creating and initialising Atlas Engine");
 
 	_renderer = new OpenGLRenderer();
-	_renderer->Initialise(800, 600, ((Win32Window*)_applicationWindow)->getWindowHandle());
+#ifdef _WIN32
+	HDC context = GetDC(((Win32Window*)_applicationWindow)->getWindowHandle());
+	/*      Pixel format index
+	*/
+	int nPixelFormat;
 
-	std::string vertexShader = "S:\\Development\\Povengine\\Povengine\\Debug\\vertexshader.glsl";
-	std::string fragShader = "S:\\Development\\Povengine\\Povengine\\Debug\\fragmentshader.glsl";
-	std::string originVertShader = "S:\\Development\\Povengine\\Povengine\\Debug\\originshader.glsl";
+	PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR),          //size of structure
+		1,                                      //default version
+		PFD_DRAW_TO_WINDOW |                    //window drawing support
+		PFD_SUPPORT_OPENGL |                    //opengl support
+		PFD_DOUBLEBUFFER,                       //double buffering support
+		PFD_TYPE_RGBA,                          //RGBA color mode
+		32,                                     //32 bit color mode
+		0, 0, 0, 0, 0, 0,                       //ignore color bits
+		0,                                      //no alpha buffer
+		0,                                      //ignore shift bit
+		0,                                      //no accumulation buffer
+		0, 0, 0, 0,                             //ignore accumulation bits
+		16,                                     //16 bit z-buffer size
+		0,                                      //no stencil buffer
+		0,                                      //no aux buffer
+		PFD_MAIN_PLANE,                         //main drawing plane
+		0,                                      //reserved
+		0, 0, 0 };                              //layer masks ignored
 
-	auto shader1 = _shaderManager->CreateShaderProgram(vertexShader, fragShader);
-	auto shader2 = _shaderManager->CreateShaderProgram(originVertShader, fragShader);
+												/*      Choose best matching format*/
+	nPixelFormat = ChoosePixelFormat(context, &pfd);
+
+	/*      Set the pixel format to the device context*/
+	SetPixelFormat(context, nPixelFormat, &pfd);
+	if (!_renderer->Initialise(800, 600, context)) {
+		_log->Debug("Win32 OpenGL renderer failed to initialise.");
+	}
+#endif
+
+	std::string dataPath = AtlasAPI::AtlasAPIHelper::GetDataPath();
+
+	std::string vertexShader = dataPath + "vertexshader.glsl";
+	std::string fragShader = dataPath + "fragmentshader.glsl";
+	std::string originVertShader = dataPath + "originshader.glsl";
+
+	auto shader1 = _shaderManager->LoadShader(vertexShader, fragShader);
+	auto shader2 = _shaderManager->LoadShader(originVertShader, fragShader);
 
 	_currentScene = new Scene();
 	_currentScene->LoadScene(shader1, shader2);
 
+	AtlasAPI::AtlasAPIHelper::GetTicks();
 
 	return true;
 }
@@ -164,7 +197,7 @@ void AtlasManager::frameProcessing()
 	_renderer->beginRender();
 
 	// Render game objects
-	_currentScene->DrawScene();
+	_currentScene->DrawScene(_renderer->GetProjection());
 
 	_renderer->endRender();
 }
@@ -174,13 +207,50 @@ void AtlasManager::frameProcessing()
 /// </summary>
 void AtlasManager::inputProcessing()
 {
-	static float yPos = 0.0f;
+	float ticks = AtlasAPI::AtlasAPIHelper::GetTicks() / 100;
+	static float radius = 20.0f;
+	static float yPos = 0.2f;
+
+	static float factor = 4.0f;
+
+
 	// Check bindings for key presses
 	_renderer->ToggleWireframe(_keyStates[0x57]);
 
-	if (_keyStates[0x26]) {	// Up arrow
-		auto temp = (Primitive*)_currentScene->GetEntity(1);
-		yPos += 0.01f;
-		temp->SetPosition(0, yPos, 0);
+	if (_keyStates[VK_ADD]) {	// plus
+		radius += 1.0f;
 	}
+	if (_keyStates[VK_SUBTRACT]) {	// subtract
+		radius -= 1.0f;
+	}
+
+	float xPos = sin(ticks * radius) * factor;
+	float zPos = cos(ticks * radius) * factor;
+
+	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
+
+	//if (_keyStates[0x28]) {	// Down arrow
+	//	if (_keyStates[0x10]) {
+	//		yPos -= 0.01f;
+	//	}
+	//	else {
+	//		zPos -= 0.01f;
+	//	}
+	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
+	//}
+	//if (_keyStates[0x25]) {	// Left arrow
+	//	xPos -= 0.01f;
+	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
+	//}
+	//if (_keyStates[0x27]) {	// Left arrow
+	//	xPos += 0.01f;
+	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
+	//}
+
+	//if (_keyStates[VK_BACK]) {
+	//	xPos = 0.0f;
+	//	yPos = 1.0f;
+	//	zPos = 3.0f;
+	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
+	//}
 }

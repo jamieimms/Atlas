@@ -1,3 +1,6 @@
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 #include "OpenGLRenderer.h"
 #define GLEW_STATIC
 #include "glew.h"
@@ -24,7 +27,7 @@ void OpenGLRenderer::Destroy()
 
 #ifdef _WIN32
 
-	wglMakeCurrent(_deviceContext, NULL);
+	wglMakeCurrent((HDC)_deviceContext, NULL);
 	wglDeleteContext(_renderContext);
 
 #endif
@@ -35,7 +38,7 @@ void OpenGLRenderer::Destroy()
 #endif
 }
 
-bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, HWND hwnd)
+bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, void* context)
 {
 	_width = width;
 	_height = height;
@@ -43,41 +46,11 @@ bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, HWND hw
 	_initialised = false;
 
 #ifdef _WIN32
-	_deviceContext = GetDC(hwnd);
-	/*      Pixel format index
-	*/
-	int nPixelFormat;
 
+	_deviceContext = context;
+	_renderContext = wglCreateContext((HDC)_deviceContext);
 
-	PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),          //size of structure
-		1,                                      //default version
-		PFD_DRAW_TO_WINDOW |                    //window drawing support
-		PFD_SUPPORT_OPENGL |                    //opengl support
-		PFD_DOUBLEBUFFER,                       //double buffering support
-		PFD_TYPE_RGBA,                          //RGBA color mode
-		32,                                     //32 bit color mode
-		0, 0, 0, 0, 0, 0,                       //ignore color bits
-		0,                                      //no alpha buffer
-		0,                                      //ignore shift bit
-		0,                                      //no accumulation buffer
-		0, 0, 0, 0,                             //ignore accumulation bits
-		16,                                     //16 bit z-buffer size
-		0,                                      //no stencil buffer
-		0,                                      //no aux buffer
-		PFD_MAIN_PLANE,                         //main drawing plane
-		0,                                      //reserved
-		0, 0, 0 };                              //layer masks ignored
-
-												/*      Choose best matching format*/
-	nPixelFormat = ChoosePixelFormat(_deviceContext, &pfd);
-
-	/*      Set the pixel format to the device context*/
-	SetPixelFormat(_deviceContext, nPixelFormat, &pfd);
-
-	_renderContext = wglCreateContext(_deviceContext);
-
-	if (wglMakeCurrent(_deviceContext, _renderContext) == FALSE) {
+	if (wglMakeCurrent((HDC)_deviceContext, _renderContext) == FALSE) {
 		return false;
 	}
 
@@ -90,6 +63,9 @@ bool OpenGLRenderer::Initialise(unsigned int width, unsigned int height, HWND hw
 	auto result = glewInit();
 
 	_useVer45 = glewIsSupported("GL_VERSION_4_5");
+
+	glViewport(0, 0, width, height);
+	_proj = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
 
 	_initialised = true;
 	return true;
@@ -104,17 +80,7 @@ void OpenGLRenderer::Resize(unsigned int width, unsigned int height)
 #ifdef _WIN32
 	glViewport(0, 0, _width, _height);
 
-	/*      Set current Matrix to projection*/
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity(); //reset projection matrix
-
-					  /*      Time to calculate aspect ratio of
-					  our window.
-					  */
-	//gluPerspective(54.0f, (GLfloat)width / (GLfloat)height, 1.0f, 1000.0f);
-
-	glMatrixMode(GL_MODELVIEW); //set modelview matrix
-	glLoadIdentity(); //reset modelview matrix
+	_proj = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
 
 #endif
 #ifdef __linux__
@@ -129,7 +95,7 @@ void OpenGLRenderer::beginRender()
 
 	glEnable(GL_DEPTH_TEST);
 
-	glClearColor(0.5f, 0.125f, 0.3f, 1.0f);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -148,7 +114,7 @@ void OpenGLRenderer::endRender()
 {
 #ifdef _WIN32
 
-	SwapBuffers(_deviceContext);
+	SwapBuffers((HDC)_deviceContext);
 
 #endif
 #ifdef __linux__

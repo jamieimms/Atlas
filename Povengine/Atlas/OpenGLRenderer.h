@@ -9,7 +9,7 @@ namespace Atlas
 		OpenGLRenderer();
 		~OpenGLRenderer();
 
-		bool Initialise(unsigned int width, unsigned int height, HWND hwnd);
+		bool Initialise(unsigned int width, unsigned int height, void* context);
 		void Resize(unsigned int width, unsigned int height);
 
 		void beginRender();
@@ -21,13 +21,10 @@ namespace Atlas
 
 		bool _useVer45;
 
-#ifdef WIN32
+#ifdef _WIN32
 
-		HDC			_deviceContext;
+		void*		_deviceContext;
 		HGLRC		_renderContext;
-
-
-
 #endif
 	};
 }

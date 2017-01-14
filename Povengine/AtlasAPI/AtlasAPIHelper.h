@@ -14,6 +14,7 @@ namespace AtlasAPI
 
 		// IO functions
 		static std::string GetUserDataPath();
+		static std::string GetDataPath();
 		static bool EnsureDirectory(std::string& path);
 		static char GetPathSeparator();
 		

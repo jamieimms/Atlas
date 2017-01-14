@@ -44,9 +44,6 @@
     <ClInclude Include="Vertex.h">
       <Filter>include\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="AtlasColour.h">
-      <Filter>include\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="IRenderable.h">
       <Filter>include\Graphics</Filter>
     </ClInclude>

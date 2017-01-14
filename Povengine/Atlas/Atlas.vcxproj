@@ -140,29 +140,35 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AtlasManager.h" />
+    <ClInclude Include="BaseEntity.h" />
     <ClInclude Include="BaseManager.h" />
-    <ClInclude Include="DirectXEntity.h" />
-    <ClInclude Include="DirectXRenderer.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cone.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="Origin.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transformable.h" />
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="AtlasRenderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderManager.h" />
-    <ClInclude Include="Primitive.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Win32Window.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasManager.cpp" />
-    <ClCompile Include="DirectXEntity.cpp" />
-    <ClCompile Include="DirectXRenderer.cpp" />
+    <ClCompile Include="BaseEntity.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cone.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="AtlasRenderer.cpp" />
     <ClCompile Include="Origin.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
-    <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Transformable.cpp" />
     <ClCompile Include="Win32Window.cpp" />
   </ItemGroup>

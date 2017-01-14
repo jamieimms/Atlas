@@ -9,19 +9,24 @@ using namespace Atlas;
 //using namespace AtlasUtil;
 
 ShaderManager::ShaderManager(AtlasUtil::AtlasLog* log, std::string basePath)
-	:_log(log), _basePath(basePath), _shaderProgramID(-1)
+	:_log(log), _basePath(basePath)
 {
 
 }
 
 ShaderManager::~ShaderManager()
 {
+	while (_loadedShaders.size() > 0) {
+		auto programID = _loadedShaders[_loadedShaders.size() - 1];
+		glDeleteProgram(programID);
+		_loadedShaders.pop_back();
+	}
 
 }
 
 ///
 ///
-unsigned int ShaderManager::CreateShaderProgram(std::string& vertexShaderFilename, std::string& fragmentShaderFilename)
+unsigned int ShaderManager::LoadShader(std::string& vertexShaderFilename, std::string& fragmentShaderFilename)
 {
 	std::string vertexShaderName = "vertex shader";
 	std::string fragmentShaderName = "fragment shader";
@@ -52,7 +57,7 @@ unsigned int ShaderManager::CreateShaderProgram(std::string& vertexShaderFilenam
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	_shaderProgramID = shaderProgram;
+	_loadedShaders.push_back(shaderProgram);
 
 	return shaderProgram;
 }
@@ -112,4 +117,13 @@ unsigned int ShaderManager::CompileShader(unsigned int shaderType, const char* s
 	}
 
 	return shader;
+}
+
+unsigned int ShaderManager::GetShaderAtIndex(unsigned int index) {
+	if (index > _loadedShaders.size()) {
+		return -1;
+	}
+	else {
+		return _loadedShaders[index];
+	}
 }

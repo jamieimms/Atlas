@@ -1,5 +1,7 @@
 #pragma once
-#include <Windows.h>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 namespace Atlas
 {
@@ -17,8 +19,10 @@ namespace Atlas
 		AtlasRenderer();
 		virtual ~AtlasRenderer();
 
-		virtual bool Initialise(unsigned int width, unsigned int height, HWND hWnd) = 0;
+		virtual bool Initialise(unsigned int width, unsigned int height, void* context) = 0;
 		virtual void Resize(unsigned int width, unsigned int height) = 0;
+
+		glm::mat4 GetProjection() { return _proj; }
 
 		virtual void beginRender() = 0;
 		virtual void endRender() = 0;
@@ -41,5 +45,8 @@ namespace Atlas
 		bool _wireframe;
 
 		bool _initialised;
+
+		glm::mat4 _proj;
+
 	};
 }

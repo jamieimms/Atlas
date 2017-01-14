@@ -3,10 +3,10 @@
 
 namespace Atlas
 {
-	class Origin : public BaseEntity
+	class Cube : public BaseEntity
 	{
 	public:
-		Origin(float size, unsigned int shaderProgramID);
+		Cube(float size, float x, float y, float z, unsigned int shaderProgramID);
 
 		virtual void InitData();
 	};

@@ -36,15 +36,22 @@ std::string AtlasAPIHelper::GetCurrentTimeODBC()
 	return ss.str();
 }
 
+// Get the seconds elapsed since first call
 float AtlasAPIHelper::GetTicks()
 {
 #ifdef _WIN32
+	static double start = 0;
 	//auto ticks = GetTickCount64();
 	//return ticks / 1000.0f;
 	LARGE_INTEGER ticks, freq;
 	QueryPerformanceCounter(&ticks);
 	QueryPerformanceFrequency(&freq);
-	return ticks.QuadPart / freq.QuadPart;
+
+	if (start == 0) {
+		start = ticks.QuadPart / (double)freq.QuadPart;
+	}
+
+	return (ticks.QuadPart / (double)freq.QuadPart) - start;
 #endif
 #ifdef __APPLE__
 	throw APIException(__FILE__, __LINE__, "NOT IMPLEMENTED.");
@@ -78,6 +85,21 @@ std::string AtlasAPIHelper::GetUserDataPath()
 #endif
 
 	return path;
+}
+
+///
+///
+std::string AtlasAPIHelper::GetDataPath()
+{
+	string path;
+#ifdef _WIN32
+
+	wchar_t buf[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, buf);
+	path = ConvertUTF16ToUTF8(buf);
+#endif
+
+	return path + GetPathSeparator() + "Data" + GetPathSeparator();
 }
 
 //
