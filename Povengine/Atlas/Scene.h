@@ -17,8 +17,6 @@ namespace Atlas
 		IRenderable* GetEntity(int index) { return _entities[index]; }
 		Camera& GetCamera() { return _cam; }
 
-
-
 	private:
 		std::vector<IRenderable*> _entities;
 

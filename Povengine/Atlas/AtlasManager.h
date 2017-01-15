@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "../AtlasUtil/AtlasLog.h"
 #include "ShaderManager.h"
+#include "InputManager.h"
+#include "AudioManager.h"
 
 namespace Atlas
 {
@@ -20,7 +22,7 @@ namespace Atlas
 
 		int start();
 
-		void HandleKeyPress(unsigned int keyID, bool isDown);
+		InputManager* Input() { return _inputManager; }
 
 	private:
 
@@ -32,14 +34,13 @@ namespace Atlas
 
 		AtlasRenderer* _renderer;	// The renderer, could be DirectX (win32 only) or OpenGL (win32 and linux), currently we only support OpenGL
 		ShaderManager* _shaderManager; // The shader loader
+		InputManager* _inputManager;	// Handles user input
+		AudioManager* _audio;	// Handles audio functions
 
-		AtlasUtil::AtlasLog* _log;
 
 		Scene* _currentScene;
 
 		std::string _name;
 		std::string _mainDir;
-
-		bool _keyStates[256];
 	};
 }

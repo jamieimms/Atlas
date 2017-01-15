@@ -29,8 +29,8 @@
     <Filter Include="Game\Graphics">
       <UniqueIdentifier>{4cf6213e-ba29-4775-a1a9-e42f1fe6ba86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Shapes">
-      <UniqueIdentifier>{19cb1167-ec5d-450e-9147-d314a7cfb30c}</UniqueIdentifier>
+    <Filter Include="Game\Input">
+      <UniqueIdentifier>{cc6ea36f-2038-42a9-bcc4-b9de769b55af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +85,18 @@
     <ClInclude Include="Cone.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasKeyEnum.h">
+      <Filter>Game\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -128,6 +140,12 @@
     </ClCompile>
     <ClCompile Include="Cone.cpp">
       <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

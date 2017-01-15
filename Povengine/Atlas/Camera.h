@@ -12,6 +12,10 @@ namespace Atlas
 
 		glm::mat4 GetViewMatrix();
 
+		void MoveForward();
+		void Backpedal();
+		void Strafe(bool isLeft);
+
 	private:
 
 		void Update();

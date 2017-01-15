@@ -99,7 +99,7 @@ LRESULT Win32Window::wmCommandHandler(WPARAM wParam, LPARAM lParam)
 
 LRESULT Win32Window::wmKeyDownHandler(WPARAM wParam, LPARAM lParam)
 {
-	_parent->HandleKeyPress(wParam, true);
+	_parent->Input()->HandleKeyPress(wParam, true);
 	return 0;
 }
 
@@ -107,7 +107,7 @@ LRESULT Win32Window::wmKeyDownHandler(WPARAM wParam, LPARAM lParam)
 //
 LRESULT Win32Window::wmKeyUpHandler(WPARAM wParam, LPARAM lParam)
 {
-	_parent->HandleKeyPress(wParam, false);
+	_parent->Input()->HandleKeyPress(wParam, false);
 
 	return 0;
 }

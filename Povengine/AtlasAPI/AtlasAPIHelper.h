@@ -17,6 +17,7 @@ namespace AtlasAPI
 		static std::string GetDataPath();
 		static bool EnsureDirectory(std::string& path);
 		static char GetPathSeparator();
+		static long GetFileSizeBytes(std::string& path);
 		
 
 		//String functions

@@ -11,7 +11,6 @@ using namespace Atlas;
 ShaderManager::ShaderManager(AtlasUtil::AtlasLog* log, std::string basePath)
 	:_log(log), _basePath(basePath)
 {
-
 }
 
 ShaderManager::~ShaderManager()
@@ -69,7 +68,7 @@ std::string ShaderManager::ReadShaderFile(std::string& filename)
 	_log->Debug("Loading shader file: " + filename);
 
 	unsigned int fileLen = 0;
-	char* fileContents;
+
 	std::ifstream file(filename, std::ios::in);
 
 	if (!file.good()) {

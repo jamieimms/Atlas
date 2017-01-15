@@ -24,7 +24,7 @@ void Cone::InitData()
 	float angleStep = 90.0f / quality;
 
 	_numVertices = sides + 2;
-	_numIndices = 4 * 3 * quality;
+	_numIndices = (4 * 3 * quality) * 2;
 
 	// Allocate memory
 	_data = new float[_numVertices * 6]{
@@ -62,14 +62,20 @@ void Cone::InitData()
 
 	for (int i = 0; i < quality; i++) {
 		if (vertexPos + 4 == _numVertices) {
+			// Handle the final triangles that needs to connect to the next quadrant
 			SetIndex(indexPos, 0, vertexPos, 3);
 			SetIndex(indexPos, 0, vertexPos + 1, 4);
 			SetIndex(indexPos, 0, vertexPos + 2, 5);
 			SetIndex(indexPos, 0, vertexPos + 3, 2);
+			SetIndex(indexPos, 1, vertexPos, 3);
+			SetIndex(indexPos, 1, vertexPos + 1, 4);
+			SetIndex(indexPos, 1, vertexPos + 2, 5);
+			SetIndex(indexPos, 1, vertexPos + 3, 2);
 		}
 		else {
 			for (int j = 0; j < 4; j++) {
 				SetIndex(indexPos, 0, vertexPos, vertexPos + 4);
+				SetIndex(indexPos, 1, vertexPos, vertexPos + 4);
 				vertexPos++;
 			}
 		}

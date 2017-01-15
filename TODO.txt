@@ -1,0 +1,20 @@
+Absolute bare minimum game engine features:
+
+Graphics:
+	2D/3D geometry
+	camera
+	2D text output
+	
+Audio:
+	Play sounds
+
+Input:
+	Keyboard input
+	
+Physics:
+	Gravity
+	Collision detection
+	
+Gameplay:
+	State
+	End condition

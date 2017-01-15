@@ -43,3 +43,37 @@ glm::mat4 Camera::GetViewMatrix()
 
 	return _viewMat;
 }
+
+void Camera::MoveForward()
+{
+	Update();
+
+	glm::vec3 forward(_viewMat[0][2], _viewMat[1][2], _viewMat[2][2]);
+
+	_camPos += (-1.0f * forward) * 0.12f;
+	_camTarget += (-1.0f * forward) * 0.12f;
+	_needsUpdate = true;
+}
+
+void Camera::Backpedal()
+{
+	Update();
+
+	glm::vec3 forward(_viewMat[0][2], _viewMat[1][2], _viewMat[2][2]);
+
+	_camPos += (1.0f * forward) * 0.12f;
+	_camTarget += (1.0f * forward) * 0.12f;
+	_needsUpdate = true;
+}
+
+void Camera::Strafe(bool isLeft)
+{
+	float amt = isLeft ? -1.0f : 1.0f;
+	Update();
+
+	glm::vec3 strafe(_viewMat[0][0], _viewMat[1][0], _viewMat[2][0]);
+
+	_camPos += (amt * strafe) * 0.12f;
+	_camTarget += (amt * strafe) * 0.12f;
+	_needsUpdate = true;
+}

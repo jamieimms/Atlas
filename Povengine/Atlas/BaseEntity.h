@@ -12,7 +12,7 @@ namespace Atlas
 
 		void Initialise();
 
-		void Render(glm::mat4 view, glm::mat4 proj);
+		virtual void Render(glm::mat4 view, glm::mat4 proj);
 
 		virtual void InitData() {}
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <sys/stat.h>
 
 #include "APIException.h"
 
@@ -121,6 +122,20 @@ char AtlasAPIHelper::GetPathSeparator()
 	return '/';
 #endif
 }
+
+long AtlasAPIHelper::GetFileSizeBytes(std::string& path)
+{
+	struct stat results;
+
+	if (stat(path.c_str(), &results) == 0) {
+		return results.st_size;
+	}
+	else {
+		return -1;
+	}
+}
+
+// end IO functions
 
 
 

@@ -15,12 +15,8 @@ using namespace AtlasUtil;
 /// Construct the manager
 /// </summary>
 AtlasManager::AtlasManager()
-	:_name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr)
+	: BaseManager(), _name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr), _inputManager(nullptr), _shaderManager(nullptr)
 {
-	for (int i = 0; i < 256; i++) {
-		_keyStates[i] = false;
-	}
-
 	std::stringstream fmt;
 	fmt << AtlasAPI::AtlasAPIHelper::GetUserDataPath() << AtlasAPI::AtlasAPIHelper::GetPathSeparator() << _name;
 	_mainDir = fmt.str();
@@ -32,6 +28,17 @@ AtlasManager::AtlasManager()
 	_log->Debug("Atlas Engine Starting");
 
 	_shaderManager = new ShaderManager(_log, _mainDir);
+
+	_inputManager = new InputManager();
+
+	_audio = new AudioManager();
+
+	if (!_audio->Init()) {
+		_log->Error("Audio manager failed to init.");
+	}
+
+	std::string s = "S:\\Development\\Povengine\\Data\\118.wav";
+	_audio->LoadSound(s, 0);
 }
 
 /// <summary>
@@ -41,20 +48,17 @@ AtlasManager::~AtlasManager()
 {
 	_log->Debug("Atlas Engine Stopping");
 
-	if (_currentScene != nullptr) {
-		delete _currentScene;
-	}
+	delete _audio;
 
-	if (_renderer != nullptr) {
-		delete _renderer;
-	}
-	if (_applicationWindow != nullptr) {
-		delete _applicationWindow;
-	}
+	delete _currentScene;
 
-	if (_log != nullptr) {
-		delete _log;
-	}
+	delete _inputManager;
+
+	delete _renderer;
+
+	delete _applicationWindow;
+
+	delete _log;
 }
 
 /// <summary>
@@ -143,6 +147,8 @@ bool AtlasManager::Initialise()
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();
 
+	_initialised = true;
+
 	return true;
 }
 
@@ -173,26 +179,14 @@ int AtlasManager::start()
 }
 
 /// <summary>
-/// Handles a key press (key up or down) by setting that key's state
-/// </summary>
-/// <param name="keyID">ID of the key to set/unset</param>
-/// <param name="isDown">bool indicating if the new key state is down or up</param>
-void AtlasManager::HandleKeyPress(unsigned int keyID, bool isDown)
-{
-	if (keyID > 256) {
-		return;
-	}
-
-	_keyStates[keyID] = isDown;
-}
-
-/// <summary>
 /// Called each time a frame can be processed.
 /// </summary>
 void AtlasManager::frameProcessing()
 {
 	// Update game state
 	inputProcessing();
+
+	_audio->ProcessAudio();
 
 	_renderer->beginRender();
 
@@ -207,27 +201,56 @@ void AtlasManager::frameProcessing()
 /// </summary>
 void AtlasManager::inputProcessing()
 {
-	float ticks = AtlasAPI::AtlasAPIHelper::GetTicks() / 100;
-	static float radius = 20.0f;
-	static float yPos = 0.2f;
+	static float xPos = 0;
+	static float yPos = 3.0f;
+	static float zPos = 5.0f;
 
-	static float factor = 4.0f;
+	if (_inputManager->IsKeyPressed(VK_UP))
+	{
+		_currentScene->GetCamera().MoveForward();
+	}	
+	if (_inputManager->IsKeyPressed(VK_DOWN))
+	{
+		_currentScene->GetCamera().Backpedal();
+	}	
+	if (_inputManager->IsKeyPressed(VK_LEFT))
+	{
+		_currentScene->GetCamera().Strafe(true);
+	}	
+	if (_inputManager->IsKeyPressed(VK_RIGHT))
+	{
+		_currentScene->GetCamera().Strafe(false);
+	}	
+	if (_inputManager->IsKeyPressed(VK_PRIOR))
+	{
 
+	}	
+	if (_inputManager->IsKeyPressed(VK_NEXT))
+	{
+
+	}
+	if (_inputManager->IsKeyPressed(VK_SPACE)) {
+		_currentScene->GetCamera().SetLookAt(0, 0, 0);
+	}
+
+	if (_inputManager->IsKeyPressed(VK_ADD)) {
+		_audio->QueueSound(0);
+	}
+
+	//float ticks = AtlasAPI::AtlasAPIHelper::GetTicks() / 100;
+	//static float radius = 20.0f;
+	//static float yPos = 0.2f;
+
+	//static float factor = 4.0f;
 
 	// Check bindings for key presses
-	_renderer->ToggleWireframe(_keyStates[0x57]);
+	_renderer->ToggleWireframe(_inputManager->IsKeyPressed(0x57));
 
-	if (_keyStates[VK_ADD]) {	// plus
-		radius += 1.0f;
-	}
-	if (_keyStates[VK_SUBTRACT]) {	// subtract
-		radius -= 1.0f;
-	}
 
-	float xPos = sin(ticks * radius) * factor;
-	float zPos = cos(ticks * radius) * factor;
+	//float xPos = sin(ticks * radius) * factor;
+	//float zPos = cos(ticks * radius) * factor;
 
-	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
+	//_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
 
 	//if (_keyStates[0x28]) {	// Down arrow
 	//	if (_keyStates[0x10]) {
