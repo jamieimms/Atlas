@@ -97,6 +97,9 @@
     <ClInclude Include="Text.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -146,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

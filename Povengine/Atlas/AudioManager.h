@@ -7,6 +7,7 @@
 
 namespace Atlas
 {
+	const int NUM_AUDIO_BUFFERS = 8;
 	class AudioManager : protected BaseManager
 	{
 
@@ -17,11 +18,13 @@ namespace Atlas
 
 		bool Init();
 
-		bool LoadSound(std::string& path, unsigned int bufferID);
+		int LoadSound(std::string& path, unsigned int bufferID);
 
-		void QueueSound(unsigned int sourceID);
+		void QueueSound(int soundID);
 
 		void ProcessAudio();
+
+		void PauseSound(int soundID);
 
 	private:
 		void PlaySource(unsigned int sourceID);
@@ -29,8 +32,10 @@ namespace Atlas
 		ALCdevice *_device;
 		ALCcontext *_context;
 
-		unsigned int _buffer;
-		unsigned int _source;
-		bool queued;
+		unsigned int _buffers[NUM_AUDIO_BUFFERS];
+		unsigned int _sources[NUM_AUDIO_BUFFERS];
+		bool queue[NUM_AUDIO_BUFFERS];
+
+		int _currentBuf;
 	};
 }

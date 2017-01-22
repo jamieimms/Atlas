@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iomanip>
 #include <sys/stat.h>
+#include <fstream>
 
 #include "APIException.h"
 
@@ -134,6 +135,42 @@ long AtlasAPIHelper::GetFileSizeBytes(std::string& path)
 		return -1;
 	}
 }
+
+///
+///
+bool AtlasAPIHelper::LoadTextFile(std::string& path, std::string& out)
+{
+	unsigned int fileLen = 0;
+
+	std::ifstream file(path, std::ios::in);
+
+	if (!file.good()) {
+		return false;
+	}
+
+	std::stringstream ss;
+	ss << file.rdbuf();
+
+	file.close();
+
+	out = ss.str();
+
+	return true;
+}
+
+//
+//bool AtlasAPIHelper::LoadBinaryFile(std::string& path, std::vector<unsigned char>& out)
+//{
+//	std::ifstream file(path, std::ios::in);
+//
+//	if (!file.good()) {
+//		return false;
+//	}
+//
+//	out
+//	 file.rdbuf();
+//}
+
 
 // end IO functions
 

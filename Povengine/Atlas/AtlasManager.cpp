@@ -37,8 +37,9 @@ AtlasManager::AtlasManager()
 		_log->Error("Audio manager failed to init.");
 	}
 
-	std::string s = "S:\\Development\\Povengine\\Data\\118.wav";
-	_audio->LoadSound(s, 0);
+	std::string s = "S:\\Development\\Povengine\\Data\\Sound\\";
+
+	_audio->LoadSound(s + "118.wav", 0);
 }
 
 /// <summary>
@@ -135,12 +136,26 @@ bool AtlasManager::Initialise()
 
 	std::string dataPath = AtlasAPI::AtlasAPIHelper::GetDataPath();
 
-	std::string vertexShader = dataPath + "vertexshader.glsl";
-	std::string fragShader = dataPath + "fragmentshader.glsl";
-	std::string originVertShader = dataPath + "originshader.glsl";
+	//std::string texVertexShader = dataPath + "texture.vert";
+	//std::string colourVertexShader = dataPath + "colour.vert";
+	//std::string colourFragShader = dataPath + "colour.frag";
+	//std::string texFragShader = dataPath + "texture.frag";
 
-	auto shader1 = _shaderManager->LoadShader(vertexShader, fragShader);
-	auto shader2 = _shaderManager->LoadShader(originVertShader, fragShader);
+
+	//auto shader1 = _shaderManager->LoadShader(colourVertexShader, colourFragShader);
+	////auto shader2 = _shaderManager->LoadShader(texVertexShader, texFragShader);
+
+	//_currentScene = new Scene();
+	//_currentScene->LoadScene(shader1, 0);
+
+	std::string colourVertexShader = dataPath + "colour.vert";
+	std::string colourShader = dataPath + "colour.frag";
+
+	std::string texVertexShader = dataPath + "texture.vert";
+	std::string texShader = dataPath + "texture.frag";
+
+	auto shader1 = _shaderManager->LoadShader(colourVertexShader, colourShader);
+	auto shader2 = _shaderManager->LoadShader(texVertexShader, texShader);
 
 	_currentScene = new Scene();
 	_currentScene->LoadScene(shader1, shader2);
@@ -208,23 +223,23 @@ void AtlasManager::inputProcessing()
 	if (_inputManager->IsKeyPressed(VK_UP))
 	{
 		_currentScene->GetCamera().MoveForward();
-	}	
+	}
 	if (_inputManager->IsKeyPressed(VK_DOWN))
 	{
 		_currentScene->GetCamera().Backpedal();
-	}	
+	}
 	if (_inputManager->IsKeyPressed(VK_LEFT))
 	{
 		_currentScene->GetCamera().Strafe(true);
-	}	
+	}
 	if (_inputManager->IsKeyPressed(VK_RIGHT))
 	{
 		_currentScene->GetCamera().Strafe(false);
-	}	
+	}
 	if (_inputManager->IsKeyPressed(VK_PRIOR))
 	{
 
-	}	
+	}
 	if (_inputManager->IsKeyPressed(VK_NEXT))
 	{
 
@@ -233,7 +248,7 @@ void AtlasManager::inputProcessing()
 		_currentScene->GetCamera().SetLookAt(0, 0, 0);
 	}
 
-	if (_inputManager->IsKeyPressed(VK_ADD)) {
+	if (_inputManager->IsKeyPressed(VK_F1)) {
 		_audio->QueueSound(0);
 	}
 

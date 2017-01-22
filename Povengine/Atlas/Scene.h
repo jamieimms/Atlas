@@ -18,6 +18,9 @@ namespace Atlas
 		Camera& GetCamera() { return _cam; }
 
 	private:
+		void AddEntity(IRenderable* entity);
+
+
 		std::vector<IRenderable*> _entities;
 
 		Camera _cam;

@@ -17,6 +17,8 @@ AudioManager::AudioManager()
 AudioManager::~AudioManager()
 {
 	if (_initialised) {
+		alDeleteSources(NUM_AUDIO_BUFFERS, _sources);
+		alDeleteBuffers(NUM_AUDIO_BUFFERS, _buffers);
 		alcMakeContextCurrent(nullptr);
 		alcDestroyContext(_context);
 		alcCloseDevice(_device);
@@ -26,7 +28,6 @@ AudioManager::~AudioManager()
 
 bool AudioManager::Init()
 {
-
 	_device = alcOpenDevice(nullptr);
 
 	if (!_device) {
@@ -40,7 +41,9 @@ bool AudioManager::Init()
 
 	alGetError();
 
-	alGenBuffers(1, &_buffer);
+	alGenBuffers(NUM_AUDIO_BUFFERS, _buffers);
+
+	_currentBuf = 0;
 
 	auto error = alGetError();
 
@@ -49,21 +52,30 @@ bool AudioManager::Init()
 		return false;
 	}
 
+	for (int i = 0; i < NUM_AUDIO_BUFFERS; i++) {
+		queue[i] = false;
+	}
+
 	_initialised = true;
 
 	return true;
 }
 
 
-bool AudioManager::LoadSound(std::string& path, unsigned int bufferID)
+int AudioManager::LoadSound(std::string& path, unsigned int bufferID)
 {
+	if (_currentBuf == NUM_AUDIO_BUFFERS) {
+		_log->Error("Out of audio buffers");
+		return -1;
+	}
+
 	long fileSize = AtlasAPI::AtlasAPIHelper::GetFileSizeBytes(path);
 
 	std::ifstream file(path, std::ios::in | std::ios::binary);
 
 	if (!file.good()) {
 		_log->Error("Failed to load sound file: " + path);
-		return false;
+		return -1;
 	}
 	char* buf = new char[fileSize];
 	file.read(buf, fileSize);
@@ -71,52 +83,68 @@ bool AudioManager::LoadSound(std::string& path, unsigned int bufferID)
 	file.close();
 
 	alGetError();
-	alBufferData(_buffer, AL_FORMAT_MONO16, buf, fileSize, 44100);
+	alBufferData(_buffers[_currentBuf], AL_FORMAT_MONO16, buf, fileSize, 44100);
 
 	delete[] buf;
 
 	auto error = alGetError();
 	if (error != AL_NO_ERROR) {
 		_log->Error("Error buffering sound file: " + path + " (" + std::to_string(error) + ")");
-		return false;
+		return -1;
 	}
 
-	alGenSources(1, &_source);
+	alGenSources(1, &_sources[_currentBuf]);
 	error = alGetError();
 	if (error != AL_NO_ERROR) {
 		_log->Error("Error generating sound source: " + path + " (" + std::to_string(error) + ")");
-		return false;
+		return -1;
 	}
 
-	alSourcei(_source, AL_BUFFER, _buffer);
+	alSourcei(_sources[_currentBuf], AL_BUFFER, _buffers[_currentBuf]);
 	error = alGetError();
 	if (error != AL_NO_ERROR) {
 		_log->Error("Error setting sound source: " + path + " (" + std::to_string(error) + ")");
-		return false;
+		return -1;
 	}
 
-	QueueSound(_source);
+	return _currentBuf++;
 }
 
-void AudioManager::QueueSound(unsigned int sourceID)
+
+void AudioManager::PauseSound(int soundID)
 {
 	int state;
-	alGetSourcei(_source, AL_SOURCE_STATE, &state);
+	alGetSourcei(_sources[soundID], AL_SOURCE_STATE, &state);
 
-	if (state != AL_PLAYING) {
-		queued = true;
+	if (state == AL_PLAYING) {
+		alSourcePause(_sources[soundID]);
 	}
 }
+
+
+void AudioManager::QueueSound(int soundID)
+{
+	int state;
+	alGetSourcei(_sources[soundID], AL_SOURCE_STATE, &state);
+
+	if (state != AL_PLAYING) {
+		queue[soundID] = true;
+	}
+}
+
 
 void AudioManager::PlaySource(unsigned int sourceID)
 {
-	alSourcePlay(_source);
+	alSourcePlay(sourceID);
 }
+
 
 void AudioManager::ProcessAudio()
 {
-	if (queued) {
-		alSourcePlay(_source);
-		queued = false;
+	for (int i = 0; i < NUM_AUDIO_BUFFERS; i++) {
+		if (queue[i]) {
+			PlaySource(_sources[i]);
+			queue[i] = false;
+		}
 	}
 }

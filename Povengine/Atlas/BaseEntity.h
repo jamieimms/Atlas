@@ -4,6 +4,13 @@
 
 namespace Atlas
 {
+	enum DataFormatEnum : int
+	{
+		Data = 3,
+		DataColour = 6,
+		DataColourTex = 8,
+	};
+
 	class BaseEntity : public Transformable, public IRenderable
 	{
 	public:
@@ -21,8 +28,9 @@ namespace Atlas
 		unsigned short* _indices;
 		int _numVertices;
 		int _numIndices;
+		
+		DataFormatEnum _dataFormat;
 		int _mode;
-
 
 	private:
 
@@ -31,7 +39,14 @@ namespace Atlas
 
 		unsigned int _ibaID;
 
+		unsigned int _texID;
+
 		unsigned int _shaderProgramID;
+
+		// Shader variables
+		int _texLoc;
+		int _viewLoc;
+		int _projLoc;
 		int _modelLoc;
 
 	};

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 // Wraps native API methods and provides the correct native implementation
 
@@ -18,7 +19,9 @@ namespace AtlasAPI
 		static bool EnsureDirectory(std::string& path);
 		static char GetPathSeparator();
 		static long GetFileSizeBytes(std::string& path);
-		
+		bool LoadTextFile(std::string& path, std::string& out);
+		bool LoadBinaryFile(std::string& path, std::vector<unsigned char>& out);
+
 
 		//String functions
 #ifdef _WIN32

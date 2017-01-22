@@ -1,6 +1,7 @@
 #include "BaseEntity.h"
 
 #include "glew.h"
+#include "..\AtlasUtil\ImageLoader.h"
 
 using namespace Atlas;
 
@@ -9,7 +10,13 @@ BaseEntity::BaseEntity(float x, float y, float z, unsigned int shaderID)
 	: Transformable(x,y,z), _shaderProgramID(shaderID)
 {
 
+	_dataFormat = DataFormatEnum::DataColour;
 	SetUniformScale(1.0f);
+
+	_texLoc = glGetUniformLocation(_shaderProgramID, "outTexture1");
+
+	_viewLoc = glGetUniformLocation(_shaderProgramID, "view");
+	_projLoc = glGetUniformLocation(_shaderProgramID, "projection");
 
 	_modelLoc = glGetUniformLocation(_shaderProgramID, "model");
 
@@ -27,12 +34,41 @@ void BaseEntity::Initialise()
 
 	glGenBuffers(1, &_vbID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (_numVertices * 6), _data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (_numVertices * ((int)_dataFormat)), _data, GL_STATIC_DRAW);
 
 	if (_indices != nullptr) {
 		glGenBuffers(1, &_ibaID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibaID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * _numIndices, _indices, GL_STATIC_DRAW);
+	}
+
+	if (_dataFormat == DataFormatEnum::DataColourTex) {
+		glGenTextures(1, &_texID);
+		glBindTexture(GL_TEXTURE_2D, _texID);
+		// Set wrapping mode
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		// Set texture filtering
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		std::vector<unsigned char> texData;
+
+		unsigned int w, h;
+		AtlasUtil::ImageLoader::LoadPNGImage("S:\\Development\\Povengine\\Data\\Textures\\Dirt.png", texData, w, h);
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texData[0]);
+		//auto error = glGetError();
+
+		//if (error != GL_NO_ERROR) {
+		//	//auto str = gluErrorString(error);
+
+		//}
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 
@@ -46,6 +82,7 @@ BaseEntity::~BaseEntity()
 
 void BaseEntity::Render(glm::mat4 view, glm::mat4 proj)
 {
+	int format = (int)_dataFormat;
 	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
 
 	// Pos
@@ -54,28 +91,45 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj)
 		3,
 		GL_FLOAT,
 		GL_FALSE,
-		6 * sizeof(float),
+		format * sizeof(float),
 		(void*)0
 	);
 	glEnableVertexAttribArray(0);
 
-	// Colour
-	glVertexAttribPointer(
-		1,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		6 * sizeof(float),
-		(void*)(3 * sizeof(float))
-	);
-	glEnableVertexAttribArray(1);
+	if (_dataFormat == DataFormatEnum::DataColour || _dataFormat == DataFormatEnum::DataColourTex) {
+		// Colour
+		glVertexAttribPointer(
+			1,
+			3,
+			GL_FLOAT,
+			GL_FALSE,
+			format * sizeof(float),
+			(void*)(3 * sizeof(float))
+		);
+		glEnableVertexAttribArray(1);
+	}
+
 
 	glUseProgram(_shaderProgramID);
 
-	auto viewLoc = glGetUniformLocation(_shaderProgramID, "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	auto projLoc = glGetUniformLocation(_shaderProgramID, "projection");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+	if (_dataFormat == DataFormatEnum::DataColourTex) {
+		glVertexAttribPointer(
+			2,
+			2,
+			GL_FLOAT,
+			GL_FALSE,
+			format * sizeof(float),
+			(void*)(6 * sizeof(float))
+		);
+		glEnableVertexAttribArray(2);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _texID);
+		glUniform1i(_texLoc, 0);
+	}
+
+	glUniformMatrix4fv(_viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(_projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
 	SetRenderTransform(_modelLoc);
 

@@ -149,6 +149,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Origin.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Transformable.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="AtlasRenderer.cpp" />
     <ClCompile Include="Origin.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Sphere.cpp" />

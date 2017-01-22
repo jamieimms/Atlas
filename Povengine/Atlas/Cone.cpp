@@ -7,9 +7,10 @@
 
 using namespace Atlas;
 
-Cone::Cone(float size, float x, float y, float z, unsigned int shaderProgramID)
+Cone::Cone(int quality, float size, float x, float y, float z, unsigned int shaderProgramID)
 	:BaseEntity(x, y, z, shaderProgramID)
 {
+	_quality = quality<1 ? 1 : quality;
 	SetUniformScale(size);
 
 	Initialise();
@@ -17,14 +18,12 @@ Cone::Cone(float size, float x, float y, float z, unsigned int shaderProgramID)
 
 void Cone::InitData()
 {
-	int quality = 10;
+	int sides = 4 * _quality;
 
-	int sides = 4 * quality;
-
-	float angleStep = 90.0f / quality;
+	float angleStep = 90.0f / _quality;
 
 	_numVertices = sides + 2;
-	_numIndices = (4 * 3 * quality) * 2;
+	_numIndices = (4 * 3 * _quality) * 2;
 
 	// Allocate memory
 	_data = new float[_numVertices * 6]{
@@ -47,7 +46,7 @@ void Cone::InitData()
 
 	float currentAngle = angleStep;
 	// Now calculate the positions of the vertices. We only need to do this for a 90 degree arc, we can just reverse the signs for each quadrant
-	for (int i = 1; i < quality; i++) {
+	for (int i = 1; i < _quality; i++) {
 		s = sin(AtlasUtil::AtlasMath::DegreesToRad(currentAngle));
 		c = cos(AtlasUtil::AtlasMath::DegreesToRad(currentAngle));
 		SetVertex(dataPos, s, 0.0f, c, 1.0f, 0, 0);
@@ -60,7 +59,7 @@ void Cone::InitData()
 	int indexPos = 0;
 	int vertexPos = 2;	// Start at the first side vertex
 
-	for (int i = 0; i < quality; i++) {
+	for (int i = 0; i < _quality; i++) {
 		if (vertexPos + 4 == _numVertices) {
 			// Handle the final triangles that needs to connect to the next quadrant
 			SetIndex(indexPos, 0, vertexPos, 3);
