@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <Windowsx.h>
 #include <cmath>
 #include "Win32Window.h"
 #include "AtlasManager.h"
@@ -49,6 +50,9 @@ bool Win32Window::createWindow(std::string title, unsigned int width, unsigned i
 	}
 
 	ShowWindow(_hWnd, _nCmdShow);
+
+	SetCapture(_hWnd);
+	ShowCursor(false);
 
 	return true;
 }
@@ -119,6 +123,20 @@ LRESULT Win32Window::wmCharHandler(WPARAM wParam, LPARAM lParam)
 
 LRESULT Win32Window::wmMouseMoveHandler(WPARAM wParam, LPARAM lParam)
 {
+	int mx = GET_X_LPARAM(lParam);
+	int my = GET_Y_LPARAM(lParam);
+
+	POINT p;
+	p.x = _width/2;
+	p.y = _height/2;
+	
+	if (mx != (_width/2) || my != (_height/2)) {
+		_parent->Input()->HandleMouseInput(mx, my);
+
+		ClientToScreen(_hWnd, &p);
+		SetCursorPos(p.x, p.y);
+	}
+
 	return 0;
 }
 
@@ -126,6 +144,8 @@ LRESULT Win32Window::wmSizeHandler(WPARAM wParam, LPARAM lParam)
 {
 	auto height = HIWORD(lParam);
 	auto width = LOWORD(lParam);
+
+	_parent->Input()->SetSize(width, height);
 
 	return 0;
 }

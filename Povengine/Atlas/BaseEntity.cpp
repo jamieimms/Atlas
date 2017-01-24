@@ -42,34 +42,6 @@ void BaseEntity::Initialise()
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * _numIndices, _indices, GL_STATIC_DRAW);
 	}
 
-	if (_dataFormat == DataFormatEnum::DataColourTex) {
-		glGenTextures(1, &_texID);
-		glBindTexture(GL_TEXTURE_2D, _texID);
-		// Set wrapping mode
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		// Set texture filtering
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		std::vector<unsigned char> texData;
-
-		unsigned int w, h;
-		AtlasUtil::ImageLoader::LoadPNGImage("S:\\Development\\Povengine\\Data\\Textures\\Dirt.png", texData, w, h);
-		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texData[0]);
-		//auto error = glGetError();
-
-		//if (error != GL_NO_ERROR) {
-		//	//auto str = gluErrorString(error);
-
-		//}
-
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
 }
 
 

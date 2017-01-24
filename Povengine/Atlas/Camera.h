@@ -15,6 +15,7 @@ namespace Atlas
 		void MoveForward();
 		void Backpedal();
 		void Strafe(bool isLeft);
+		void SetAngle(float pitch, float yaw);
 
 	private:
 
@@ -26,6 +27,7 @@ namespace Atlas
 		glm::vec3 _camUp;
 		glm::vec3 _upVec;
 		glm::vec3 _rightVec;
+		glm::vec3 _front;
 
 		glm::mat4 _viewMat;
 

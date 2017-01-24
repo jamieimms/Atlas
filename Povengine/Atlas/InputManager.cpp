@@ -40,3 +40,15 @@ bool InputManager::IsKeyPressed(unsigned int keyID)
 
 	return _keyStates[keyID];
 }
+
+/// <summary>
+///	Receive mouse input from window
+/// </summary>
+/// <param name="keyID">ID of the key to set/unset</param>
+/// <param name="isDown">bool indicating if the new key state is down or up</param>
+/// <returns>true if key is pressed, otherwise false. False if invalid key</returns>
+void InputManager::HandleMouseInput(int x, int y)
+{
+	_mouseX = x - (_width /2);
+	_mouseY = y - (_height / 2);
+}

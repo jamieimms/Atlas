@@ -40,6 +40,8 @@ AtlasManager::AtlasManager()
 	std::string s = "S:\\Development\\Povengine\\Data\\Sound\\";
 
 	_audio->LoadSound(s + "118.wav", 0);
+
+	_lastFrame = std::chrono::high_resolution_clock::now();
 }
 
 /// <summary>
@@ -198,6 +200,10 @@ int AtlasManager::start()
 /// </summary>
 void AtlasManager::frameProcessing()
 {
+	auto frameTime = std::chrono::high_resolution_clock::now();
+
+	std::chrono::duration<double, std::ratio<1, 1000>> elapsed_ms = frameTime - _lastFrame;
+
 	// Update game state
 	inputProcessing();
 
@@ -209,6 +215,8 @@ void AtlasManager::frameProcessing()
 	_currentScene->DrawScene(_renderer->GetProjection());
 
 	_renderer->endRender();
+
+	_lastFrame = std::chrono::high_resolution_clock::now();
 }
 
 /// <summary>
@@ -219,6 +227,9 @@ void AtlasManager::inputProcessing()
 	static float xPos = 0;
 	static float yPos = 3.0f;
 	static float zPos = 5.0f;
+
+	static float camPitch = 0.0f;
+	static float camYaw = 0.0f;
 
 	if (_inputManager->IsKeyPressed(VK_UP))
 	{
@@ -251,6 +262,23 @@ void AtlasManager::inputProcessing()
 	if (_inputManager->IsKeyPressed(VK_F1)) {
 		_audio->QueueSound(0);
 	}
+
+	if (_inputManager->IsKeyPressed(VK_ESCAPE)) {
+		exit(0);
+	}
+
+	//camPitch += 0.1f;
+	camYaw += (_inputManager->GetMouseX() * 0.05f);
+	camPitch += -(_inputManager->GetMouseY() * 0.05f);
+
+	if (camPitch >= 90.0f) {
+		camPitch = 89.0f;
+	}
+	if (camPitch <= -90.0f) {
+		camPitch = -89.0f;
+	}
+
+	_currentScene->GetCamera().SetAngle(camPitch, camYaw);
 
 	//float ticks = AtlasAPI::AtlasAPIHelper::GetTicks() / 100;
 	//static float radius = 20.0f;

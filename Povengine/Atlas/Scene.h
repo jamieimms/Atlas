@@ -3,6 +3,7 @@
 
 #include "../AtlasUtil/IRenderable.h"
 #include "Camera.h"
+#include "TextureManager.h"
 
 namespace Atlas
 {
@@ -18,11 +19,13 @@ namespace Atlas
 		Camera& GetCamera() { return _cam; }
 
 	private:
-		void AddEntity(IRenderable* entity);
+		IRenderable* AddEntity(IRenderable* entity);
 
 
 		std::vector<IRenderable*> _entities;
 
 		Camera _cam;
+
+		TextureManager _texManager;
 	};
 }

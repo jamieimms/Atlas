@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseManager.h"
+#include <chrono>
 #include "Window.h"
 #include "AtlasRenderer.h"
 #include "Scene.h"
@@ -37,6 +38,7 @@ namespace Atlas
 		InputManager* _inputManager;	// Handles user input
 		AudioManager* _audio;	// Handles audio functions
 
+		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
 
 		Scene* _currentScene;
 

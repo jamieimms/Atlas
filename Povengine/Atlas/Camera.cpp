@@ -25,13 +25,24 @@ void Camera::SetLookAt(float x, float y, float z)
 	_needsUpdate = true;
 }
 
+void Camera::SetAngle(float pitch, float yaw)
+{
+	_front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	_front.y = sin(glm::radians(pitch));
+	_front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+	_front = glm::normalize(_front);
+	_needsUpdate = true;
+}
+
+
 void Camera::Update()
 {
 	if (_needsUpdate) {
 		//_camDirection = glm::normalize(_camPos - _camTarget);
 		//_rightVec = glm::normalize(glm::cross(_upVec, _camDirection));
 		//_camUp = glm::cross(_camDirection, _rightVec);
-		_viewMat = glm::lookAt(_camPos, _camTarget, _upVec);
+		_viewMat = glm::lookAt(_camPos, _camPos + _front, _upVec);
 
 		_needsUpdate = false;
 	}

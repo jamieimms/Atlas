@@ -152,6 +152,7 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transformable.h" />
     <ClInclude Include="OpenGLRenderer.h" />
     <ClInclude Include="AtlasRenderer.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Transformable.cpp" />
     <ClCompile Include="Win32Window.cpp" />

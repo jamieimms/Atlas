@@ -17,6 +17,8 @@ namespace Atlas
 		BaseEntity(float x, float y, float z, unsigned int shaderProgramID);
 		virtual ~BaseEntity();
 
+		void SetTexture(unsigned int texID) { _texID = texID; }
+
 		void Initialise();
 
 		virtual void Render(glm::mat4 view, glm::mat4 proj);
@@ -31,6 +33,8 @@ namespace Atlas
 		
 		DataFormatEnum _dataFormat;
 		int _mode;
+
+		float _size;
 
 	private:
 
