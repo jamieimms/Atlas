@@ -5,7 +5,8 @@
 using namespace Atlas;
 
 
-TextureManager::TextureManager()
+TextureManager::TextureManager(AtlasUtil::AtlasLog* log)
+	: BaseManager(log)
 {
 
 }

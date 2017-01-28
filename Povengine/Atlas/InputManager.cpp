@@ -2,8 +2,8 @@
 
 using namespace Atlas;
 
-InputManager::InputManager()
-	: BaseManager()
+InputManager::InputManager(AtlasUtil::AtlasLog* log)
+	: BaseManager(log)
 {
 	for (int i = 0; i < 256; i++) {
 		_keyStates[i] = false;
@@ -51,4 +51,10 @@ void InputManager::HandleMouseInput(int x, int y)
 {
 	_mouseX = x - (_width /2);
 	_mouseY = y - (_height / 2);
+}
+
+void InputManager::ResetMouseInput()
+{
+	_mouseX = 0;
+	_mouseY = 0;
 }

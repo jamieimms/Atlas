@@ -6,16 +6,25 @@
 #include "Sphere.h"
 #include "Cone.h"
 #include "Plane.h"
+#include "FileManager.h"
 
 using namespace Atlas;
+
+
+Scene::Scene(TextureManager* texManager)
+	: _texManager(texManager)
+{
+
+}
+
 
 ///
 void Scene::LoadScene(unsigned int shader1, unsigned int shader2)
 {
-	std::string texDir = "S:\\Development\\Povengine\\Data\\Textures\\";
-	auto tex1 = _texManager.LoadTexture(texDir + "Dirt.png");
-	auto tex2 = _texManager.LoadTexture(texDir + "PatchyDirt.png");
-	auto tex3 = _texManager.LoadTexture(texDir + "DirtGrassBorder01.png");
+	std::string texDir = FileManager::GetTextureDirectory();
+	auto tex1 = _texManager->LoadTexture(texDir + "Dirt.png");
+	auto tex2 = _texManager->LoadTexture(texDir + "PatchyDirt.png");
+	auto tex3 = _texManager->LoadTexture(texDir + "DirtGrassBorder01.png");
 
 	//Triangle* t = new Triangle(1.0f, 0.0f, 0.0f, 0.0f, shader1);
 	//Triangle* u = new Triangle(0.5f, 0.0f, -1.0f, 0.0f, shader1);
@@ -29,6 +38,7 @@ void Scene::LoadScene(unsigned int shader1, unsigned int shader2)
 
 	//AddEntity(new Cone(10, 1.0f, 0, 1.0f, 0, shader1));
 	//AddEntity(new Cone(5, 1.0f, 0, -1.0f, 0, shader1));
+
 	auto p = new Plane(10.0f, 0, -0.01f, 0, shader2);
 	AddEntity(p);
 	p->SetTexture(tex1);

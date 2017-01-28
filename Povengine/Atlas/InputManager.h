@@ -7,13 +7,13 @@ namespace Atlas
 	class InputManager : protected BaseManager
 	{
 	public:
-		InputManager();
+		InputManager(AtlasUtil::AtlasLog* log);
 
 		void SetSize(int w, int h) { _width = w; _height = h; }
 
 		void HandleKeyPress(unsigned int keyID, bool isDown);
 		void HandleMouseInput(int x, int y);
-
+		void ResetMouseInput();
 
 		bool IsKeyPressed(unsigned int keyID);
 

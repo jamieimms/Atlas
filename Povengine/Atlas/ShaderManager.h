@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "BaseManager.h"
 #include "../AtlasUtil/AtlasLog.h"
 
 
@@ -14,7 +15,7 @@ namespace Atlas
 	//	unsigned int _internalID;
 	//};
 
-	class ShaderManager
+	class ShaderManager : protected BaseManager
 	{
 	public:
 		ShaderManager(AtlasUtil::AtlasLog* log, std::string basePath);
@@ -33,8 +34,6 @@ namespace Atlas
 		unsigned int CompileShader(unsigned int shaderType, const char* source, int sourceLen, std::string& shaderName);
 
 		std::string _basePath;
-
-		AtlasUtil::AtlasLog* _log;
 
 		std::vector<unsigned int> _loadedShaders;
 	};

@@ -77,15 +77,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>S:\Development\Povengine\Dependencies\GLEW\include;S:\Development\Povengine\Dependencies\glm;C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>S:\Development\Povengine\Dependencies\GLEW\include;S:\Development\Povengine\Dependencies\glm;C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;S:\Development\Povengine\Dependencies\Bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>S:\Development\Povengine\Dependencies\GLEW\lib\Win32;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;OpenGL32.lib;glew32s.lib;OpenAL32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>S:\Development\Povengine\Dependencies\GLEW\lib\Win32;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;S:\Development\Povengine\Dependencies\Bullet\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;OpenGL32.lib;glew32s.lib;OpenAL32.lib;BulletCollision_vs2015_debug.lib;BulletDynamics_vs2015_debug.lib;LinearMath_vs2015_debug.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -147,8 +147,11 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Origin.h" />
+    <ClInclude Include="PhysicsEntity.h" />
+    <ClInclude Include="PhysicsManager.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Text.h" />
@@ -169,10 +172,13 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="AtlasRenderer.cpp" />
     <ClCompile Include="Origin.cpp" />
+    <ClCompile Include="PhysicsEntity.cpp" />
+    <ClCompile Include="PhysicsManager.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />

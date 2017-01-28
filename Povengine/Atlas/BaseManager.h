@@ -6,7 +6,7 @@ namespace Atlas
 	class BaseManager
 	{
 	public:
-		BaseManager() : _initialised(false) {}
+		BaseManager(AtlasUtil::AtlasLog* log) : _initialised(false), _log(log) {}
 		virtual ~BaseManager() {}
 
 	protected:

@@ -8,6 +8,7 @@
 #include "../AtlasUtil/AtlasMessageBox.h"
 #include "../AtlasAPI/AtlasAPIHelper.h"
 
+
 using namespace Atlas;
 using namespace AtlasUtil;
 
@@ -15,7 +16,7 @@ using namespace AtlasUtil;
 /// Construct the manager
 /// </summary>
 AtlasManager::AtlasManager()
-	: BaseManager(), _name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr), _inputManager(nullptr), _shaderManager(nullptr)
+	: BaseManager(nullptr), _name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr), _inputManager(nullptr), _shaderManager(nullptr), _phys(nullptr)
 {
 	std::stringstream fmt;
 	fmt << AtlasAPI::AtlasAPIHelper::GetUserDataPath() << AtlasAPI::AtlasAPIHelper::GetPathSeparator() << _name;
@@ -29,13 +30,22 @@ AtlasManager::AtlasManager()
 
 	_shaderManager = new ShaderManager(_log, _mainDir);
 
-	_inputManager = new InputManager();
+	_inputManager = new InputManager(_log);
 
-	_audio = new AudioManager();
+	_audio = new AudioManager(_log);
 
 	if (!_audio->Init()) {
 		_log->Error("Audio manager failed to init.");
 	}
+
+	_phys = new PhysicsManager(_log);
+
+	if (!_phys->initialisePhysicsEngine()) {
+		// fall over in heap. No recovering from this.
+		_log->Error("Atlas init failed.");
+	}
+
+	_texManager = new TextureManager(_log);
 
 	std::string s = "S:\\Development\\Povengine\\Data\\Sound\\";
 
@@ -50,6 +60,10 @@ AtlasManager::AtlasManager()
 AtlasManager::~AtlasManager()
 {
 	_log->Debug("Atlas Engine Stopping");
+
+	delete _texManager;
+
+	delete _phys;
 
 	delete _audio;
 
@@ -147,9 +161,6 @@ bool AtlasManager::Initialise()
 	//auto shader1 = _shaderManager->LoadShader(colourVertexShader, colourFragShader);
 	////auto shader2 = _shaderManager->LoadShader(texVertexShader, texFragShader);
 
-	//_currentScene = new Scene();
-	//_currentScene->LoadScene(shader1, 0);
-
 	std::string colourVertexShader = dataPath + "colour.vert";
 	std::string colourShader = dataPath + "colour.frag";
 
@@ -159,7 +170,7 @@ bool AtlasManager::Initialise()
 	auto shader1 = _shaderManager->LoadShader(colourVertexShader, colourShader);
 	auto shader2 = _shaderManager->LoadShader(texVertexShader, texShader);
 
-	_currentScene = new Scene();
+	_currentScene = new Scene(_texManager);
 	_currentScene->LoadScene(shader1, shader2);
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();
@@ -268,17 +279,21 @@ void AtlasManager::inputProcessing()
 	}
 
 	//camPitch += 0.1f;
-	camYaw += (_inputManager->GetMouseX() * 0.05f);
-	camPitch += -(_inputManager->GetMouseY() * 0.05f);
+	if (_inputManager->GetMouseX() != 0 && _inputManager->GetMouseY() != 0) {
+		camYaw += (_inputManager->GetMouseX() * 0.05f);
+		camPitch += -(_inputManager->GetMouseY() * 0.05f);
 
-	if (camPitch >= 90.0f) {
-		camPitch = 89.0f;
-	}
-	if (camPitch <= -90.0f) {
-		camPitch = -89.0f;
-	}
+		if (camPitch >= 90.0f) {
+			camPitch = 89.0f;
+		}
+		if (camPitch <= -90.0f) {
+			camPitch = -89.0f;
+		}
 
-	_currentScene->GetCamera().SetAngle(camPitch, camYaw);
+		_currentScene->GetCamera().SetAngle(camPitch, camYaw);
+
+		_inputManager->ResetMouseInput();
+	}
 
 	//float ticks = AtlasAPI::AtlasAPIHelper::GetTicks() / 100;
 	//static float radius = 20.0f;

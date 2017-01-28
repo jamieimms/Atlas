@@ -103,6 +103,15 @@
     <ClInclude Include="TextureManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsEntity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -157,6 +166,15 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEntity.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,8 +9,9 @@ using namespace Atlas;
 //using namespace AtlasUtil;
 
 ShaderManager::ShaderManager(AtlasUtil::AtlasLog* log, std::string basePath)
-	:_log(log), _basePath(basePath)
+	: BaseManager(log), _basePath(basePath)
 {
+
 }
 
 ShaderManager::~ShaderManager()

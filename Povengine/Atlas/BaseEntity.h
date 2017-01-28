@@ -19,7 +19,7 @@ namespace Atlas
 
 		void SetTexture(unsigned int texID) { _texID = texID; }
 
-		void Initialise();
+		virtual void Initialise();
 
 		virtual void Render(glm::mat4 view, glm::mat4 proj);
 

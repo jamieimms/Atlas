@@ -8,6 +8,8 @@
 #include "ShaderManager.h"
 #include "InputManager.h"
 #include "AudioManager.h"
+#include "PhysicsManager.h"
+#include "TextureManager.h"
 
 namespace Atlas
 {
@@ -37,6 +39,8 @@ namespace Atlas
 		ShaderManager* _shaderManager; // The shader loader
 		InputManager* _inputManager;	// Handles user input
 		AudioManager* _audio;	// Handles audio functions
+		PhysicsManager* _phys;	// Handles physics calculations
+		TextureManager* _texManager; // Handles textures
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
 

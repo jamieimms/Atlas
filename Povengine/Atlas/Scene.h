@@ -10,6 +10,7 @@ namespace Atlas
 	class Scene
 	{
 	public:
+		Scene(TextureManager* texManager);
 		void LoadScene(unsigned int shader1, unsigned int shader2);
 		void UnloadScene();
 
@@ -26,6 +27,6 @@ namespace Atlas
 
 		Camera _cam;
 
-		TextureManager _texManager;
+		TextureManager* _texManager;
 	};
 }

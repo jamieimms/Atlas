@@ -7,8 +7,8 @@
 
 using namespace Atlas;
 
-AudioManager::AudioManager()
-	:_device(nullptr)
+AudioManager::AudioManager(AtlasUtil::AtlasLog* log)
+	: BaseManager(log), _device(nullptr)
 {
 
 }

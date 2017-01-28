@@ -16,7 +16,7 @@ namespace Atlas
 	{
 
 	public:
-		TextureManager();
+		TextureManager(AtlasUtil::AtlasLog* log);
 		virtual ~TextureManager();
 
 

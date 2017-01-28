@@ -13,7 +13,7 @@ namespace Atlas
 
 	public:
 
-		AudioManager();
+		AudioManager(AtlasUtil::AtlasLog* log);
 		virtual ~AudioManager();
 
 		bool Init();
