@@ -1,9 +1,10 @@
 #pragma once
-#include "BaseEntity.h"
+#include "PhysicsEntity.h"
+
 
 namespace Atlas
 {
-	class Cube : public BaseEntity
+	class Cube : public PhysicsEntity
 	{
 	public:
 		Cube(float size, float x, float y, float z, unsigned int shaderProgramID);

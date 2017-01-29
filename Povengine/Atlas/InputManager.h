@@ -18,8 +18,9 @@ namespace Atlas
 		bool IsKeyPressed(unsigned int keyID);
 
 		int GetMouseX() { return _mouseX; }
-		int GetMouseY() { return _mouseY; }
+		int GetMouseY() { return _mouseInvertedY ? _mouseY : -_mouseY; }
 
+		float GetMouseSensitivity() { return _sensitivity; }
 
 	private:
 		bool _keyStates[256];
@@ -29,6 +30,9 @@ namespace Atlas
 
 		int _mouseX;
 		int _mouseY;
+
+		float _sensitivity;
+		bool _mouseInvertedY;
 
 	};
 

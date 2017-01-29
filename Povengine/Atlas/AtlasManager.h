@@ -43,6 +43,7 @@ namespace Atlas
 		TextureManager* _texManager; // Handles textures
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
+		double _frameDelta;
 
 		Scene* _currentScene;
 

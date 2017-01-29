@@ -1,9 +1,9 @@
 #pragma once
-#include "BaseEntity.h"
+#include "PhysicsEntity.h"
 
 namespace Atlas
 {
-	class Plane : public BaseEntity
+	class Plane : public PhysicsEntity
 	{
 	public:
 		Plane(float size, float x, float y, float z, unsigned int shaderProgramID);

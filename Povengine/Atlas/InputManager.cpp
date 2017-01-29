@@ -9,6 +9,9 @@ InputManager::InputManager(AtlasUtil::AtlasLog* log)
 		_keyStates[i] = false;
 	}
 
+	_sensitivity = 3.0f;
+	_mouseInvertedY = false;
+
 	_initialised = true;
 }
 

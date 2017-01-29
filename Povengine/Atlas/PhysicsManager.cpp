@@ -96,7 +96,7 @@ bool PhysicsManager::initialisePhysicsEngine()
 //	Advances the simulation by the seconds elapsed since last frame.
 //
 //
-void PhysicsManager::doFrame(float delta)
+void PhysicsManager::doFrame(double delta)
 {
 		_dynamicsWorld->stepSimulation(delta, 10);
 }

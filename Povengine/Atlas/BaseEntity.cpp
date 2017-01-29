@@ -116,3 +116,23 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj)
 
 	glDisableVertexAttribArray(0);
 }
+
+void BaseEntity::SetVertex(int &dataPos, float x, float y, float z, float r = 1.0f, float g = 1.0f, float b = 1.0f)
+{
+	// Vertex position
+	_data[dataPos++] = x;
+	_data[dataPos++] = y;
+	_data[dataPos++] = z;
+
+	// Colour
+	_data[dataPos++] = r;
+	_data[dataPos++] = g;
+	_data[dataPos++] = b;
+}
+
+void BaseEntity::SetIndex(int &indexPos, unsigned short a, unsigned short b, unsigned short c)
+{
+	_indices[indexPos++] = a;
+	_indices[indexPos++] = b;
+	_indices[indexPos++] = c;
+}

@@ -152,15 +152,6 @@ bool AtlasManager::Initialise()
 
 	std::string dataPath = AtlasAPI::AtlasAPIHelper::GetDataPath();
 
-	//std::string texVertexShader = dataPath + "texture.vert";
-	//std::string colourVertexShader = dataPath + "colour.vert";
-	//std::string colourFragShader = dataPath + "colour.frag";
-	//std::string texFragShader = dataPath + "texture.frag";
-
-
-	//auto shader1 = _shaderManager->LoadShader(colourVertexShader, colourFragShader);
-	////auto shader2 = _shaderManager->LoadShader(texVertexShader, texFragShader);
-
 	std::string colourVertexShader = dataPath + "colour.vert";
 	std::string colourShader = dataPath + "colour.frag";
 
@@ -170,7 +161,7 @@ bool AtlasManager::Initialise()
 	auto shader1 = _shaderManager->LoadShader(colourVertexShader, colourShader);
 	auto shader2 = _shaderManager->LoadShader(texVertexShader, texShader);
 
-	_currentScene = new Scene(_texManager);
+	_currentScene = new Scene(_texManager, _phys);
 	_currentScene->LoadScene(shader1, shader2);
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();
@@ -213,12 +204,15 @@ void AtlasManager::frameProcessing()
 {
 	auto frameTime = std::chrono::high_resolution_clock::now();
 
-	std::chrono::duration<double, std::ratio<1, 1000>> elapsed_ms = frameTime - _lastFrame;
+	std::chrono::duration<double> elapsedSec = frameTime - _lastFrame;
+	_frameDelta = elapsedSec.count();
 
 	// Update game state
 	inputProcessing();
 
 	_audio->ProcessAudio();
+	
+	_phys->doFrame(_frameDelta);
 
 	_renderer->beginRender();
 
@@ -227,7 +221,7 @@ void AtlasManager::frameProcessing()
 
 	_renderer->endRender();
 
-	_lastFrame = std::chrono::high_resolution_clock::now();
+	_lastFrame = frameTime;
 }
 
 /// <summary>
@@ -278,10 +272,13 @@ void AtlasManager::inputProcessing()
 		exit(0);
 	}
 
+	
+
 	//camPitch += 0.1f;
 	if (_inputManager->GetMouseX() != 0 && _inputManager->GetMouseY() != 0) {
-		camYaw += (_inputManager->GetMouseX() * 0.05f);
-		camPitch += -(_inputManager->GetMouseY() * 0.05f);
+		camYaw += ((_inputManager->GetMouseX()) * _frameDelta) * _inputManager->GetMouseSensitivity();
+		camPitch += (_inputManager->GetMouseY() * _frameDelta) * _inputManager->GetMouseSensitivity();
+
 
 		if (camPitch >= 90.0f) {
 			camPitch = 89.0f;

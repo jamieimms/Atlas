@@ -1,9 +1,7 @@
 #include "Cone.h"
 
-#include <cmath>
 #include "glew.h"
-
-#include "..\AtlasUtil\AtlasMath.h"
+#include "glm.hpp"
 
 using namespace Atlas;
 
@@ -15,6 +13,7 @@ Cone::Cone(int quality, float size, float x, float y, float z, unsigned int shad
 
 	Initialise();
 }
+
 
 void Cone::InitData()
 {
@@ -47,8 +46,8 @@ void Cone::InitData()
 	float currentAngle = angleStep;
 	// Now calculate the positions of the vertices. We only need to do this for a 90 degree arc, we can just reverse the signs for each quadrant
 	for (int i = 1; i < _quality; i++) {
-		s = sin(AtlasUtil::AtlasMath::DegreesToRad(currentAngle));
-		c = cos(AtlasUtil::AtlasMath::DegreesToRad(currentAngle));
+		s = sin(glm::radians(currentAngle));
+		c = cos(glm::radians(currentAngle));
 		SetVertex(dataPos, s, 0.0f, c, 1.0f, 0, 0);
 		SetVertex(dataPos, c, 0.0f, -s, 0, 1.0f, 0);	// Invert angle
 		SetVertex(dataPos, -s, 0.0f, -c, 0, 0, 1.0f);
@@ -79,24 +78,4 @@ void Cone::InitData()
 			}
 		}
 	}
-}
-
-void Cone::SetVertex(int &dataPos, float x, float y, float z, float r = 1.0f, float g = 1.0f, float b = 1.0f)
-{
-	// Vertex position
-	_data[dataPos++] = x;
-	_data[dataPos++] = y;
-	_data[dataPos++] = z;
-
-	// Colour
-	_data[dataPos++] = r;
-	_data[dataPos++] = g;
-	_data[dataPos++] = b;
-}
-
-void Cone::SetIndex(int &indexPos, unsigned short a, unsigned short b, unsigned short c)
-{
-	_indices[indexPos++] = a;
-	_indices[indexPos++] = b;
-	_indices[indexPos++] = c;
 }

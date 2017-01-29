@@ -4,13 +4,14 @@
 #include "../AtlasUtil/IRenderable.h"
 #include "Camera.h"
 #include "TextureManager.h"
+#include "PhysicsManager.h"
 
 namespace Atlas
 {
 	class Scene
 	{
 	public:
-		Scene(TextureManager* texManager);
+		Scene(TextureManager* texManager, PhysicsManager* physManager);
 		void LoadScene(unsigned int shader1, unsigned int shader2);
 		void UnloadScene();
 
@@ -28,5 +29,6 @@ namespace Atlas
 		Camera _cam;
 
 		TextureManager* _texManager;
+		PhysicsManager* _physicsManager;
 	};
 }

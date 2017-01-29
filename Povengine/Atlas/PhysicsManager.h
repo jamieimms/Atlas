@@ -15,7 +15,7 @@ namespace Atlas
 
 		// abstract Subsystem methods
 		//virtual void reset();
-		virtual void doFrame(float delta);
+		virtual void doFrame(double delta);
 
 		bool initialisePhysicsEngine();
 

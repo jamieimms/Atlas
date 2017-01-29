@@ -5,9 +5,9 @@ using namespace Atlas;
 
 ///
 Cube::Cube(float size, float x, float y, float z, unsigned int shaderProgramID)
-	:BaseEntity(x, y, z, shaderProgramID)
+	:PhysicsEntity(x, y, z, shaderProgramID)
 {
-	SetUniformScale(size);
+	_size = size;
 
 	Initialise();
 }
@@ -40,14 +40,14 @@ void Cube::InitData()
 	// An array of 3 vectors which represents 3 vertices
 	_data = new float[_numVertices * 6]{
 
-		-1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,	// 0
-		1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,	// 1
-		1.0f,  1.0f, -1.0f, 1.0f, 0.0f, 0.0f,	// 2
-		-1.0f,  1.0f, -1.0f,   1.0f, 0.0f, 0.0f,	// 3
+		-_size, -_size, -_size, 1.0f, 0.0f, 0.0f,	// 0
+		_size, -_size, -_size,  1.0f, 0.0f, 0.0f,	// 1
+		_size,  _size, -_size, 1.0f, 0.0f, 0.0f,	// 2
+		-_size,  _size, -_size,   1.0f, 0.0f, 0.0f,	// 3
 
-		-1.0f, -1.0f,  1.0f,   0.0f, 1.0f, 0.0f,	// 4
-		1.0f, -1.0f,  1.0f,   0.0f, 1.0f, 0.0f,	// 5
-		1.0f,  1.0f,  1.0f,  0.0f, 1.0f, 0.0f,	// 6
-		-1.0f,  1.0f,  1.0f,  0.0f, 1.0f, 0.0f,	// 7
+		-_size, -_size,  _size,   0.0f, 1.0f, 0.0f,	// 4
+		_size, -_size,  _size,   0.0f, 1.0f, 0.0f,	// 5
+		_size,  _size,  _size,  0.0f, 1.0f, 0.0f,	// 6
+		-_size,  _size,  _size,  0.0f, 1.0f, 0.0f,	// 7
 	};
 }

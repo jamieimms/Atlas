@@ -21,11 +21,21 @@ namespace Atlas
 
 		void SetRenderTransform(unsigned int transformLoc);
 
+		glm::mat4 GetTransform();
+		glm::vec3 GetPosition();
+
+		void SetTransform(glm::mat4 newTransform);
+
+
 	private:
+		void UpdateTransform();
+
 		glm::vec4 _pos;
 		glm::mat4 _transMat;
 		glm::vec3 _scale;
 		glm::vec3 _rot;
 
+		bool _requiresUpdate;
+
 	};
-}
+};
