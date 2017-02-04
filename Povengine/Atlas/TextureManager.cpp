@@ -16,6 +16,9 @@ TextureManager::~TextureManager()
 	FlushTextures();
 }
 
+/// <summary>
+/// Load the texture with the given path or returns the texture ID if it is already loaded into memory
+/// </summary>
 unsigned int TextureManager::LoadTexture(std::string& path)
 {
 	if (IsLoaded(path)) {
@@ -37,9 +40,19 @@ unsigned int TextureManager::LoadTexture(std::string& path)
 	std::vector<unsigned char> texData;
 
 	unsigned int w, h;
-	AtlasUtil::ImageLoader::LoadPNGImage(path, texData, w, h);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texData[0]);
+	switch (GetTextureType(path)) {
+	case Unsupported:
+		return -1;
+	case PNG:
+		AtlasUtil::ImageLoader::LoadPNGImage(path, texData, w, h);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texData[0]);
+		break;
+	case JPG:
+		AtlasUtil::ImageLoader::LoadJPGImage(path, texData, w, h);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, &texData[0]);
+		break;
+	}
 
 	glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -50,13 +63,34 @@ unsigned int TextureManager::LoadTexture(std::string& path)
 	return tex->TextureID;
 }
 
+TextureType TextureManager::GetTextureType(std::string& path)
+{
+	auto index = path.find_last_of('.');
+	auto extension = path.substr(index + 1);
+
+	if (extension == "png") {
+		return TextureType::PNG;
+	}
+	else if (extension == "jpg" || extension == "jpeg") {
+		return TextureType::JPG;
+	}
+
+	return TextureType::Unsupported;
+}
+
+/// <summary>
+/// Unloads a given texture and frees the memory associated with it.
+/// </summary>
 void TextureManager::UnloadTexture(AtlasTexture* texture)
 {
-	// OpenGL texture deinit
+	// TODO: OpenGL texture deinit
 
 	delete texture;
 }
 
+/// <summary>
+/// Unloads and deallocates all currently loaded textures
+/// </summary>
 void TextureManager::FlushTextures()
 {
 	while (_loadedTextures.size() > 0) {
@@ -66,7 +100,9 @@ void TextureManager::FlushTextures()
 	}
 }
 
-
+/// <summary>
+/// Check if the given texture is already loaded
+/// </summary>
 bool TextureManager::IsLoaded(std::string& path)
 {
 	for (auto it : _loadedTextures) {
@@ -78,7 +114,9 @@ bool TextureManager::IsLoaded(std::string& path)
 	return false;
 }
 
-
+/// <summary>
+/// Gets the internal id of the given texture file path
+/// </summary>
 unsigned int TextureManager::GetTextureID(std::string& path)
 {
 	for (auto it : _loadedTextures) {

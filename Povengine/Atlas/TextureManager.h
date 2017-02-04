@@ -5,6 +5,12 @@
 
 namespace Atlas
 {
+	enum TextureType {
+		Unsupported,
+		PNG,
+		JPG
+	};
+
 	class AtlasTexture
 	{
 	public:
@@ -29,6 +35,7 @@ namespace Atlas
 
 	private:
 		void UnloadTexture(AtlasTexture* textureID);
+		TextureType GetTextureType(std::string& path);
 
 
 		std::list<AtlasTexture*> _loadedTextures;

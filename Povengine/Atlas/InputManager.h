@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseManager.h"
-#include "AtlasKeyEnum.h"
 
 namespace Atlas
 {

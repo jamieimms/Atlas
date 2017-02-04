@@ -32,6 +32,12 @@
     <Filter Include="Game\Input">
       <UniqueIdentifier>{cc6ea36f-2038-42a9-bcc4-b9de769b55af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Lights">
+      <UniqueIdentifier>{eabddf9e-036d-4379-a848-fed78cc1d794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enums">
+      <UniqueIdentifier>{595c5dbc-ffa6-4494-9903-a52c0ff0b310}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -88,9 +94,6 @@
     <ClInclude Include="InputManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="AtlasKeyEnum.h">
-      <Filter>Game\Input</Filter>
-    </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -111,6 +114,21 @@
     </ClInclude>
     <ClInclude Include="FileManager.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Entities\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="DataFormatEnum.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityTypeEnum.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="FileManager.cpp">
       <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Entities\Lights</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
