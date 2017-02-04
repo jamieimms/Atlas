@@ -9,12 +9,14 @@ using namespace Atlas;
 Sphere::Sphere(int segments, int rings, float size, float x, float y, float z, unsigned int shaderProgramID)
 	:BaseEntity(x, y, z, shaderProgramID)
 {
+	_entityType = EntityTypeEnum::ET_Sphere;
+
 	_segs = segments < 4 ? 4 : segments;
 	_rings = rings < 4 ? 4 : rings;
 
 	SetUniformScale(size);
 
-	Initialise();
+	Initialise(DataFormatEnum::DataColour);
 }
 
 void Sphere::InitData()

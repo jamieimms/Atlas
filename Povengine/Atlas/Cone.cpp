@@ -5,13 +5,15 @@
 
 using namespace Atlas;
 
-Cone::Cone(int quality, float size, float x, float y, float z, unsigned int shaderProgramID)
-	:BaseEntity(x, y, z, shaderProgramID)
+Cone::Cone(int quality, float size, glm::vec3 pos, unsigned int shaderProgramID)
+	:BaseEntity(pos, shaderProgramID)
 {
-	_quality = quality<1 ? 1 : quality;
-	SetUniformScale(size);
+	_entityType = EntityTypeEnum::ET_Cone;
 
-	Initialise();
+	_quality = quality<1 ? 1 : quality;
+
+	Initialise(DataFormatEnum::DataColour);
+	SetUniformScale(size);
 }
 
 

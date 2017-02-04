@@ -7,9 +7,15 @@ using namespace Atlas;
 Origin::Origin(float size, unsigned int shaderProgramID)
 	:BaseEntity(0, 0, 0, shaderProgramID)
 {
+	_entityType = EntityTypeEnum::ET_Origin;
+
 	SetUniformScale(size);
 
-	Initialise();
+	Initialise(DataFormatEnum::DataColour);
+}
+
+Origin::~Origin()
+{
 }
 
 void Origin::InitData()

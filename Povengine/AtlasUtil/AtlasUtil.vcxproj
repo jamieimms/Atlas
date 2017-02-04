@@ -141,13 +141,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AtlasMath.h" />
     <ClInclude Include="AtlasMessageBox.h" />
     <ClInclude Include="AtlasLog.h" />
     <ClInclude Include="AtlasTimer.h" />
-    <ClInclude Include="CImg.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="IRenderable.h" />
+    <ClInclude Include="jpeg_decoder.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "OpenGLRenderer.h"
 #include "../AtlasUtil/AtlasMessageBox.h"
 #include "../AtlasAPI/AtlasAPIHelper.h"
+#include "FileManager.h"
 
 
 using namespace Atlas;
@@ -162,7 +163,8 @@ bool AtlasManager::Initialise()
 	auto shader2 = _shaderManager->LoadShader(texVertexShader, texShader);
 
 	_currentScene = new Scene(_texManager, _phys);
-	_currentScene->LoadScene(shader1, shader2);
+	//_currentScene->LoadScene(shader1, shader2);
+	_currentScene->LoadFromFile(FileManager::GetSceneDirectory() + "test01.as", shader1, shader2);
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();
 

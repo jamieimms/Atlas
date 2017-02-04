@@ -5,14 +5,21 @@
 
 using namespace Atlas;
 
+BaseEntity::BaseEntity(glm::vec3 pos, unsigned int shaderID)
+	: Transformable(pos), _shaderProgramID(shaderID)
+{
+	SetUniformScale(1.0f);
+}
 
 BaseEntity::BaseEntity(float x, float y, float z, unsigned int shaderID)
 	: Transformable(x,y,z), _shaderProgramID(shaderID)
 {
-
-	_dataFormat = DataFormatEnum::DataColour;
 	SetUniformScale(1.0f);
+}
 
+void BaseEntity::Initialise(DataFormatEnum dataFormat)
+{
+	_dataFormat = dataFormat;
 	_texLoc = glGetUniformLocation(_shaderProgramID, "outTexture1");
 
 	_viewLoc = glGetUniformLocation(_shaderProgramID, "view");
@@ -24,10 +31,7 @@ BaseEntity::BaseEntity(float x, float y, float z, unsigned int shaderID)
 
 	_indices = nullptr;
 	_ibaID = -1;
-}
 
-void BaseEntity::Initialise()
-{
 	InitData();
 	glGenVertexArrays(1, &_vbaID);
 	glBindVertexArray(_vbaID);
@@ -102,8 +106,7 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj)
 
 	glUniformMatrix4fv(_viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(_projLoc, 1, GL_FALSE, glm::value_ptr(proj));
-
-	SetRenderTransform(_modelLoc);
+	glUniformMatrix4fv(_modelLoc, 1, GL_FALSE, glm::value_ptr(GetTransform()));
 
 	if (_indices == nullptr) {
 		glDrawArrays(_mode, 0, _numVertices);

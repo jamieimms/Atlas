@@ -11,8 +11,7 @@ namespace Atlas
 
 	public:
 		PhysicsEntity(float x, float y, float z, unsigned int shaderProgramID);
-
-		virtual void Initialise();
+		PhysicsEntity(glm::vec3 pos, unsigned int shaderProgramID);
 
 		bool TogglePhysics(bool enabled) { _physEnable = enabled; }
 

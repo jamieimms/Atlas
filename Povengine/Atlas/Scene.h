@@ -12,7 +12,9 @@ namespace Atlas
 	{
 	public:
 		Scene(TextureManager* texManager, PhysicsManager* physManager);
-		void LoadScene(unsigned int shader1, unsigned int shader2);
+		void LoadFromFile(std::string& path, unsigned int shader1, unsigned int shader2);
+		//void LoadScene(unsigned int shader1, unsigned int shader2);
+
 		void UnloadScene();
 
 		void DrawScene(glm::mat4 proj);

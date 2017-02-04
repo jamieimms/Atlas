@@ -148,6 +148,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DataFormatEnum.h" />
     <ClInclude Include="Entities.h" />
+    <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="EntityTypeEnum.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="InputManager.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Light.cpp" />

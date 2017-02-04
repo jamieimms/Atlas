@@ -19,8 +19,8 @@ namespace AtlasAPI
 		static bool EnsureDirectory(std::string& path);
 		static char GetPathSeparator();
 		static long GetFileSizeBytes(std::string& path);
-		bool LoadTextFile(std::string& path, std::string& out);
-		bool LoadBinaryFile(std::string& path, std::vector<unsigned char>& out);
+		static bool LoadTextFile(std::string& path, std::string& out);
+		//bool LoadBinaryFile(std::string& path, std::vector<unsigned char>& out);
 
 
 		//String functions

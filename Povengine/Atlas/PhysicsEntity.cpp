@@ -8,13 +8,11 @@ PhysicsEntity::PhysicsEntity(float x, float y, float z, unsigned int shaderProgr
 
 }
 
-void PhysicsEntity::Initialise()
+PhysicsEntity::PhysicsEntity(glm::vec3 pos, unsigned int shaderProgramID)
+	: BaseEntity(pos, shaderProgramID), _physEnable(false)
 {
-	BaseEntity::Initialise();
 
-	// Initialise physics stuff
 }
-
 
 void PhysicsEntity::SetPhysicsProperties(PhysicsManager* phys, bool physicsEnabled, float mass, float w, float h, float d)
 {

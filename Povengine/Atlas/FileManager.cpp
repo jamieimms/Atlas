@@ -30,3 +30,9 @@ std::string FileManager::GetSoundDirectory()
 {
 	return AtlasAPI::AtlasAPIHelper::GetDataPath() + "Sound" + AtlasAPI::AtlasAPIHelper::GetPathSeparator();
 }
+
+std::string FileManager::GetSceneDirectory()
+{
+	return AtlasAPI::AtlasAPIHelper::GetDataPath() + "Scenes" + AtlasAPI::AtlasAPIHelper::GetPathSeparator();
+
+}

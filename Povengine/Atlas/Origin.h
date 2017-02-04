@@ -7,6 +7,7 @@ namespace Atlas
 	{
 	public:
 		Origin(float size, unsigned int shaderProgramID);
+		virtual ~Origin();
 
 		virtual void InitData();
 	};

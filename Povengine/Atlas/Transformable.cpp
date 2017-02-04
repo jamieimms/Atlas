@@ -1,8 +1,6 @@
 #include "Transformable.h"
 #include "glew.h"
 #include "..\AtlasAPI\AtlasAPIHelper.h"
-#include "..\AtlasUtil\AtlasMath.h"
-
 
 using namespace Atlas;
 
@@ -13,7 +11,7 @@ Transformable::Transformable(float x, float y, float z)
 }
 
 
-Transformable::Transformable(glm::vec4 pos)
+Transformable::Transformable(glm::vec3 pos)
 {
 	SetPosition(pos.x, pos.y, pos.z);
 }
@@ -39,7 +37,6 @@ void Transformable::SetPosition(float x, float y, float z)
 	_pos.x = x;
 	_pos.y = y;
 	_pos.z = z;
-	_pos.w = 1.0f;
 	_requiresUpdate = true;
 }
 
@@ -52,12 +49,16 @@ void Transformable::SetRotation(float x, float y, float z)
 	_requiresUpdate = true;
 }
 
-
+/// <summary>
+/// Whenever the transform is retrieved it is checked for an update first. This recalculates the transform matrix
+/// if it has changed.
+/// </summary>
 void Transformable::UpdateTransform()
 {
 	if (_requiresUpdate) {
 		_transMat = glm::mat4();
 		// Translate
+		//_transMat = glm::translate(_transMat, _pos);
 		_transMat = glm::translate(_transMat, glm::vec3(_pos.x, _pos.y, _pos.z));
 
 		// Rotate
@@ -67,23 +68,21 @@ void Transformable::UpdateTransform()
 
 		// Scale
 		_transMat = glm::scale(_transMat, glm::vec3(_scale.x, _scale.y, _scale.z));
+		_requiresUpdate = false;
 	}
 }
 
-
-void Transformable::SetRenderTransform(unsigned int transformLoc)
-{
-	UpdateTransform();
-
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(_transMat));
-}
-
+/// <summary>
+///	retrieve a copy of the position vector
+/// </summary>
 glm::vec3 Transformable::GetPosition()
 {
 	return _pos;
 }
 
-
+/// <summary>
+///	Retrieve a copy of the transform matrix
+/// </summary>
 glm::mat4 Transformable::GetTransform()
 {
 	UpdateTransform();
@@ -91,6 +90,11 @@ glm::mat4 Transformable::GetTransform()
 	return _transMat;
 }
 
+
+/// <summary>
+///	For some objects (such as physics objects), this method allows overriding the
+/// transform matrix with a new one
+/// </summary>
 void Transformable::SetTransform(glm::mat4 newTransform)
 {
 	_transMat = newTransform;

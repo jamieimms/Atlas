@@ -7,14 +7,16 @@ using namespace Atlas;
 Plane::Plane(float size, float x, float y, float z, unsigned int shaderProgramID)
 	:PhysicsEntity(x, y, z, shaderProgramID)
 {
-	_dataFormat = DataFormatEnum::DataColourTex;
+	_entityType = EntityTypeEnum::ET_Plane;
+
 	_size = size;
 
-	//SetUniformScale(size);
-
-	Initialise();
+	Initialise(DataFormatEnum::DataColourTex);
 }
 
+/// <summary>
+///	Initialise the vertex and index data for a plane.
+/// </summary>
 void Plane::InitData()
 {
 	_numIndices = 6;

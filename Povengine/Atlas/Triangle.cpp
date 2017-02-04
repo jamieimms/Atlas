@@ -7,9 +7,11 @@ using namespace Atlas;
 Triangle::Triangle(float size, float x, float y, float z, unsigned int shaderProgramID)
 	:BaseEntity(x, y, z, shaderProgramID)
 {
+	_entityType = EntityTypeEnum::ET_Triangle;
+
 	SetUniformScale(size);
 
-	Initialise();
+	Initialise(DataFormatEnum::Data);
 }
 
 void Triangle::InitData()

@@ -47,16 +47,13 @@
     <ClInclude Include="IRenderable.h">
       <Filter>include\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="AtlasMath.h">
-      <Filter>include\Math</Filter>
-    </ClInclude>
     <ClInclude Include="ImageLoader.h">
       <Filter>include\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="lodepng.h">
       <Filter>include\IO</Filter>
     </ClInclude>
-    <ClInclude Include="CImg.h">
+    <ClInclude Include="jpeg_decoder.h">
       <Filter>include\IO</Filter>
     </ClInclude>
   </ItemGroup>

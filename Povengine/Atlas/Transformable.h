@@ -12,14 +12,12 @@ namespace Atlas
 	public:
 
 		Transformable(float x, float y, float z);
-		Transformable(glm::vec4 pos);
+		Transformable(glm::vec3 pos);
 
 		void SetUniformScale(float scale);
 		void SetScale(float x, float y, float z);
 		void SetPosition(float x, float y, float z);
-		void SetRotation(float x, float t, float z);		
-
-		void SetRenderTransform(unsigned int transformLoc);
+		void SetRotation(float x, float t, float z);
 
 		glm::mat4 GetTransform();
 		glm::vec3 GetPosition();
@@ -30,7 +28,7 @@ namespace Atlas
 	private:
 		void UpdateTransform();
 
-		glm::vec4 _pos;
+		glm::vec3 _pos;
 		glm::mat4 _transMat;
 		glm::vec3 _scale;
 		glm::vec3 _rot;

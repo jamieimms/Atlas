@@ -130,6 +130,9 @@
     <ClInclude Include="Entities.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -197,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Entities\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityFactory.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

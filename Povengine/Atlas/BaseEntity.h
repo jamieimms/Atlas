@@ -1,31 +1,28 @@
 #pragma once
 #include "../AtlasUtil/IRenderable.h"
 #include "Transformable.h"
+#include "DataFormatEnum.h"
+#include "EntityTypeEnum.h"
 
 namespace Atlas
 {
-	enum DataFormatEnum : int
-	{
-		Data = 3,
-		DataColour = 6,
-		DataColourTex = 8,
-	};
 
 	class BaseEntity : public Transformable, public IRenderable
 	{
 	public:
-		BaseEntity(float x, float y, float z, unsigned int shaderProgramID);
+		BaseEntity(glm::vec3 pos, unsigned int shaderID);
+		BaseEntity(float x, float y, float z, unsigned int shaderID);
 		virtual ~BaseEntity();
 
 		void SetTexture(unsigned int texID) { _texID = texID; }
-
-		virtual void Initialise();
 
 		virtual void Render(glm::mat4 view, glm::mat4 proj);
 
 		virtual void InitData() {}
 
 	protected:
+		virtual void Initialise(DataFormatEnum dataFormat);
+
 		void SetVertex(int &dataPos, float x, float y, float z, float r, float g, float b);
 		void SetIndex(int &indexPos, unsigned short a, unsigned short b, unsigned short c);
 
@@ -34,7 +31,9 @@ namespace Atlas
 		int _numVertices;
 		int _numIndices;
 		
+		EntityTypeEnum _entityType;
 		DataFormatEnum _dataFormat;
+		
 		int _mode;
 
 		float _size;

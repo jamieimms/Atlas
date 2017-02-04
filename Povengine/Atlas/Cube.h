@@ -7,7 +7,8 @@ namespace Atlas
 	class Cube : public PhysicsEntity
 	{
 	public:
-		Cube(float size, float x, float y, float z, unsigned int shaderProgramID);
+		Cube(float size, glm::vec3 pos, unsigned int shaderProgramID);
+		virtual ~Cube();
 
 		virtual void InitData();
 	};

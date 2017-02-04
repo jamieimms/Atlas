@@ -4,11 +4,12 @@ namespace Atlas
 {
 	enum EntityTypeEnum : int
 	{
-		Origin,
-		Plane,
-		Triangle,
-		Cube,
-		Cone,
-		Sphere,
+		ET_Unknown = -1,
+		ET_Origin = 0,
+		ET_Plane,
+		ET_Triangle,
+		ET_Cube,
+		ET_Cone,
+		ET_Sphere,
 	};
 }
