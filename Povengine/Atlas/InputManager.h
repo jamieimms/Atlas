@@ -3,6 +3,12 @@
 
 namespace Atlas
 {
+	struct KeyState
+	{
+		bool pressed;
+		bool hasToggled;
+	};
+
 	class InputManager : protected BaseManager
 	{
 	public:
@@ -15,6 +21,8 @@ namespace Atlas
 		void ResetMouseInput();
 
 		bool IsKeyPressed(unsigned int keyID);
+		bool IsToggleKeyPressed(unsigned int keyID);
+
 
 		int GetMouseX() { return _mouseX; }
 		int GetMouseY() { return _mouseInvertedY ? _mouseY : -_mouseY; }
@@ -22,7 +30,7 @@ namespace Atlas
 		float GetMouseSensitivity() { return _sensitivity; }
 
 	private:
-		bool _keyStates[256];
+		KeyState _keyStates[256];
 
 		int _width;
 		int _height;

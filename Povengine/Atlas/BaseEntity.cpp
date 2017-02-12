@@ -27,6 +27,12 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 
 	_modelLoc = glGetUniformLocation(_shaderProgramID, "model");
 
+	// Lighting variables
+	_objectColour = glGetUniformLocation(_shaderProgramID, "objectColour");
+	_positionalLightColour = glGetUniformLocation(_shaderProgramID, "lightColour");
+	_positionalLightPos = glGetUniformLocation(_shaderProgramID, "lightPos");
+	_viewerPos = glGetUniformLocation(_shaderProgramID, "viewPos");
+
 	_mode = GL_TRIANGLES;
 
 	_indices = nullptr;
@@ -45,7 +51,6 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibaID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * _numIndices, _indices, GL_STATIC_DRAW);
 	}
-
 }
 
 
@@ -56,7 +61,7 @@ BaseEntity::~BaseEntity()
 }
 
 
-void BaseEntity::Render(glm::mat4 view, glm::mat4 proj)
+void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 {
 	int format = (int)_dataFormat;
 	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
@@ -104,9 +109,27 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj)
 		glUniform1i(_texLoc, 0);
 	}
 
+	if (_dataFormat == DataFormatEnum::DataColourTexNorm) {
+		glVertexAttribPointer(
+			3,
+			3,
+			GL_FLOAT,
+			GL_FALSE,
+			format * sizeof(float),
+			(void*)(8 * sizeof(float)));
+		glEnableVertexAttribArray(3);
+	}
+
 	glUniformMatrix4fv(_viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(_projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 	glUniformMatrix4fv(_modelLoc, 1, GL_FALSE, glm::value_ptr(GetTransform()));
+
+	glUniform3f(_objectColour, _material.diffuseColour.r, _material.diffuseColour.g, _material.diffuseColour.b);
+
+	//glUniform3f(_objectColour, 1.0f, 0.5f, 0.31f);
+	glUniform3f(_positionalLightColour, 1.0f, 1.0f, 1.0f);
+	glUniform3f(_positionalLightPos, 0.0f, 5.0f, 0.0f);
+	glUniform3f(_viewerPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
 	if (_indices == nullptr) {
 		glDrawArrays(_mode, 0, _numVertices);

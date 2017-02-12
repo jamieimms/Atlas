@@ -96,9 +96,10 @@ std::string AtlasAPIHelper::GetDataPath()
 	string path;
 #ifdef _WIN32
 
-	wchar_t buf[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, buf);
-	path = ConvertUTF16ToUTF8(buf);
+	path = "S:\\Development\\Povengine\\Build";
+	//wchar_t buf[MAX_PATH];
+	//GetCurrentDirectory(MAX_PATH, buf);
+	//path = ConvertUTF16ToUTF8(buf);
 #endif
 
 	return path + GetPathSeparator() + "Data" + GetPathSeparator();

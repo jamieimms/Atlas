@@ -3,6 +3,7 @@
 #include "Transformable.h"
 #include "DataFormatEnum.h"
 #include "EntityTypeEnum.h"
+#include "Material.h"
 
 namespace Atlas
 {
@@ -16,7 +17,7 @@ namespace Atlas
 
 		void SetTexture(unsigned int texID) { _texID = texID; }
 
-		virtual void Render(glm::mat4 view, glm::mat4 proj);
+		virtual void Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos);
 
 		virtual void InitData() {}
 
@@ -38,6 +39,8 @@ namespace Atlas
 
 		float _size;
 
+		Material _material;
+
 	private:
 
 		unsigned int _vbaID;
@@ -54,6 +57,11 @@ namespace Atlas
 		int _viewLoc;
 		int _projLoc;
 		int _modelLoc;
+		//int _ambientLightColour;
+		int _objectColour;
+		int _positionalLightColour;
+		int _positionalLightPos;
+		int _viewerPos;
 
 	};
 }

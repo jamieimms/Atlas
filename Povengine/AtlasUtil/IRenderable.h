@@ -8,7 +8,7 @@ namespace Atlas
 	class IRenderable
 	{
 	public:
-			virtual void Render(glm::mat4 view, glm::mat4 proj) = 0;
+			virtual void Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos) = 0;
 	protected:
 
 

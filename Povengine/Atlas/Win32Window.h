@@ -14,6 +14,8 @@ namespace Atlas
 		void setWindowVariables(HINSTANCE hInstance, int nCmdShow);
 		bool createWindow(std::string title, unsigned int width, unsigned int height);
 
+		virtual void setCaptureMouse(bool enable);
+
 		virtual LRESULT wmPaintHandler(WPARAM wParam, LPARAM lParam);
 		virtual LRESULT wmCommandHandler(WPARAM wParam, LPARAM lParam);
 		virtual LRESULT wmKeyDownHandler(WPARAM wParam, LPARAM lParam);

@@ -23,6 +23,8 @@ namespace Atlas
 
 		bool Initialise();
 
+		void windowSizeChanged(int width, int height);
+
 		int start();
 
 		InputManager* Input() { return _inputManager; }
@@ -44,6 +46,7 @@ namespace Atlas
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
 		double _frameDelta;
+		long _frameCount;
 
 		Scene* _currentScene;
 

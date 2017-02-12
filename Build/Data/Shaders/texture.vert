@@ -16,6 +16,4 @@ void main()
 	
 	outColour = colour;
 	outTexCoord = vec2(texCoord.x, texCoord.y);
-	//outText = vec2(1.0, 1.0);
-	
 }

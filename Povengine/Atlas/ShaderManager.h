@@ -8,12 +8,15 @@
 
 namespace Atlas
 {
-	//class Shader
-	//{
-	//public:
-	//	unsigned int _id;
-	//	unsigned int _internalID;
-	//};
+	class Shader
+	{
+	public:
+		unsigned int _atlasID;
+		std::string name;
+
+		unsigned int _id;
+	};
+
 
 	class ShaderManager : protected BaseManager
 	{
@@ -22,9 +25,10 @@ namespace Atlas
 		~ShaderManager();
 
 		// OpenGL
-		unsigned int LoadShader(std::string& vertexShaderFilename, std::string& fragmentShaderFilename);
+		unsigned int LoadShader(std::string& shaderName);
 
 		unsigned int GetShaderAtIndex(unsigned int index);
+		unsigned int GetShaderByName(std::string& shaderName);
 
 	private:
 
@@ -35,6 +39,6 @@ namespace Atlas
 
 		std::string _basePath;
 
-		std::vector<unsigned int> _loadedShaders;
+		std::vector<Shader*> _loadedShaders;
 	};
 }

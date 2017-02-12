@@ -7,5 +7,6 @@ namespace Atlas
 		Data = 3,
 		DataColour = 6,
 		DataColourTex = 8,
+		DataColourTexNorm = 11,
 	};
 }

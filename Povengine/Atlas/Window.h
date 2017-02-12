@@ -9,17 +9,18 @@ namespace Atlas
 	class Window
 	{
 	public:
-		Window(AtlasManager* parent)
-			: _parent(parent)
-		{}
+		Window(AtlasManager* parent);
 
-		virtual ~Window() {}
+		virtual ~Window();
 
 		virtual bool createWindow(std::string title, unsigned int width, unsigned int height) = 0;
+
+		virtual void setCaptureMouse(bool enable);
 
 	protected:
 
 		AtlasManager* _parent;
+		bool _mouseCaptured;
 	};
 
 }

@@ -5,15 +5,16 @@
 #include "Camera.h"
 #include "TextureManager.h"
 #include "PhysicsManager.h"
+#include "ShaderManager.h"
+#include "glm.hpp"
 
 namespace Atlas
 {
 	class Scene
 	{
 	public:
-		Scene(TextureManager* texManager, PhysicsManager* physManager);
-		void LoadFromFile(std::string& path, unsigned int shader1, unsigned int shader2);
-		//void LoadScene(unsigned int shader1, unsigned int shader2);
+		Scene(TextureManager* texManager, PhysicsManager* physManager, ShaderManager* shaderManager);
+		void LoadFromFile(std::string& path);
 
 		void UnloadScene();
 
@@ -32,5 +33,10 @@ namespace Atlas
 
 		TextureManager* _texManager;
 		PhysicsManager* _physicsManager;
+		ShaderManager* _shaderManager;
+
+		glm::vec3 _ambientLight;
+
+
 	};
 }

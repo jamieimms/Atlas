@@ -133,6 +133,9 @@
     <ClInclude Include="EntityFactory.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -203,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="EntityFactory.cpp">
       <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Windowing\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

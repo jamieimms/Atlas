@@ -12,5 +12,7 @@ namespace Atlas
 		static std::string GetTextureDirectory();
 		static std::string GetSoundDirectory();
 		static std::string GetSceneDirectory();
+		static std::string GetShaderDirectory();
+
 	};
 }

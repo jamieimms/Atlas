@@ -146,27 +146,24 @@ bool AtlasManager::Initialise()
 
 	/*      Set the pixel format to the device context*/
 	SetPixelFormat(context, nPixelFormat, &pfd);
-	if (!_renderer->Initialise(800, 600, context)) {
+	if (!_renderer->Initialise(1024, 768, context)) {
 		_log->Debug("Win32 OpenGL renderer failed to initialise.");
 	}
 #endif
 
-	std::string dataPath = AtlasAPI::AtlasAPIHelper::GetDataPath();
-
-	std::string colourVertexShader = dataPath + "colour.vert";
-	std::string colourShader = dataPath + "colour.frag";
-
-	std::string texVertexShader = dataPath + "texture.vert";
-	std::string texShader = dataPath + "texture.frag";
-
-	auto shader1 = _shaderManager->LoadShader(colourVertexShader, colourShader);
-	auto shader2 = _shaderManager->LoadShader(texVertexShader, texShader);
-
-	_currentScene = new Scene(_texManager, _phys);
-	//_currentScene->LoadScene(shader1, shader2);
-	_currentScene->LoadFromFile(FileManager::GetSceneDirectory() + "test01.as", shader1, shader2);
+	std::string shaderName = "colour";
+	_shaderManager->LoadShader(shaderName);
+	shaderName = "texture";
+	_shaderManager->LoadShader(shaderName);
+	shaderName = "lighting";
+	_shaderManager->LoadShader(shaderName);
+	
+	_currentScene = new Scene(_texManager, _phys, _shaderManager);
+	_currentScene->LoadFromFile(FileManager::GetSceneDirectory() + "01.as");
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();
+
+	_frameCount = 0;
 
 	_initialised = true;
 
@@ -224,6 +221,7 @@ void AtlasManager::frameProcessing()
 	_renderer->endRender();
 
 	_lastFrame = frameTime;
+	_frameCount++;
 }
 
 /// <summary>
@@ -231,6 +229,7 @@ void AtlasManager::frameProcessing()
 /// </summary>
 void AtlasManager::inputProcessing()
 {
+	static bool enableMouseLook = true;
 	static float xPos = 0;
 	static float yPos = 3.0f;
 	static float zPos = 5.0f;
@@ -274,63 +273,46 @@ void AtlasManager::inputProcessing()
 		exit(0);
 	}
 
-	
-
-	//camPitch += 0.1f;
-	if (_inputManager->GetMouseX() != 0 && _inputManager->GetMouseY() != 0) {
-		camYaw += ((_inputManager->GetMouseX()) * _frameDelta) * _inputManager->GetMouseSensitivity();
-		camPitch += (_inputManager->GetMouseY() * _frameDelta) * _inputManager->GetMouseSensitivity();
-
-
-		if (camPitch >= 90.0f) {
-			camPitch = 89.0f;
-		}
-		if (camPitch <= -90.0f) {
-			camPitch = -89.0f;
-		}
-
-		_currentScene->GetCamera().SetAngle(camPitch, camYaw);
-
+	// Enable/disable mouse look
+	if (_inputManager->IsToggleKeyPressed(VK_PAUSE)) {
+		enableMouseLook = !enableMouseLook;
+		_applicationWindow->setCaptureMouse(enableMouseLook);
 		_inputManager->ResetMouseInput();
 	}
 
-	//float ticks = AtlasAPI::AtlasAPIHelper::GetTicks() / 100;
-	//static float radius = 20.0f;
-	//static float yPos = 0.2f;
+	if (enableMouseLook) {
+		if (!_frameCount) {
 
-	//static float factor = 4.0f;
+			_currentScene->GetCamera().SetPosition(20, 10, 0);
+			_currentScene->GetCamera().SetLookAt(0, 0, 0);
+
+			_inputManager->ResetMouseInput();
+		}
+		else if (_inputManager->GetMouseX() != 0 && _inputManager->GetMouseY() != 0) {
+			camYaw += ((_inputManager->GetMouseX()) * _frameDelta) * _inputManager->GetMouseSensitivity();
+			camPitch += (_inputManager->GetMouseY() * _frameDelta) * _inputManager->GetMouseSensitivity();
+
+			if (camPitch >= 90.0f) {
+				camPitch = 89.0f;
+			}
+			if (camPitch <= -90.0f) {
+				camPitch = -89.0f;
+			}
+
+			_currentScene->GetCamera().SetAngle(camPitch, camYaw);
+
+			_inputManager->ResetMouseInput();
+		}
+	}
 
 	// Check bindings for key presses
 	_renderer->ToggleWireframe(_inputManager->IsKeyPressed(0x57));
+}
 
-
-	//float xPos = sin(ticks * radius) * factor;
-	//float zPos = cos(ticks * radius) * factor;
-
-	//_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
-
-	//if (_keyStates[0x28]) {	// Down arrow
-	//	if (_keyStates[0x10]) {
-	//		yPos -= 0.01f;
-	//	}
-	//	else {
-	//		zPos -= 0.01f;
-	//	}
-	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
-	//}
-	//if (_keyStates[0x25]) {	// Left arrow
-	//	xPos -= 0.01f;
-	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
-	//}
-	//if (_keyStates[0x27]) {	// Left arrow
-	//	xPos += 0.01f;
-	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
-	//}
-
-	//if (_keyStates[VK_BACK]) {
-	//	xPos = 0.0f;
-	//	yPos = 1.0f;
-	//	zPos = 3.0f;
-	//	_currentScene->GetCamera().SetPosition(xPos, yPos, zPos);
-	//}
+void AtlasManager::windowSizeChanged(int width, int height)
+{
+	_inputManager->SetSize(width, height);
+	if (_renderer != nullptr) {
+		_renderer->Resize(width, height);
+	}
 }

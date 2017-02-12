@@ -8,8 +8,8 @@
 using namespace Atlas;
 
 
-Scene::Scene(TextureManager* texManager, PhysicsManager* physManager)
-	: _texManager(texManager), _physicsManager(physManager)
+Scene::Scene(TextureManager* texManager, PhysicsManager* physManager, ShaderManager* shaderManager)
+	: _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager)
 {
 
 }
@@ -61,10 +61,21 @@ void ParseEntity(EntityTypeEnum type, std::stringstream& ss, EntityCreateInfo& e
 
 		eci.textureID = GetInt(ss);
 		break;
+	case ET_Cone:
+		eci.pos.x = GetFloat(ss);
+		eci.pos.y = GetFloat(ss);
+		eci.pos.z = GetFloat(ss);
+
+		eci.size = GetFloat(ss);
+		eci.quality = GetInt(ss);
+		break;
 	}
 }
 
-void Scene::LoadFromFile(std::string& path, unsigned int shader1, unsigned int shader2)
+/// Loads a scene from the very basic text-based scene file
+/// 
+///
+void Scene::LoadFromFile(std::string& path)
 {
 	std::string texDir = FileManager::GetTextureDirectory();
 	auto dirt = _texManager->LoadTexture(texDir + "Dirt.png");
@@ -91,15 +102,16 @@ void Scene::LoadFromFile(std::string& path, unsigned int shader1, unsigned int s
 		if (line[0] == '#') {
 			continue;
 		}
+		else if (line[0] == 'a') {
+			_ambientLight.r = GetFloat(ln);
+			_ambientLight.g = GetFloat(ln);
+			_ambientLight.b = GetFloat(ln);			
+		}
 		else {
 			EntityCreateInfo eci;
 			ParseEntity((EntityTypeEnum)atoi(line), ln, eci);
-			if (eci.shader == 0) {
-				eci.shader = shader1;
-			}
-			else {
-				eci.shader = shader2;
-			}
+			
+			eci.shader = _shaderManager->GetShaderAtIndex(eci.shader);
 
 			if (eci.textureID == 0) {
 				eci.textureID = dirt;
@@ -123,48 +135,10 @@ void Scene::LoadFromFile(std::string& path, unsigned int shader1, unsigned int s
 	_cam.SetPosition(0, 3.0f, 5.0f);
 	_cam.SetLookAt(0, 0, 0);
 }
-//
-/////
-//void Scene::LoadScene(unsigned int shader1, unsigned int shader2)
-//{
-//	std::string texDir = FileManager::GetTextureDirectory();
-//	auto dirt = _texManager->LoadTexture(texDir + "Dirt.png");
-//	auto grassBoundary = _texManager->LoadTexture(texDir + "DirtGrassBorder01.png");
-//	auto patchyGrass = _texManager->LoadTexture(texDir + "PatchyDirt.png");
-//	auto crate = _texManager->LoadTexture(texDir + "crate.jpg");
-//
-//	EntityCreateInfo curInfo;
-//
-//	curInfo.type = ET_Origin;
-//	curInfo.size = 1.0f;
-//	curInfo.shader = shader1;
-//	AddEntity(EntityFactory::CreateEntity(curInfo, _physicsManager));
-//
-//	//
-//	//IRenderable* c;
-//	//float x = 0;
-//	//for (float y = 10.0f; y < 30.0f; y += 2.0f) {
-//	//	c = new Cube(0.5f, x, y, 0.0f, shader2);
-//	//	AddEntity(c);
-//	//	dynamic_cast<PhysicsEntity*>(c)->SetPhysicsProperties(_physicsManager, true, 1.0f, 0.5f, 0.5f, 0.5f);
-//	//	dynamic_cast<BaseEntity*>(c)->SetTexture(crate);
-//	//	x += 0.2f;
-//	//}
-//
-//	auto p = new Plane(5.0f, 0, -0.01f, 0, shader2);
-//	//AddEntity(p);
-//	//p->SetTexture(dirt);
-//	//p->SetPhysicsProperties(_physicsManager, true, 0.0f, 5.0f, 0.1f, 5.0f);
-//
-//	//auto l = new Light(0.9f, 0.5f, 0.0f, 0.5f, shader1);
-//	//AddEntity(l);
-//	//l->SetPhysicsProperties(_physicsManager, false, 0, 0, 0, 0);
-//
-//	_cam.SetPosition(0, 3.0f, 5.0f);
-//	_cam.SetLookAt(0, 0, 0);
-//}
 
-
+///
+///
+///
 IRenderable* Scene::AddEntity(IRenderable* entity)
 {
 	_entities.push_back(entity);
@@ -193,6 +167,6 @@ void Scene::DrawScene(glm::mat4 proj)
 			tmp->UpdateFromPhysics(_physicsManager);
 		}
 
-		i->Render(view, proj);
+		i->Render(view, proj, _cam.GetPosition());
 	}
 }

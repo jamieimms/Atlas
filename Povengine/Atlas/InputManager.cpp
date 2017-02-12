@@ -6,7 +6,8 @@ InputManager::InputManager(AtlasUtil::AtlasLog* log)
 	: BaseManager(log)
 {
 	for (int i = 0; i < 256; i++) {
-		_keyStates[i] = false;
+		_keyStates[i].hasToggled = false;
+		_keyStates[i].pressed = false;
 	}
 
 	_sensitivity = 3.0f;
@@ -26,7 +27,10 @@ void InputManager::HandleKeyPress(unsigned int keyID, bool isDown)
 		return;
 	}
 
-	_keyStates[keyID] = isDown;
+	_keyStates[keyID].pressed = isDown;
+	if (!isDown) {
+		_keyStates[keyID].hasToggled = false;
+	}
 }
 
 /// <summary>
@@ -41,7 +45,25 @@ bool InputManager::IsKeyPressed(unsigned int keyID)
 		return false;
 	}
 
-	return _keyStates[keyID];
+	return _keyStates[keyID].pressed;
+}
+
+/// <summary>
+///	Get the pressed state of the given toggle key. Same as IsKeyPressed but will only return true
+/// once per press of the key
+/// </summary>
+/// <param name="keyID">ID of the key to set/unset</param>
+/// <param name="isDown">bool indicating if the new key state is down or up</param>
+/// <returns>true if key is pressed, otherwise false. False if invalid key</returns>
+bool InputManager::IsToggleKeyPressed(unsigned int keyID)
+{
+	bool pressed = IsKeyPressed(keyID);
+
+	if (pressed && !_keyStates[keyID].hasToggled) {
+		_keyStates[keyID].hasToggled = true;
+		return true;
+	}
+	return false;
 }
 
 /// <summary>

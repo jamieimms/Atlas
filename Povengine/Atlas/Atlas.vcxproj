@@ -153,6 +153,7 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Origin.h" />
     <ClInclude Include="PhysicsEntity.h" />
     <ClInclude Include="PhysicsManager.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Transformable.cpp" />
     <ClCompile Include="Win32Window.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

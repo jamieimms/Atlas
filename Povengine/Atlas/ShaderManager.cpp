@@ -5,6 +5,9 @@
 #include <fstream>
 #include <sstream>
 
+#include "FileManager.h"
+#include "..\AtlasAPI\AtlasAPIHelper.h"
+
 using namespace Atlas;
 //using namespace AtlasUtil;
 
@@ -17,23 +20,28 @@ ShaderManager::ShaderManager(AtlasUtil::AtlasLog* log, std::string basePath)
 ShaderManager::~ShaderManager()
 {
 	while (_loadedShaders.size() > 0) {
-		auto programID = _loadedShaders[_loadedShaders.size() - 1];
-		glDeleteProgram(programID);
+		auto shader = _loadedShaders[_loadedShaders.size() - 1];
+		glDeleteProgram(shader->_id);
 		_loadedShaders.pop_back();
+		delete shader;
 	}
-
 }
 
 ///
 ///
-unsigned int ShaderManager::LoadShader(std::string& vertexShaderFilename, std::string& fragmentShaderFilename)
+unsigned int ShaderManager::LoadShader(std::string& shaderName)
 {
-	std::string vertexShaderName = "vertex shader";
-	std::string fragmentShaderName = "fragment shader";
+	std::string basePath = FileManager::GetShaderDirectory();
+	std::string vertexShaderName = shaderName + " vertex";
+	std::string fragmentShaderName = shaderName + " fragment";
 	unsigned int vertexShaderLen = 0;
 	unsigned int fragmentShaderLen = 0;
-	auto vertexShaderCode = ReadShaderFile(vertexShaderFilename);
-	auto fragmentShaderCode = ReadShaderFile(fragmentShaderFilename);
+
+	std::string vertexShaderCode;
+	AtlasAPI::AtlasAPIHelper::LoadTextFile(basePath + shaderName + ".vert", vertexShaderCode);
+
+	std::string fragmentShaderCode;
+	AtlasAPI::AtlasAPIHelper::LoadTextFile(basePath + shaderName + ".frag", fragmentShaderCode);
 
 	auto vertexShader = CompileShader(GL_VERTEX_SHADER, vertexShaderCode.c_str(), vertexShaderCode.length(), vertexShaderName);
 	auto fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentShaderCode.c_str(), fragmentShaderCode.length(), fragmentShaderName);
@@ -57,7 +65,12 @@ unsigned int ShaderManager::LoadShader(std::string& vertexShaderFilename, std::s
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	_loadedShaders.push_back(shaderProgram);
+	Shader* shader = new Shader();
+	shader->name = shaderName;
+	shader->_atlasID = _loadedShaders.size();
+	shader->_id = shaderProgram;
+
+	_loadedShaders.push_back(shader);
 
 	return shaderProgram;
 }
@@ -74,14 +87,13 @@ std::string ShaderManager::ReadShaderFile(std::string& filename)
 
 	if (!file.good()) {
 		//throw Exception
+		return "";
 	}
 
 	std::stringstream ss;
 	ss << file.rdbuf();
 
 	file.close();
-
-
 
 	return ss.str();
 }
@@ -119,11 +131,23 @@ unsigned int ShaderManager::CompileShader(unsigned int shaderType, const char* s
 	return shader;
 }
 
-unsigned int ShaderManager::GetShaderAtIndex(unsigned int index) {
+unsigned int ShaderManager::GetShaderAtIndex(unsigned int index)
+{
 	if (index > _loadedShaders.size()) {
 		return -1;
 	}
 	else {
-		return _loadedShaders[index];
+		return _loadedShaders[index]->_id;
 	}
+}
+
+unsigned int ShaderManager::GetShaderByName(std::string& shaderName)
+{
+	for (auto shader : _loadedShaders) {
+		if (shader->name == shaderName) {
+			return shader->_id;
+		}
+	}
+
+	return -1;
 }
