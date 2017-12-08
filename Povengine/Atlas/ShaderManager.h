@@ -5,19 +5,10 @@
 #include "BaseManager.h"
 #include "../AtlasUtil/AtlasLog.h"
 
+#include "Shader.h"
 
 namespace Atlas
 {
-	class Shader
-	{
-	public:
-		unsigned int _atlasID;
-		std::string name;
-
-		unsigned int _id;
-	};
-
-
 	class ShaderManager : protected BaseManager
 	{
 	public:
@@ -25,17 +16,17 @@ namespace Atlas
 		~ShaderManager();
 
 		// OpenGL
-		unsigned int LoadShader(std::string& shaderName);
+		unsigned int LoadShader(const std::string& shaderName);
 
-		unsigned int GetShaderAtIndex(unsigned int index);
-		unsigned int GetShaderByName(std::string& shaderName);
+		Shader* GetShaderAtIndex(unsigned int index);
+		Shader* GetShaderByName(const std::string& shaderName);
 
 	private:
 
-		std::string ReadShaderFile(std::string& filename);
+		std::string ReadShaderFile(const std::string& filename);
 		
 		/// OpenGL
-		unsigned int CompileShader(unsigned int shaderType, const char* source, int sourceLen, std::string& shaderName);
+		unsigned int CompileShader(unsigned int shaderType, const char* source, int sourceLen, const std::string& shaderName);
 
 		std::string _basePath;
 

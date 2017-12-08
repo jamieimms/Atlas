@@ -6,7 +6,7 @@ namespace Atlas
 	class Plane : public PhysicsEntity
 	{
 	public:
-		Plane(float size, float x, float y, float z, unsigned int shaderProgramID);
+		Plane(float size, float x, float y, float z, Shader* shader);
 
 		virtual void InitData();
 	};

@@ -9,10 +9,10 @@ namespace Atlas
 		bool hasToggled;
 	};
 
-	class InputManager : protected BaseManager
+	class Input : protected BaseManager
 	{
 	public:
-		InputManager(AtlasUtil::AtlasLog* log);
+		Input(AtlasUtil::AtlasLog* log);
 
 		void SetSize(int w, int h) { _width = w; _height = h; }
 

@@ -2,9 +2,9 @@
 
 using namespace Atlas;
 
-IRenderable* EntityFactory::CreateEntity(EntityCreateInfo& info, PhysicsManager* phys)
+EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys, EntityHolder* holder)
 {
-	IRenderable* newEntity = nullptr;
+	BaseEntity* newEntity = nullptr;
 	switch (info.type)
 	{
 	case EntityTypeEnum::ET_Cone:
@@ -38,5 +38,12 @@ IRenderable* EntityFactory::CreateEntity(EntityCreateInfo& info, PhysicsManager*
 
 	dynamic_cast<BaseEntity*>(newEntity)->SetTexture(info.textureID);
 
-	return newEntity;
+	if (holder != nullptr) {
+		return holder->Initialise(newEntity) ? holder : nullptr;
+	}
+	else {
+		EntityHolder* newHolder = new EntityHolder();
+		newHolder->Initialise(newEntity);
+		return newHolder;
+	}
 }

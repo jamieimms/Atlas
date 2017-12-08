@@ -4,8 +4,8 @@
 using namespace Atlas;
 
 ///
-Triangle::Triangle(float size, float x, float y, float z, unsigned int shaderProgramID)
-	:BaseEntity(x, y, z, shaderProgramID)
+Triangle::Triangle(float size, float x, float y, float z, Shader* shader)
+	:BaseEntity(x, y, z, shader)
 {
 	_entityType = EntityTypeEnum::ET_Triangle;
 

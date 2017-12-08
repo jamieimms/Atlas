@@ -1,11 +1,13 @@
 #include "Cube.h"
 #include "glew.h"
+#include <random>
+#include "..\AtlasAPI\AtlasAPIHelper.h"
 
 using namespace Atlas;
 
 ///
-Cube::Cube(float size, glm::vec3 pos, unsigned int shaderProgramID)
-	:PhysicsEntity(pos, shaderProgramID)
+Cube::Cube(float size, glm::vec3 pos, Shader* shader)
+	:PhysicsEntity(pos, shader)
 {
 	_entityType = EntityTypeEnum::ET_Cube;
 
@@ -44,6 +46,7 @@ void Cube::InitData()
 	_numVertices = 24;
 	_data = new float[_numVertices * _dataFormat]{
 
+		// X, Y, Z				 R, G, B			Tex U, V		Normal X, Y, Z
 		-_size, -_size, -_size, 1.0f, 0.0f, 0.0f,	0.0f, 0.0f,		0.0f, 0.0f, -1.0f, 	// 0
 		_size, -_size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 0.0f,		0.0f, 0.0f, -1.0f,	// 1
 		_size,  _size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 1.0f,		0.0f, 0.0f, -1.0f,	// 2
@@ -75,8 +78,15 @@ void Cube::InitData()
 		-_size,  _size,  _size,  0.0f, 1.0f, 0.0f,	0.0f, 1.0f,		0.0f, 1.0f, 0.0f,	// 7
 	};
 
+	std::default_random_engine rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+	std::uniform_real_distribution<float> dist(0, 1);
+
+	float r = dist(rng);
+	float g = dist(rng);
+	float b = dist(rng);
+
 	_material.ambientColour = glm::vec3(0.0f, 0.08f, 0.34f);
-	_material.diffuseColour = glm::vec3(0.0f, 0.45f, 1.0f);
+	_material.diffuseColour = glm::vec3(r, g, b);
 	_material.specularColour = glm::vec3(0.78, 0.88, 1.0f);
 	_material.shininess = 32.0f;
 

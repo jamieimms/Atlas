@@ -4,8 +4,8 @@
 using namespace Atlas;
 
 ///
-Origin::Origin(float size, unsigned int shaderProgramID)
-	:BaseEntity(0, 0, 0, shaderProgramID)
+Origin::Origin(float size, Shader* shader)
+	:BaseEntity(0, 0, 0, shader)
 {
 	_entityType = EntityTypeEnum::ET_Origin;
 

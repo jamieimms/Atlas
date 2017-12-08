@@ -4,8 +4,8 @@
 using namespace Atlas;
 
 ///
-Plane::Plane(float size, float x, float y, float z, unsigned int shaderProgramID)
-	:PhysicsEntity(x, y, z, shaderProgramID)
+Plane::Plane(float size, float x, float y, float z, Shader* shader)
+	:PhysicsEntity(x, y, z, shader)
 {
 	_entityType = EntityTypeEnum::ET_Plane;
 

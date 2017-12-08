@@ -6,7 +6,7 @@ namespace Atlas
 	class Sphere : public BaseEntity
 	{
 	public:
-		Sphere(int segments, int rings, float size, float x, float y, float z, unsigned int shaderProgramID);
+		Sphere(int segments, int rings, float size, float x, float y, float z, Shader* shader);
 
 		virtual void InitData();
 

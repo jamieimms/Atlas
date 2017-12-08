@@ -8,7 +8,7 @@ namespace Atlas
 	{
 
 	public:
-		Spawner(float x, float y, float z, unsigned int shaderProgramID);
+		Spawner(float x, float y, float z, Shader* shader);
 
 		virtual void InitData();
 	private:

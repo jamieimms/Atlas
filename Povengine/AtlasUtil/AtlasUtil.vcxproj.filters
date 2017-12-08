@@ -38,9 +38,6 @@
     <ClInclude Include="AtlasLog.h">
       <Filter>include\IO</Filter>
     </ClInclude>
-    <ClInclude Include="AtlasTimer.h">
-      <Filter>include\Time</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>include\Graphics</Filter>
     </ClInclude>
@@ -56,6 +53,12 @@
     <ClInclude Include="jpeg_decoder.h">
       <Filter>include\IO</Filter>
     </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>include\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasStopwatch.h">
+      <Filter>include\Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasLog.cpp">
@@ -69,6 +72,12 @@
     </ClCompile>
     <ClCompile Include="lodepng.cpp">
       <Filter>include\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>include\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="AtlasStopwatch.cpp">
+      <Filter>include\Time</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

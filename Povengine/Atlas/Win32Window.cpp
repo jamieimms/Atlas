@@ -114,7 +114,7 @@ LRESULT Win32Window::wmCommandHandler(WPARAM wParam, LPARAM lParam)
 
 LRESULT Win32Window::wmKeyDownHandler(WPARAM wParam, LPARAM lParam)
 {
-	_parent->Input()->HandleKeyPress(wParam, true);
+	_parent->GetInput()->HandleKeyPress(wParam, true);
 	return 0;
 }
 
@@ -122,7 +122,7 @@ LRESULT Win32Window::wmKeyDownHandler(WPARAM wParam, LPARAM lParam)
 //
 LRESULT Win32Window::wmKeyUpHandler(WPARAM wParam, LPARAM lParam)
 {
-	_parent->Input()->HandleKeyPress(wParam, false);
+	_parent->GetInput()->HandleKeyPress(wParam, false);
 
 	return 0;
 }
@@ -143,7 +143,7 @@ LRESULT Win32Window::wmMouseMoveHandler(WPARAM wParam, LPARAM lParam)
 		p.y = _height / 2;
 
 		if (mx != (_width / 2) || my != (_height / 2)) {
-			_parent->Input()->HandleMouseInput(mx, my);
+			_parent->GetInput()->HandleMouseInput(mx, my);
 
 			ClientToScreen(_hWnd, &p);
 			SetCursorPos(p.x, p.y);

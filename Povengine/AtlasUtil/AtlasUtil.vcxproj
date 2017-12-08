@@ -143,18 +143,21 @@
   <ItemGroup>
     <ClInclude Include="AtlasMessageBox.h" />
     <ClInclude Include="AtlasLog.h" />
-    <ClInclude Include="AtlasTimer.h" />
+    <ClInclude Include="AtlasStopwatch.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="jpeg_decoder.h" />
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasLog.cpp" />
     <ClCompile Include="AtlasMessageBox.cpp" />
+    <ClCompile Include="AtlasStopwatch.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="lodepng.cpp" />
+    <ClCompile Include="Random.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,7 +6,7 @@ namespace Atlas
 	class Origin : public BaseEntity
 	{
 	public:
-		Origin(float size, unsigned int shaderProgramID);
+		Origin(float size, Shader* shader);
 		virtual ~Origin();
 
 		virtual void InitData();

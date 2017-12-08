@@ -6,10 +6,11 @@
 #include "Scene.h"
 #include "../AtlasUtil/AtlasLog.h"
 #include "ShaderManager.h"
-#include "InputManager.h"
-#include "AudioManager.h"
-#include "PhysicsManager.h"
+#include "Input.h"
+#include "Audio.h"
+#include "Physics.h"
 #include "TextureManager.h"
+#include "../AtlasUtil/AtlasStopwatch.h"
 
 namespace Atlas
 {
@@ -27,7 +28,7 @@ namespace Atlas
 
 		int start();
 
-		InputManager* Input() { return _inputManager; }
+		Input* GetInput() { return _input; }
 
 	private:
 
@@ -39,9 +40,9 @@ namespace Atlas
 
 		AtlasRenderer* _renderer;	// The renderer, could be DirectX (win32 only) or OpenGL (win32 and linux), currently we only support OpenGL
 		ShaderManager* _shaderManager; // The shader loader
-		InputManager* _inputManager;	// Handles user input
-		AudioManager* _audio;	// Handles audio functions
-		PhysicsManager* _phys;	// Handles physics calculations
+		Input* _input;	// Handles user input
+		Audio* _audio;	// Handles audio functions
+		Physics* _phys;	// Handles physics calculations
 		TextureManager* _texManager; // Handles textures
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;

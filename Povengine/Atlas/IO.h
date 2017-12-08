@@ -4,7 +4,7 @@
 
 namespace Atlas
 {
-	class FileManager : protected BaseManager
+	class IO : protected BaseManager
 	{ 
 	public:
 

@@ -5,33 +5,27 @@
 
 using namespace Atlas;
 
-BaseEntity::BaseEntity(glm::vec3 pos, unsigned int shaderID)
-	: Transformable(pos), _shaderProgramID(shaderID)
+BaseEntity::BaseEntity()
+	: Transformable(glm::vec3())
+{
+}
+
+BaseEntity::BaseEntity(glm::vec3 pos, Shader* shader)
+	: Transformable(pos), _shader(shader)
 {
 	SetUniformScale(1.0f);
 }
 
-BaseEntity::BaseEntity(float x, float y, float z, unsigned int shaderID)
-	: Transformable(x,y,z), _shaderProgramID(shaderID)
+BaseEntity::BaseEntity(float x, float y, float z, Shader* shader)
+	: Transformable(x,y,z), _shader(shader)
 {
 	SetUniformScale(1.0f);
 }
 
 void BaseEntity::Initialise(DataFormatEnum dataFormat)
 {
+	_dead = false;
 	_dataFormat = dataFormat;
-	_texLoc = glGetUniformLocation(_shaderProgramID, "outTexture1");
-
-	_viewLoc = glGetUniformLocation(_shaderProgramID, "view");
-	_projLoc = glGetUniformLocation(_shaderProgramID, "projection");
-
-	_modelLoc = glGetUniformLocation(_shaderProgramID, "model");
-
-	// Lighting variables
-	_objectColour = glGetUniformLocation(_shaderProgramID, "objectColour");
-	_positionalLightColour = glGetUniformLocation(_shaderProgramID, "lightColour");
-	_positionalLightPos = glGetUniformLocation(_shaderProgramID, "lightPos");
-	_viewerPos = glGetUniformLocation(_shaderProgramID, "viewPos");
 
 	_mode = GL_TRIANGLES;
 
@@ -51,15 +45,24 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibaID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * _numIndices, _indices, GL_STATIC_DRAW);
 	}
+
+	SetVisibility(true);
 }
 
 
 BaseEntity::~BaseEntity()
 {
+	glDeleteBuffers(1, &_ibaID);
+	glDeleteBuffers(1, &_vbID);
+	glDeleteVertexArrays(1, &_vbaID);
 	delete[] _indices;
 	delete[] _data;
 }
 
+void BaseEntity::Update()
+{
+
+}
 
 void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 {
@@ -90,8 +93,7 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 		glEnableVertexAttribArray(1);
 	}
 
-
-	glUseProgram(_shaderProgramID);
+	glUseProgram(_shader->glProgramID);
 
 	if (_dataFormat == DataFormatEnum::DataColourTex) {
 		glVertexAttribPointer(
@@ -106,7 +108,7 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _texID);
-		glUniform1i(_texLoc, 0);
+		glUniform1i(_shader->texLoc, 0);
 	}
 
 	if (_dataFormat == DataFormatEnum::DataColourTexNorm) {
@@ -120,16 +122,15 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 		glEnableVertexAttribArray(3);
 	}
 
-	glUniformMatrix4fv(_viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(_projLoc, 1, GL_FALSE, glm::value_ptr(proj));
-	glUniformMatrix4fv(_modelLoc, 1, GL_FALSE, glm::value_ptr(GetTransform()));
+	glUniformMatrix4fv(_shader->viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(_shader->projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+	glUniformMatrix4fv(_shader->modelLoc, 1, GL_FALSE, glm::value_ptr(GetTransform()));
 
-	glUniform3f(_objectColour, _material.diffuseColour.r, _material.diffuseColour.g, _material.diffuseColour.b);
+	glUniform3f(_shader->objectColour, _material.diffuseColour.r, _material.diffuseColour.g, _material.diffuseColour.b);
 
-	//glUniform3f(_objectColour, 1.0f, 0.5f, 0.31f);
-	glUniform3f(_positionalLightColour, 1.0f, 1.0f, 1.0f);
-	glUniform3f(_positionalLightPos, 0.0f, 5.0f, 0.0f);
-	glUniform3f(_viewerPos, cameraPos.x, cameraPos.y, cameraPos.z);
+	glUniform3f(_shader->positionalLightColour, 1.0f, 1.0f, 1.0f);
+	glUniform3f(_shader->positionalLightPos, 0.0f, 5.0f, 0.0f);
+	glUniform3f(_shader->viewerPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
 	if (_indices == nullptr) {
 		glDrawArrays(_mode, 0, _numVertices);
@@ -137,7 +138,7 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 	else {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibaID);
 
-		glDrawElements(GL_TRIANGLES, _numIndices, GL_UNSIGNED_SHORT, (void*)0);
+		glDrawElements(_mode, _numIndices, GL_UNSIGNED_SHORT, (void*)0);
 	}
 
 	glDisableVertexAttribArray(0);

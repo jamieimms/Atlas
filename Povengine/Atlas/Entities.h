@@ -6,3 +6,4 @@
 #include "Cone.h"
 #include "Plane.h"
 #include "Light.h"
+#include "FiniteEntity.h"

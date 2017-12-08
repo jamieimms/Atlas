@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "FileManager.h"
+#include "IO.h"
 #include "..\AtlasAPI\AtlasAPIHelper.h"
 
 using namespace Atlas;
@@ -21,7 +21,7 @@ ShaderManager::~ShaderManager()
 {
 	while (_loadedShaders.size() > 0) {
 		auto shader = _loadedShaders[_loadedShaders.size() - 1];
-		glDeleteProgram(shader->_id);
+		glDeleteProgram(shader->glProgramID);
 		_loadedShaders.pop_back();
 		delete shader;
 	}
@@ -29,9 +29,9 @@ ShaderManager::~ShaderManager()
 
 ///
 ///
-unsigned int ShaderManager::LoadShader(std::string& shaderName)
+unsigned int ShaderManager::LoadShader(const std::string& shaderName)
 {
-	std::string basePath = FileManager::GetShaderDirectory();
+	std::string basePath = IO::GetShaderDirectory();
 	std::string vertexShaderName = shaderName + " vertex";
 	std::string fragmentShaderName = shaderName + " fragment";
 	unsigned int vertexShaderLen = 0;
@@ -67,8 +67,22 @@ unsigned int ShaderManager::LoadShader(std::string& shaderName)
 
 	Shader* shader = new Shader();
 	shader->name = shaderName;
-	shader->_atlasID = _loadedShaders.size();
-	shader->_id = shaderProgram;
+	shader->atlasID = _loadedShaders.size();
+	shader->glProgramID = shaderProgram;
+
+	// Populate the uniforms
+	shader->texLoc = glGetUniformLocation(shader->glProgramID, "outTexture1");
+
+	shader->viewLoc = glGetUniformLocation(shader->glProgramID, "view");
+	shader->projLoc = glGetUniformLocation(shader->glProgramID, "projection");
+
+	shader->modelLoc = glGetUniformLocation(shader->glProgramID, "model");
+
+	// Lighting variables
+	shader->objectColour = glGetUniformLocation(shader->glProgramID, "objectColour");
+	shader->positionalLightColour = glGetUniformLocation(shader->glProgramID, "lightColour");
+	shader->positionalLightPos = glGetUniformLocation(shader->glProgramID, "lightPos");
+	shader->viewerPos = glGetUniformLocation(shader->glProgramID, "viewPos");
 
 	_loadedShaders.push_back(shader);
 
@@ -77,7 +91,7 @@ unsigned int ShaderManager::LoadShader(std::string& shaderName)
 
 ///
 ///
-std::string ShaderManager::ReadShaderFile(std::string& filename)
+std::string ShaderManager::ReadShaderFile(const std::string& filename)
 {
 	_log->Debug("Loading shader file: " + filename);
 
@@ -100,7 +114,7 @@ std::string ShaderManager::ReadShaderFile(std::string& filename)
 
 ///
 ///
-unsigned int ShaderManager::CompileShader(unsigned int shaderType, const char* source, int sourceLen, std::string& shaderName)
+unsigned int ShaderManager::CompileShader(unsigned int shaderType, const char* source, int sourceLen, const std::string& shaderName)
 {
 	_log->Debug("Compiling shader " + shaderName);
 
@@ -131,23 +145,23 @@ unsigned int ShaderManager::CompileShader(unsigned int shaderType, const char* s
 	return shader;
 }
 
-unsigned int ShaderManager::GetShaderAtIndex(unsigned int index)
+Shader* ShaderManager::GetShaderAtIndex(unsigned int index)
 {
 	if (index > _loadedShaders.size()) {
-		return -1;
+		return nullptr;
 	}
 	else {
-		return _loadedShaders[index]->_id;
+		return _loadedShaders[index];
 	}
 }
 
-unsigned int ShaderManager::GetShaderByName(std::string& shaderName)
+Shader* ShaderManager::GetShaderByName(const std::string& shaderName)
 {
 	for (auto shader : _loadedShaders) {
 		if (shader->name == shaderName) {
-			return shader->_id;
+			return shader;
 		}
 	}
 
-	return -1;
+	return nullptr;
 }

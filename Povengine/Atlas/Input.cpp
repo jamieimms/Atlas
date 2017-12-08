@@ -1,8 +1,8 @@
-#include "InputManager.h"
+#include "Input.h"
 
 using namespace Atlas;
 
-InputManager::InputManager(AtlasUtil::AtlasLog* log)
+Input::Input(AtlasUtil::AtlasLog* log)
 	: BaseManager(log)
 {
 	for (int i = 0; i < 256; i++) {
@@ -21,7 +21,7 @@ InputManager::InputManager(AtlasUtil::AtlasLog* log)
 /// </summary>
 /// <param name="keyID">ID of the key to set/unset</param>
 /// <param name="isDown">bool indicating if the new key state is down or up</param>
-void InputManager::HandleKeyPress(unsigned int keyID, bool isDown)
+void Input::HandleKeyPress(unsigned int keyID, bool isDown)
 {
 	if (keyID >= 256) {
 		return;
@@ -39,7 +39,7 @@ void InputManager::HandleKeyPress(unsigned int keyID, bool isDown)
 /// <param name="keyID">ID of the key to set/unset</param>
 /// <param name="isDown">bool indicating if the new key state is down or up</param>
 /// <returns>true if key is pressed, otherwise false. False if invalid key</returns>
-bool InputManager::IsKeyPressed(unsigned int keyID)
+bool Input::IsKeyPressed(unsigned int keyID)
 {
 	if (keyID >= 256) {
 		return false;
@@ -55,7 +55,7 @@ bool InputManager::IsKeyPressed(unsigned int keyID)
 /// <param name="keyID">ID of the key to set/unset</param>
 /// <param name="isDown">bool indicating if the new key state is down or up</param>
 /// <returns>true if key is pressed, otherwise false. False if invalid key</returns>
-bool InputManager::IsToggleKeyPressed(unsigned int keyID)
+bool Input::IsToggleKeyPressed(unsigned int keyID)
 {
 	bool pressed = IsKeyPressed(keyID);
 
@@ -72,13 +72,13 @@ bool InputManager::IsToggleKeyPressed(unsigned int keyID)
 /// <param name="keyID">ID of the key to set/unset</param>
 /// <param name="isDown">bool indicating if the new key state is down or up</param>
 /// <returns>true if key is pressed, otherwise false. False if invalid key</returns>
-void InputManager::HandleMouseInput(int x, int y)
+void Input::HandleMouseInput(int x, int y)
 {
 	_mouseX = x - (_width /2);
 	_mouseY = y - (_height / 2);
 }
 
-void InputManager::ResetMouseInput()
+void Input::ResetMouseInput()
 {
 	_mouseX = 0;
 	_mouseY = 0;

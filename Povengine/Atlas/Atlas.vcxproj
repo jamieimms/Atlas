@@ -77,15 +77,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>S:\Development\Povengine\Dependencies\GLEW\include;S:\Development\Povengine\Dependencies\glm;C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;S:\Development\Povengine\Dependencies\Bullet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>S:\Development\Povengine\Dependencies\GLEW\include;S:\Development\Povengine\Dependencies\glm;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc;S:\Development\Povengine\Dependencies\Bullet;S:\Development\Povengine\Dependencies\Freetype\include;S:\Development\Povengine\Dependencies\Freetype\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>S:\Development\Povengine\Dependencies\GLEW\lib\Win32;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;S:\Development\Povengine\Dependencies\Bullet\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;OpenGL32.lib;glew32s.lib;OpenAL32.lib;BulletCollision_vs2015_debug.lib;BulletDynamics_vs2015_debug.lib;LinearMath_vs2015_debug.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>S:\Development\Povengine\Dependencies\GLEW\lib\Win32;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib;S:\Development\Povengine\Dependencies\Bullet\bin;S:\Development\Povengine\Dependencies\Freetype\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;OpenGL32.lib;glew32s.lib;BulletCollision_vs2015_debug.lib;BulletDynamics_vs2015_debug.lib;LinearMath_vs2015_debug.lib;freetype.lib;fmod_vc.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -140,7 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AtlasManager.h" />
-    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="BaseEntity.h" />
     <ClInclude Include="BaseManager.h" />
     <ClInclude Include="Camera.h" />
@@ -149,15 +149,19 @@
     <ClInclude Include="DataFormatEnum.h" />
     <ClInclude Include="Entities.h" />
     <ClInclude Include="EntityFactory.h" />
+    <ClInclude Include="EntityHolder.h" />
     <ClInclude Include="EntityTypeEnum.h" />
-    <ClInclude Include="FileManager.h" />
-    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="FiniteEntity.h" />
+    <ClInclude Include="IO.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="MapFileIndex.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Origin.h" />
     <ClInclude Include="PhysicsEntity.h" />
-    <ClInclude Include="PhysicsManager.h" />
+    <ClInclude Include="Physics.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Text.h" />
@@ -173,24 +177,27 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasManager.cpp" />
-    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="BaseEntity.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
-    <ClCompile Include="FileManager.cpp" />
-    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="EntityHolder.cpp" />
+    <ClCompile Include="FiniteEntity.cpp" />
+    <ClCompile Include="IO.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="OpenGLRenderer.cpp" />
     <ClCompile Include="AtlasRenderer.cpp" />
     <ClCompile Include="Origin.cpp" />
     <ClCompile Include="PhysicsEntity.cpp" />
-    <ClCompile Include="PhysicsManager.cpp" />
+    <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Transformable.cpp" />

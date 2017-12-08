@@ -7,7 +7,7 @@ namespace Atlas
 	{
 	public:
 
-		Light(float r, float g, float b, float brightness, unsigned int shaderProgramID);
+		Light(float r, float g, float b, float brightness, Shader* shader);
 		virtual ~Light();
 
 		virtual void InitData();

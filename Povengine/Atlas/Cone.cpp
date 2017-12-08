@@ -5,8 +5,8 @@
 
 using namespace Atlas;
 
-Cone::Cone(int quality, float size, glm::vec3 pos, unsigned int shaderProgramID)
-	:BaseEntity(pos, shaderProgramID)
+Cone::Cone(int quality, float size, glm::vec3 pos, Shader* shader)
+	:BaseEntity(pos, shader)
 {
 	_entityType = EntityTypeEnum::ET_Cone;
 

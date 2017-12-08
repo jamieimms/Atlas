@@ -6,8 +6,8 @@
 
 using namespace Atlas;
 
-Sphere::Sphere(int segments, int rings, float size, float x, float y, float z, unsigned int shaderProgramID)
-	:BaseEntity(x, y, z, shaderProgramID)
+Sphere::Sphere(int segments, int rings, float size, float x, float y, float z, Shader* shader)
+	:BaseEntity(x, y, z, shader)
 {
 	_entityType = EntityTypeEnum::ET_Sphere;
 

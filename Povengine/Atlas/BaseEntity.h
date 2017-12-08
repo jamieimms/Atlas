@@ -4,6 +4,7 @@
 #include "DataFormatEnum.h"
 #include "EntityTypeEnum.h"
 #include "Material.h"
+#include "Shader.h"
 
 namespace Atlas
 {
@@ -11,15 +12,24 @@ namespace Atlas
 	class BaseEntity : public Transformable, public IRenderable
 	{
 	public:
-		BaseEntity(glm::vec3 pos, unsigned int shaderID);
-		BaseEntity(float x, float y, float z, unsigned int shaderID);
+		BaseEntity();
+		BaseEntity(glm::vec3 pos, Shader* shader);
+		BaseEntity(float x, float y, float z, Shader* shader);
 		virtual ~BaseEntity();
 
-		void SetTexture(unsigned int texID) { _texID = texID; }
 
+		virtual void Update();
 		virtual void Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos);
 
 		virtual void InitData() {}
+
+		virtual void Kill() { _dead = true; }
+
+		// Getters
+		bool IsDead() { return _dead; }
+
+		// Setters
+		void SetTexture(unsigned int texID) { _texID = texID; }
 
 	protected:
 		virtual void Initialise(DataFormatEnum dataFormat);
@@ -41,6 +51,8 @@ namespace Atlas
 
 		Material _material;
 
+		bool _dead;
+
 	private:
 
 		unsigned int _vbaID;
@@ -50,18 +62,6 @@ namespace Atlas
 
 		unsigned int _texID;
 
-		unsigned int _shaderProgramID;
-
-		// Shader variables
-		int _texLoc;
-		int _viewLoc;
-		int _projLoc;
-		int _modelLoc;
-		//int _ambientLightColour;
-		int _objectColour;
-		int _positionalLightColour;
-		int _positionalLightPos;
-		int _viewerPos;
-
+		Shader* _shader;
 	};
 }

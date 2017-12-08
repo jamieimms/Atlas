@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseEntity.h"
 #include "btBulletDynamicsCommon.h"
-#include "PhysicsManager.h"
+#include "Physics.h"
 
 
 namespace Atlas
@@ -10,16 +10,18 @@ namespace Atlas
 	{
 
 	public:
-		PhysicsEntity(float x, float y, float z, unsigned int shaderProgramID);
-		PhysicsEntity(glm::vec3 pos, unsigned int shaderProgramID);
+		PhysicsEntity(float x, float y, float z, Shader* shader);
+		PhysicsEntity(glm::vec3 pos, Shader* shader);
+
+		virtual ~PhysicsEntity();
 
 		bool TogglePhysics(bool enabled) { _physEnable = enabled; }
 
-		void SetPhysicsProperties(PhysicsManager* phys, bool physicsEnabled, float mass, float w, float h, float d);
+		void SetPhysicsProperties(Physics* phys, bool physicsEnabled, float mass, float w, float h, float d);
 		void SetPhysicsBody(btRigidBody* body) { _physicsBody = body; }
-		
-		void UpdateFromPhysics(PhysicsManager* phys);
 
+		void RemoveFromSimulation(Physics* phys);
+		void UpdateFromPhysics(Physics* phys);
 
 		float GetMass() { return _mass; }
 		bool IsPhysicsEnabled() { return _physEnable; }

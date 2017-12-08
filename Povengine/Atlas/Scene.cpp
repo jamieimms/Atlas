@@ -1,15 +1,15 @@
 #include "Scene.h"
 #include "glew.h"
-#include "FileManager.h"
-#include "EntityFactory.h"
+#include "IO.h"
 #include "..\AtlasAPI\AtlasAPIHelper.h"
-#include <sstream>
+#include "Text.h"
+#include "MapFileIndex.h"
 
 using namespace Atlas;
 
 
-Scene::Scene(TextureManager* texManager, PhysicsManager* physManager, ShaderManager* shaderManager)
-	: _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager)
+Scene::Scene(TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager)
+	: _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager), _audio(audioManager)
 {
 
 }
@@ -30,14 +30,12 @@ float GetFloat(std::stringstream& ss)
 	return atof(curLine);
 }
 
-void ParseEntity(EntityTypeEnum type, std::stringstream& ss, EntityCreateInfo& eci)
+void Scene::ParseEntity(EntityTypeEnum type, std::stringstream& ss, EntityCreateInfo& eci)
 {
-	char curLine[256];
-
 	eci.type = type;
 
 	// All types specify a shader (for now)
-	eci.shader = GetInt(ss);
+	eci.shader = _shaderManager->GetShaderAtIndex(GetInt(ss));
 
 	switch (type)
 	{
@@ -77,7 +75,7 @@ void ParseEntity(EntityTypeEnum type, std::stringstream& ss, EntityCreateInfo& e
 ///
 void Scene::LoadFromFile(std::string& path)
 {
-	std::string texDir = FileManager::GetTextureDirectory();
+	std::string texDir = IO::GetTextureDirectory();
 	auto dirt = _texManager->LoadTexture(texDir + "Dirt.png");
 	auto grassBoundary = _texManager->LoadTexture(texDir + "DirtGrassBorder01.png");
 	auto patchyGrass = _texManager->LoadTexture(texDir + "PatchyDirt.png");
@@ -99,19 +97,24 @@ void Scene::LoadFromFile(std::string& path)
 		std::stringstream ln(curLine);
 
 		ln.getline(line, 256, ' ');
-		if (line[0] == '#') {
+		if (line[0] == AS_COMMENT) {
 			continue;
 		}
-		else if (line[0] == 'a') {
+		else if (line[0] == AS_AMBIENT_LIGHT) {
 			_ambientLight.r = GetFloat(ln);
 			_ambientLight.g = GetFloat(ln);
 			_ambientLight.b = GetFloat(ln);			
 		}
+		else if (line[0] == AS_BG_MUSIC) {
+			char soundFile[256];
+			ln.getline(soundFile, 256, ' ');
+			SoundInfo info;
+			_audio->LoadSound(soundFile, &info);
+			_bgMusicId = info.soundId;
+		}
 		else {
 			EntityCreateInfo eci;
 			ParseEntity((EntityTypeEnum)atoi(line), ln, eci);
-			
-			eci.shader = _shaderManager->GetShaderAtIndex(eci.shader);
 
 			if (eci.textureID == 0) {
 				eci.textureID = dirt;
@@ -128,22 +131,56 @@ void Scene::LoadFromFile(std::string& path)
 			else if (eci.textureID == 4) {
 				eci.textureID = crate;
 			}
-			AddEntity(EntityFactory::CreateEntity(eci, _physicsManager));
+			_entities.push_back(EntityFactory::CreateEntity(eci, _physicsManager));
+
 		}
 	}
 
 	_cam.SetPosition(0, 3.0f, 5.0f);
 	_cam.SetLookAt(0, 0, 0);
+
+	//std::string test = "T";
+	//
+	//Text* t = new Text(_shaderManager->GetShaderAtIndex(0));
+	//t->init(test, 60, 60);
+	//
+	//AddEntity(t);
 }
 
-///
-///
-///
-IRenderable* Scene::AddEntity(IRenderable* entity)
+void Scene::Test()
 {
-	_entities.push_back(entity);
+	int random = rand() % 10;
+	double diff = random / 10.0;
+	// Test finite
+	EntityCreateInfo ei;
+	ei.type = EntityTypeEnum::ET_Cube;
+	ei.pos = glm::vec3(random - 5, 15, 0);
+	ei.size = diff;
+	ei.textureID = 0;
+	ei.shader = _shaderManager->GetShaderAtIndex(2);
+	FiniteEntity* shortEntity = new FiniteEntity(10);
+	_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
+}
 
-	return entity;
+void Scene::Start()
+{
+	//_audio->queueSoundForNextFrame(_bgMusicId, glm::vec3(), glm::vec3());
+
+	_sceneClock.Start();
+
+	srand(48674);
+}
+
+void Scene::Stop()
+{
+	_audio->UnloadSound(_bgMusicId);
+}
+
+
+void Scene::RemoveEntity(BaseEntity* entity)
+{
+	// Remove entity from the list
+	delete entity;
 }
 
 ///
@@ -152,6 +189,43 @@ void Scene::UnloadScene()
 	for (auto i : _entities)
 	{
 		delete i;
+	}
+
+	_entities.clear();
+}
+
+void Scene::UpdateScene()
+{
+	auto it = _entities.begin();
+	while (it != _entities.end()) {
+		if (*it == nullptr) {
+			it++;
+			continue;
+		}
+		auto entity = (*it)->GetEntity();
+
+		if (entity->IsDead()) {
+			auto holder = (*it);
+			it = _entities.erase(it);
+
+			PhysicsEntity* tmp = dynamic_cast<PhysicsEntity*>(entity);
+			if (tmp != nullptr) {
+				tmp->RemoveFromSimulation(_physicsManager);
+			}
+
+			delete entity;
+			delete holder;
+		}
+		else {
+			(*it)->Update();
+			it++;
+		}
+	}
+
+	if (_sceneClock.GetElapsedMs() > 100) {
+		Test();
+		_sceneClock.Reset();
+		_sceneClock.Start();
 	}
 }
 
@@ -162,11 +236,21 @@ void Scene::DrawScene(glm::mat4 proj)
 
 	for (auto i : _entities)
 	{
-		PhysicsEntity* tmp = dynamic_cast<PhysicsEntity*>(i);
+		if (i == nullptr) {
+			continue;
+		}
+		if (!i->IsInitialised()) {
+			continue;
+		}
+		auto entity = i->GetEntity();
+
+		PhysicsEntity* tmp = dynamic_cast<PhysicsEntity*>(entity);
 		if (tmp != nullptr) {
 			tmp->UpdateFromPhysics(_physicsManager);
 		}
 
-		i->Render(view, proj, _cam.GetPosition());
+		if (entity->IsVisible()) {
+			entity->Render(view, proj, _cam.GetPosition());
+		}
 	}
 }

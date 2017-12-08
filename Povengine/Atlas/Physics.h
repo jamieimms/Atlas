@@ -7,11 +7,11 @@
 
 namespace Atlas
 {
-	class PhysicsManager : public BaseManager
+	class Physics : public BaseManager
 	{
 	public:
-		PhysicsManager(AtlasUtil::AtlasLog* log);
-		~PhysicsManager();
+		Physics(AtlasUtil::AtlasLog* log);
+		~Physics();
 
 		// abstract Subsystem methods
 		//virtual void reset();
@@ -32,7 +32,7 @@ namespace Atlas
 		//void readdBody(btRigidBody* body);
 
 		//// something for removing an entity
-		//void removeBody(btRigidBody* body);
+		void removeBody(btRigidBody* body);
 		//void tempRemoveBody(btRigidBody* body);
 
 		// enable/disable simulation of bodies

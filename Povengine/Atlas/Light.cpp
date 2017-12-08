@@ -2,8 +2,8 @@
 
 using namespace Atlas;
 
-Light::Light(float r, float g, float b, float brightness, unsigned int shaderProgramID)
-	: PhysicsEntity(0,0,0,shaderProgramID)
+Light::Light(float r, float g, float b, float brightness, Shader* shader)
+	: PhysicsEntity(0,0,0,shader)
 {
 	_size = 0.2f;
 

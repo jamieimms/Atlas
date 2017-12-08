@@ -3,6 +3,7 @@
 #include "glm.hpp"
 #include "Entities.h"
 #include "EntityTypeEnum.h"
+#include "Shader.h"
 
 namespace Atlas
 {
@@ -10,7 +11,7 @@ namespace Atlas
 	{
 		EntityTypeEnum type;
 		glm::vec3 pos;
-		unsigned int shader;
+		Shader* shader;
 
 		float size;
 		int quality;
@@ -22,6 +23,6 @@ namespace Atlas
 	{
 	public:
 
-		static IRenderable* CreateEntity(EntityCreateInfo& info, PhysicsManager* phys);
+		static EntityHolder* CreateEntity(EntityCreateInfo& info, Physics* phys, EntityHolder* holder = nullptr);
 	};
 }

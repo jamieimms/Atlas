@@ -2,41 +2,57 @@
 #include <vector>
 
 #include "../AtlasUtil/IRenderable.h"
+#include "../AtlasUtil/AtlasStopwatch.h"
+#include "Audio.h"
 #include "Camera.h"
 #include "TextureManager.h"
-#include "PhysicsManager.h"
+#include "Physics.h"
 #include "ShaderManager.h"
 #include "glm.hpp"
+#include "EntityTypeEnum.h"
+#include "EntityFactory.h"
+#include <sstream>
 
 namespace Atlas
 {
 	class Scene
 	{
 	public:
-		Scene(TextureManager* texManager, PhysicsManager* physManager, ShaderManager* shaderManager);
+		Scene(TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager);
 		void LoadFromFile(std::string& path);
 
 		void UnloadScene();
 
+		void Start();
+		void Stop();
+
+		void UpdateScene();
 		void DrawScene(glm::mat4 proj);
 
-		IRenderable* GetEntity(int index) { return _entities[index]; }
+		//IRenderable* GetEntity(int index) { return _entities[index]; }
 		Camera& GetCamera() { return _cam; }
 
+		void RemoveEntity(BaseEntity* entity);
+
 	private:
-		IRenderable* AddEntity(IRenderable* entity);
+		void ParseEntity(EntityTypeEnum type, std::stringstream& ss, EntityCreateInfo& eci);
 
-
-		std::vector<IRenderable*> _entities;
+		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
 
 		Camera _cam;
 
 		TextureManager* _texManager;
-		PhysicsManager* _physicsManager;
+		Physics* _physicsManager;
 		ShaderManager* _shaderManager;
+		Audio* _audio;
 
 		glm::vec3 _ambientLight;
 
+		AtlasUtil::AtlasStopwatch _sceneClock;
+
+		unsigned long _bgMusicId;
+
+		void Test();
 
 	};
 }

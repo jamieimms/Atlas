@@ -1,15 +1,15 @@
-#include "PhysicsManager.h"
+#include "Physics.h"
 
 using namespace Atlas;
 
-PhysicsManager::PhysicsManager(AtlasUtil::AtlasLog* log)
+Physics::Physics(AtlasUtil::AtlasLog* log)
 	:BaseManager(log)
 {
 	//_debugDrawer = 0;
 	_debugMode = false;
 }
 
-PhysicsManager::~PhysicsManager()
+Physics::~Physics()
 {
 	//cleanup in the reverse order of creation/initialization
 
@@ -52,7 +52,7 @@ PhysicsManager::~PhysicsManager()
 	//delete _debugDrawer;
 }
 
-bool PhysicsManager::initialisePhysicsEngine()
+bool Physics::initialisePhysicsEngine()
 {
 	try {
 		_log->Debug("Initialising Physics System");
@@ -96,7 +96,7 @@ bool PhysicsManager::initialisePhysicsEngine()
 //	Advances the simulation by the seconds elapsed since last frame.
 //
 //
-void PhysicsManager::doFrame(double delta)
+void Physics::doFrame(double delta)
 {
 		_dynamicsWorld->stepSimulation(delta, 10);
 }
@@ -106,7 +106,7 @@ void PhysicsManager::doFrame(double delta)
 //	Adds a new rigid body with the specified parameters.  Returns the index the adder should use if it
 //  wants to find out info about this body later.
 //
-btRigidBody* PhysicsManager::addRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, btCollisionShape* colShape)
+btRigidBody* Physics::addRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, btCollisionShape* colShape)
 {
 	/// Create Dynamic Objects
 	btTransform startTransform;
@@ -145,7 +145,7 @@ btRigidBody* PhysicsManager::addRigidBody(glm::mat4& startRot, glm::vec3& startP
 //
 //	Adds a rigid body with a sphere shaped collision shape with the given dimensions.
 //
-btRigidBody* PhysicsManager::addSphereRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, float size)
+btRigidBody* Physics::addSphereRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, float size)
 {
 	btCollisionShape* colShape = new btSphereShape(btScalar(size));
 
@@ -169,7 +169,7 @@ btRigidBody* PhysicsManager::addSphereRigidBody(glm::mat4& startRot, glm::vec3& 
 //	h - height of the entity
 //	d - depth
 //</Params>
-btRigidBody* PhysicsManager::addBoxRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, float w, float h, float d)
+btRigidBody* Physics::addBoxRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, float w, float h, float d)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(w, h, d));
 
@@ -189,7 +189,7 @@ btRigidBody* PhysicsManager::addBoxRigidBody(glm::mat4& startRot, glm::vec3& sta
 //	pe - physics entity (e.g. box)
 //	mass - mass of the entity
 //</Params>
-btRigidBody* PhysicsManager::addConvexRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, btCollisionShape *colShape)
+btRigidBody* Physics::addConvexRigidBody(glm::mat4& startRot, glm::vec3& startPos, float mass, btCollisionShape *colShape)
 {
 	if (!_collisionShapes.findBinarySearch(colShape)) {
 		_collisionShapes.push_back(colShape);
@@ -209,7 +209,7 @@ btRigidBody* PhysicsManager::addConvexRigidBody(glm::mat4& startRot, glm::vec3& 
 //<Params>
 //	body - physics body to remove and destroy
 //</Params>
-void PhysicsManager::ToggleEnableSimulation(btRigidBody* body, bool enable)
+void Physics::ToggleEnableSimulation(btRigidBody* body, bool enable)
 {
 	if (!body) {
 		return;
@@ -230,7 +230,7 @@ void PhysicsManager::ToggleEnableSimulation(btRigidBody* body, bool enable)
 //	m - the matrix to fill
 //	body - the body to re-add.
 //</Params>
-bool PhysicsManager::getTransformForRigid(glm::mat4& m, btRigidBody* body)
+bool Physics::getTransformForRigid(glm::mat4& m, btRigidBody* body)
 {
 
 	if (!body) {
@@ -261,3 +261,12 @@ bool PhysicsManager::getTransformForRigid(glm::mat4& m, btRigidBody* body)
 	return true;
 }
 
+void Physics::removeBody(btRigidBody* toRemove)
+{
+	if (toRemove == nullptr) {
+		return;
+	}
+
+	_dynamicsWorld->removeCollisionObject(toRemove);
+
+}
