@@ -7,3 +7,4 @@
 #include "Plane.h"
 #include "Light.h"
 #include "FiniteEntity.h"
+#include "Skybox.h"

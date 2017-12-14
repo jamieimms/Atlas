@@ -11,5 +11,6 @@ namespace Atlas
 		ET_Cube,
 		ET_Cone,
 		ET_Sphere,
+		ET_Skybox,
 	};
 }

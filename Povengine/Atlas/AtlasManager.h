@@ -11,13 +11,14 @@
 #include "Physics.h"
 #include "TextureManager.h"
 #include "../AtlasUtil/AtlasStopwatch.h"
+#include "AtlasGame.h"
 
 namespace Atlas
 {
 	class AtlasManager : protected BaseManager
 	{
 	public:
-		AtlasManager();
+		AtlasManager(AtlasGame* game);
 		~AtlasManager();
 
 		Window* getWindow();
@@ -35,6 +36,8 @@ namespace Atlas
 		void inputProcessing();
 		void frameProcessing();
 
+		void toggleMouseLook(bool enable);
+
 		// Members
 		Window* _applicationWindow;	// The desktop window we're rendering inside
 
@@ -51,7 +54,11 @@ namespace Atlas
 
 		Scene* _currentScene;
 
+		AtlasGame* _game;
+
 		std::string _name;
 		std::string _mainDir;
+
+		bool _enableMouseLook;
 	};
 }

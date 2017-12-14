@@ -120,6 +120,10 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 			format * sizeof(float),
 			(void*)(8 * sizeof(float)));
 		glEnableVertexAttribArray(3);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _texID);
+		glUniform1i(_shader->texLoc, 0);
 	}
 
 	glUniformMatrix4fv(_shader->viewLoc, 1, GL_FALSE, glm::value_ptr(view));

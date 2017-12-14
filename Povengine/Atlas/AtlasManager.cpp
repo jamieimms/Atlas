@@ -8,6 +8,7 @@
 #include "../AtlasUtil/AtlasMessageBox.h"
 #include "../AtlasAPI/AtlasAPIHelper.h"
 #include "IO.h"
+#include "SceneParser.h"
 
 
 using namespace Atlas;
@@ -16,7 +17,7 @@ using namespace AtlasUtil;
 /// <summary>
 /// Construct the manager
 /// </summary>
-AtlasManager::AtlasManager()
+AtlasManager::AtlasManager(AtlasGame* game)
 	: BaseManager(nullptr), _name("Atlas"), _applicationWindow(nullptr), _renderer(nullptr), _currentScene(nullptr), _input(nullptr), _shaderManager(nullptr), _phys(nullptr)
 {
 	std::stringstream fmt;
@@ -152,18 +153,20 @@ bool AtlasManager::Initialise()
 	_shaderManager->LoadShader("lighting");
 	_shaderManager->LoadShader("text");
 	
-	_currentScene = new Scene(_texManager, _phys, _shaderManager, _audio);
-	_currentScene->LoadFromFile(IO::GetSceneDirectory() + "main.as");
+	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "main.as", _texManager, _phys, _shaderManager, _audio);
 	_currentScene->Start();
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();
 
 	_frameCount = 0;
 
+	toggleMouseLook(true);
+
 	_initialised = true;
 
 	return true;
 }
+
 
 /// <summary>
 /// Starts the engine running by entering the application loop (this may be better moved to the Window classes)
@@ -226,7 +229,6 @@ void AtlasManager::frameProcessing()
 /// </summary>
 void AtlasManager::inputProcessing()
 {
-	static bool enableMouseLook = false;
 	static float xPos = 0;
 	static float yPos = 3.0f;
 	static float zPos = 5.0f;
@@ -274,23 +276,21 @@ void AtlasManager::inputProcessing()
 		exit(0);
 	}
 
-	// Enable/disable mouse look
-	if (_input->IsToggleKeyPressed(VK_PAUSE)) {
-		enableMouseLook = !enableMouseLook;
-		_applicationWindow->setCaptureMouse(enableMouseLook);
-		_input->ResetMouseInput();
-	}
-
-	if (enableMouseLook) {
+	if (_enableMouseLook) {
+		if (camYaw == 0 && camPitch == 0) {
+			_currentScene->GetCamera().GetYaw(camYaw);
+			_currentScene->GetCamera().GetPitch(camPitch);
+		}
 		if (!_frameCount) {
-
 			_currentScene->GetCamera().SetPosition(20, 10, 0);
 			_currentScene->GetCamera().SetLookAt(0, 0, 0);
 
 			_input->ResetMouseInput();
 		}
 		else if (_input->GetMouseX() != 0 && _input->GetMouseY() != 0) {
-			camYaw += ((_input->GetMouseX()) * _frameDelta) * _input->GetMouseSensitivity();
+			//_input->ResetMouseInput();
+
+			camYaw += (_input->GetMouseX() * _frameDelta) * _input->GetMouseSensitivity();
 			camPitch += (_input->GetMouseY() * _frameDelta) * _input->GetMouseSensitivity();
 
 			if (camPitch >= 90.0f) {
@@ -306,8 +306,20 @@ void AtlasManager::inputProcessing()
 		}
 	}
 
+	// Enable/disable mouse look
+	if (_input->IsToggleKeyPressed(VK_PAUSE)) {
+		toggleMouseLook(!_enableMouseLook);
+	}
+
 	// Check bindings for key presses
 	_renderer->ToggleWireframe(_input->IsKeyPressed(0x57));
+}
+
+void AtlasManager::toggleMouseLook(bool enable)
+{
+	_enableMouseLook = enable;
+	_applicationWindow->setCaptureMouse(_enableMouseLook);
+	_input->ResetMouseInput();
 }
 
 void AtlasManager::windowSizeChanged(int width, int height)

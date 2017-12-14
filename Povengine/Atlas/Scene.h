@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <string>
+#include <sstream>
 
 #include "../AtlasUtil/IRenderable.h"
 #include "../AtlasUtil/AtlasStopwatch.h"
@@ -11,15 +13,13 @@
 #include "glm.hpp"
 #include "EntityTypeEnum.h"
 #include "EntityFactory.h"
-#include <sstream>
 
 namespace Atlas
 {
 	class Scene
 	{
 	public:
-		Scene(TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager);
-		void LoadFromFile(std::string& path);
+		Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager);
 
 		void UnloadScene();
 
@@ -34,9 +34,12 @@ namespace Atlas
 
 		void RemoveEntity(BaseEntity* entity);
 
-	private:
-		void ParseEntity(EntityTypeEnum type, std::stringstream& ss, EntityCreateInfo& eci);
+		bool AddBackgroundMusic(std::string fileName);
+		void SetAmbientLight(float r, float g, float b);
+		void SetCamera(glm::vec3 pos, glm::vec3 target);
+		void AddEntity(EntityHolder* entity);
 
+	private:
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
 
 		Camera _cam;
@@ -52,7 +55,9 @@ namespace Atlas
 
 		unsigned long _bgMusicId;
 
-		void Test();
+		std::string _name;
+
+		//void Test();
 
 	};
 }

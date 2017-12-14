@@ -2,15 +2,18 @@
 #include <Windows.h>
 #include "..\Atlas\AtlasManager.h"
 #include "..\Atlas\Win32Window.h"
+#include "TerraFormaGame.h"
 
 using namespace Atlas;
+using namespace TerraForma;
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	AtlasManager atlasManager;
+	TerraFormaGame game;
+	AtlasManager atlasManager(&game);
 
 	Win32Window* window = (Win32Window*)atlasManager.getWindow();
 

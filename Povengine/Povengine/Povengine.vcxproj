@@ -147,6 +147,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="TerraFormaGame.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TerraFormaGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

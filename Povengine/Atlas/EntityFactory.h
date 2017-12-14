@@ -7,8 +7,12 @@
 
 namespace Atlas
 {
-	struct EntityCreateInfo
+	class EntityCreateInfo
 	{
+	public:
+		EntityCreateInfo();
+
+
 		EntityTypeEnum type;
 		glm::vec3 pos;
 		Shader* shader;
@@ -16,7 +20,9 @@ namespace Atlas
 		float size;
 		int quality;
 
-		unsigned int textureID;
+		unsigned int texCount;
+		unsigned int textureID[6];
+
 	};
 
 	class EntityFactory

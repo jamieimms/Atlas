@@ -8,10 +8,10 @@
 using namespace Atlas;
 
 
-Scene::Scene(TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager)
-	: _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager), _audio(audioManager)
+Scene::Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager)
+	: _name(name), _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager), _audio(audioManager)
 {
-
+	_bgMusicId = 0;
 }
 
 int GetInt(std::stringstream& ss)
@@ -30,141 +30,98 @@ float GetFloat(std::stringstream& ss)
 	return atof(curLine);
 }
 
-void Scene::ParseEntity(EntityTypeEnum type, std::stringstream& ss, EntityCreateInfo& eci)
+
+bool Scene::AddBackgroundMusic(std::string fileName)
 {
-	eci.type = type;
-
-	// All types specify a shader (for now)
-	eci.shader = _shaderManager->GetShaderAtIndex(GetInt(ss));
-
-	switch (type)
-	{
-	case ET_Origin:	// size
-		eci.size = GetFloat(ss);
-		break;
-	case ET_Plane: // x, y, z, size tex
-		eci.pos.x = GetFloat(ss);
-		eci.pos.y = GetFloat(ss);
-		eci.pos.z = GetFloat(ss);
-		eci.size = GetFloat(ss);
-
-		eci.textureID = GetInt(ss);
-		break;
-	case ET_Cube:
-		eci.pos.x = GetFloat(ss);
-		eci.pos.y = GetFloat(ss);
-		eci.pos.z = GetFloat(ss);
-
-		eci.size = GetFloat(ss);
-
-		eci.textureID = GetInt(ss);
-		break;
-	case ET_Cone:
-		eci.pos.x = GetFloat(ss);
-		eci.pos.y = GetFloat(ss);
-		eci.pos.z = GetFloat(ss);
-
-		eci.size = GetFloat(ss);
-		eci.quality = GetInt(ss);
-		break;
+	SoundInfo info;
+	info.soundId = 999;
+	if (!_audio->LoadSound(fileName, &info)) {
+		return false;
 	}
+	_bgMusicId = info.soundId;
+	return true;
 }
 
-/// Loads a scene from the very basic text-based scene file
-/// 
-///
-void Scene::LoadFromFile(std::string& path)
+void Scene::SetAmbientLight(float r, float g, float b)
 {
-	std::string texDir = IO::GetTextureDirectory();
-	auto dirt = _texManager->LoadTexture(texDir + "Dirt.png");
-	auto grassBoundary = _texManager->LoadTexture(texDir + "DirtGrassBorder01.png");
-	auto patchyGrass = _texManager->LoadTexture(texDir + "PatchyDirt.png");
-	auto crate = _texManager->LoadTexture(texDir + "crate.jpg");
-
-	std::string sceneFile;
-	char curLine[256];
-	char line[256];
-	AtlasAPI::AtlasAPIHelper::LoadTextFile(path, sceneFile);
-
-	EntityTypeEnum type = ET_Unknown;
-
-	std::stringstream s(sceneFile);
-	while (!s.eof()) {
-		s.getline(curLine, 256);
-		if (curLine[0] == '\0') {
-			continue;
-		}
-		std::stringstream ln(curLine);
-
-		ln.getline(line, 256, ' ');
-		if (line[0] == AS_COMMENT) {
-			continue;
-		}
-		else if (line[0] == AS_AMBIENT_LIGHT) {
-			_ambientLight.r = GetFloat(ln);
-			_ambientLight.g = GetFloat(ln);
-			_ambientLight.b = GetFloat(ln);			
-		}
-		else if (line[0] == AS_BG_MUSIC) {
-			char soundFile[256];
-			ln.getline(soundFile, 256, ' ');
-			SoundInfo info;
-			_audio->LoadSound(soundFile, &info);
-			_bgMusicId = info.soundId;
-		}
-		else {
-			EntityCreateInfo eci;
-			ParseEntity((EntityTypeEnum)atoi(line), ln, eci);
-
-			if (eci.textureID == 0) {
-				eci.textureID = dirt;
-			}
-			else if (eci.textureID == 1) {
-				eci.textureID = grassBoundary;
-			}
-			else if (eci.textureID == 2) {
-				eci.textureID = patchyGrass;
-			}
-			else if (eci.textureID == 3) {
-				eci.textureID = patchyGrass;
-			}
-			else if (eci.textureID == 4) {
-				eci.textureID = crate;
-			}
-			_entities.push_back(EntityFactory::CreateEntity(eci, _physicsManager));
-
-		}
-	}
-
-	_cam.SetPosition(0, 3.0f, 5.0f);
-	_cam.SetLookAt(0, 0, 0);
-
-	//std::string test = "T";
-	//
-	//Text* t = new Text(_shaderManager->GetShaderAtIndex(0));
-	//t->init(test, 60, 60);
-	//
-	//AddEntity(t);
+	_ambientLight.r = r;
+	_ambientLight.g = g;
+	_ambientLight.b = b;
 }
 
-void Scene::Test()
+
+void Scene::SetCamera(glm::vec3 pos, glm::vec3 target)
 {
-	int random = rand() % 10;
-	double diff = random / 10.0;
-	// Test finite
-	EntityCreateInfo ei;
-	ei.type = EntityTypeEnum::ET_Cube;
-	ei.pos = glm::vec3(random - 5, 15, 0);
-	ei.size = diff;
-	ei.textureID = 0;
-	ei.shader = _shaderManager->GetShaderAtIndex(2);
-	FiniteEntity* shortEntity = new FiniteEntity(10);
-	_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
+	_cam.SetPosition(pos.x, pos.y, pos.z);
+	_cam.SetLookAt(target.x, target.y, target.z);
 }
+
+void Scene::AddEntity(EntityHolder* entity)
+{
+	_entities.push_back(entity);
+}
+
+///// Loads a scene from the very basic text-based scene file
+///// 
+/////
+//void Scene::LoadFromFile(std::string& path)
+//{
+//	std::string texDir = IO::GetTextureDirectory();
+//	auto dirt = _texManager->LoadTexture(texDir + "Dirt.png");
+//	auto grassBoundary = _texManager->LoadTexture(texDir + "DirtGrassBorder01.png");
+//	auto patchyGrass = _texManager->LoadTexture(texDir + "PatchyDirt.png");
+//	auto crate = _texManager->LoadTexture(texDir + "crate.jpg");
+//
+//	std::string sceneFile;
+//	char curLine[256];
+//	char line[256];
+//
+//	EntityTypeEnum type = ET_Unknown;
+//
+//	std::stringstream s(sceneFile);
+//	while (!s.eof()) {
+//		s.getline(curLine, 256);
+//		if (curLine[0] == '\0') {
+//			continue;
+//		}
+//		else if (line[0] == AS_SKY) {
+
+//		}
+//		else {
+//			EntityCreateInfo eci;
+//			ParseEntity((EntityTypeEnum)atoi(line), ln, eci);
+//			if (eci.type == EntityTypeEnum::ET_Plane) {
+//				eci.texCount = 1;
+//			}
+//
+//			for (int i = 0; i < eci.texCount; i++) {
+//				if (eci.textureID[i] == 0) {
+//					eci.textureID[i] = dirt;
+//				}
+//				else if (eci.textureID[i] == 1) {
+//					eci.textureID[i] = grassBoundary;
+//				}
+//				else if (eci.textureID[i] == 2) {
+//					eci.textureID[i] = patchyGrass;
+//				}
+//				else if (eci.textureID[i] == 3) {
+//					eci.textureID[i] = patchyGrass;
+//				}
+//				else if (eci.textureID[i] == 4) {
+//					eci.textureID[i] = crate;
+//				}
+//				eci.shader->texLoc = eci.textureID[i];
+//			}
+//			_entities.push_back(EntityFactory::CreateEntity(eci, _physicsManager));
+//		}
+//	}
+//}
 
 void Scene::Start()
 {
-	//_audio->queueSoundForNextFrame(_bgMusicId, glm::vec3(), glm::vec3());
+	if (_bgMusicId != 0) {
+		_audio->queueSoundForNextFrame(_bgMusicId, glm::vec3(), glm::vec3());
+	}
 
 	_sceneClock.Start();
 
@@ -223,7 +180,19 @@ void Scene::UpdateScene()
 	}
 
 	if (_sceneClock.GetElapsedMs() > 100) {
-		Test();
+
+			int random = rand() % 10;
+			double diff = random / 10.0;
+			// Test finite
+			EntityCreateInfo ei;
+			ei.type = EntityTypeEnum::ET_Cube;
+			ei.pos = glm::vec3(random - 5, 15, 0);
+			ei.size = diff;
+			ei.textureID[0] = 0;
+			ei.shader = _shaderManager->GetShaderAtIndex(2);
+			FiniteEntity* shortEntity = new FiniteEntity(10);
+			_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
+
 		_sceneClock.Reset();
 		_sceneClock.Start();
 	}

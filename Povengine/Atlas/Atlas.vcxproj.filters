@@ -148,6 +148,15 @@
     <ClInclude Include="EntityHolder.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="AtlasGame.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneParser.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -230,6 +239,12 @@
     </ClCompile>
     <ClCompile Include="EntityHolder.cpp">
       <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneParser.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

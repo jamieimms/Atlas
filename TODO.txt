@@ -1,20 +1,25 @@
 Absolute bare minimum game engine features:
 
 Graphics:
-	2D/3D geometry
-	camera
-	2D text output
+	2D/3D geometry	- Partially implemented using OpenGL
+	camera			- Done (buggy, very simple)
+	2D text output	- TODO
 	
 Audio:
-	Play sounds
+	Play sounds		- Done, audio implemented with FMOD
 
 Input:
-	Keyboard input
+	Keyboard input	- Done
 	
 Physics:
-	Gravity
-	Collision detection
+	Gravity				- Done, physics implemented with Bullet Physics
+	Collision detection	- Done via Bullet but no API hooks yet
 	
 Gameplay:
-	State
-	End condition
+	State			- TODO
+	End condition	- TODO
+	
+	
+	
+Known Issues:
+Camera stuffs up when enabling free-look (also when window size changes) - it seems to be because the yaw and pitch are not set correctly when updating the non-freelook camera

@@ -11,4 +11,6 @@ namespace Atlas
 
 	// Sound
 	char AS_BG_MUSIC = 'm';
+
+	char AS_SKY = 's';
 }

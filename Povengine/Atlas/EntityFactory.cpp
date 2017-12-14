@@ -2,6 +2,14 @@
 
 using namespace Atlas;
 
+EntityCreateInfo::EntityCreateInfo()
+{
+	texCount = 0;
+	for (int i = 0; i < 6; i++) {
+		textureID[i] = 0;
+	}
+}
+
 EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys, EntityHolder* holder)
 {
 	BaseEntity* newEntity = nullptr;
@@ -32,11 +40,13 @@ EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys,
 		break;
 	case EntityTypeEnum::ET_Triangle:
 		newEntity = new Triangle(info.size, info.pos.x, info.pos.y, info.pos.z, info.shader);
-
+		break;
+	case EntityTypeEnum::ET_Skybox:
+		newEntity = new Skybox(info.size, info.pos, info.shader, info.textureID[0]);
 		break;
 	}
 
-	dynamic_cast<BaseEntity*>(newEntity)->SetTexture(info.textureID);
+	dynamic_cast<BaseEntity*>(newEntity)->SetTexture(info.textureID[0]);
 
 	if (holder != nullptr) {
 		return holder->Initialise(newEntity) ? holder : nullptr;
