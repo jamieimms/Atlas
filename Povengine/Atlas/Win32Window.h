@@ -12,7 +12,11 @@ namespace Atlas
 		virtual ~Win32Window();
 
 		void setWindowVariables(HINSTANCE hInstance, int nCmdShow);
+
+		// Abstract methods we need to implement
 		bool createWindow(std::string title, unsigned int width, unsigned int height);
+		bool showMessageBox(AtlasMessageTypeEnum type, std::string title, std::string message, AtlasMessageButtonsEnum buttons);
+
 
 		virtual void setCaptureMouse(bool enable);
 
@@ -41,7 +45,7 @@ namespace Atlas
 		static LRESULT CALLBACK staticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 		LRESULT CALLBACK wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-		static std::wstring MAIN_WINDOW_CLASS_NAME;
+		static std::string MAIN_WINDOW_CLASS_NAME;
 
 	protected:
 

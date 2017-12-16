@@ -1,20 +1,30 @@
 #pragma once
 #include "PhysicsEntity.h"
+#include "LightTypeEnum.h"
 
 namespace Atlas
 {
-	class Light : public PhysicsEntity
+	class Light
 	{
 	public:
 
-		Light(float r, float g, float b, float brightness, Shader* shader);
+		Light(LightTypeEnum type);
+		Light(LightTypeEnum type, float r, float g, float b);
+		Light(LightTypeEnum type, float r, float g, float b, float x, float y, float z);
+
 		virtual ~Light();
 
-		virtual void InitData();
+		glm::vec3 GetColour() { return _lightColour; }
+		glm::vec3 GetPosition() { return _position; }
+
+		void SetPosition(glm::vec3& pos) { _position = pos; }
 
 	private:
 
+		LightTypeEnum _type;
+
 		glm::vec3 _lightColour;
+		glm::vec3 _position;
 
 	};
 }

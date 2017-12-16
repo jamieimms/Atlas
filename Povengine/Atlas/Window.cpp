@@ -18,3 +18,4 @@ void Window::setCaptureMouse(bool enable)
 {
 	_mouseCaptured = enable; 
 }
+

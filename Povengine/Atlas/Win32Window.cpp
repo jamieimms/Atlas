@@ -7,7 +7,7 @@
 
 using namespace Atlas;
 
-std::wstring Win32Window::MAIN_WINDOW_CLASS_NAME = L"AtlasWin32ApplicationClassName";
+std::string Win32Window::MAIN_WINDOW_CLASS_NAME = "AtlasWin32ApplicationClassName";
 
 Win32Window::Win32Window(AtlasManager* parent)
 	:Window(parent)
@@ -38,7 +38,7 @@ bool Win32Window::createWindow(std::string title, unsigned int width, unsigned i
 	_width = width;
 	_height = height;
 
-	std::wstring w32Title = L"Atlas Engine";
+	std::string w32Title = "Atlas Engine";
 
 	RECT rc = { 0, 0, _width, _height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
@@ -53,6 +53,47 @@ bool Win32Window::createWindow(std::string title, unsigned int width, unsigned i
 
 	return true;
 }
+
+bool Win32Window::showMessageBox(AtlasMessageTypeEnum type, std::string title, std::string message, AtlasMessageButtonsEnum buttons)
+{
+	unsigned int button;
+	switch (buttons)
+	{
+	case AtlasMessageButtonsEnum::AB_OKCancel:
+		button = MB_OKCANCEL;
+		break;
+	//case AtlasMessageButtonsEnum::AB_YesNoCancel:
+	//	button = MB_YESNOCANCEL;
+	//	break;
+	case AtlasMessageButtonsEnum::AB_YesNo:
+		button = MB_YESNO;
+		break;
+	default:
+		button = MB_OK;
+	}
+
+	switch (type)
+	{
+	case AtlasMessageTypeEnum::AMT_Error:
+		button |= MB_ICONERROR;
+		break;
+	case AtlasMessageTypeEnum::AMT_Warning:
+		button |= MB_ICONWARNING;
+		break;
+	case AtlasMessageTypeEnum::AMT_Information:
+		button |= MB_ICONINFORMATION;
+		break;
+	}
+
+	int result = MessageBox(_hWnd, message.c_str(), title.c_str(),  button);
+
+	if (result == IDOK || result == IDYES) {
+		return true;
+	}
+
+	return false;
+}
+
 
 void Win32Window::setCaptureMouse(bool enable)
 {
@@ -87,9 +128,9 @@ bool Win32Window::initialiseWindow()
 	wcex.hIconSm = 0;
 	if (!RegisterClassEx(&wcex)) {
 		DWORD error = GetLastError();
-		wchar_t buf[256];
+		char buf[256];
 		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, error, 0, buf, 256, 0);
-		MessageBox(NULL, buf, L"Error", MB_OK);
+		MessageBox(NULL, buf, "Error", MB_OK);
 		return false;
 	}
 

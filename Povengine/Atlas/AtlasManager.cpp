@@ -152,8 +152,13 @@ bool AtlasManager::Initialise()
 	_shaderManager->LoadShader("texture");
 	_shaderManager->LoadShader("lighting");
 	_shaderManager->LoadShader("text");
+	_shaderManager->LoadShader("littex");
 	
 	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "main.as", _texManager, _phys, _shaderManager, _audio);
+	if (_currentScene == nullptr) {
+		_log->Debug("The scene failed to load.");
+		return false;
+	}
 	_currentScene->Start();
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();

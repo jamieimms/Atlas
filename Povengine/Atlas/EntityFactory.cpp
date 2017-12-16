@@ -16,33 +16,33 @@ EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys,
 	switch (info.type)
 	{
 	case EntityTypeEnum::ET_Cone:
-		newEntity = new Cone(info.quality, info.size, info.pos, info.shader);
+		newEntity = new Cone(info.quality, info.uniformScale, info.pos, info.shader);
 		break;
 	case EntityTypeEnum::ET_Cube:
 	{
-		auto c = new Cube(info.size, info.pos, info.shader);
-		c->SetPhysicsProperties(phys, true, 1.0f, info.size, info.size, info.size);
+		auto c = new Cube(info.uniformScale, info.pos, info.shader);
+		c->SetPhysicsProperties(phys, true, 1.0f, info.uniformScale, info.uniformScale, info.uniformScale);
 		newEntity = c;
 		break;
 	}
 	case EntityTypeEnum::ET_Origin:
-		newEntity = new Origin(info.size, info.shader);
+		newEntity = new Origin(info.uniformScale, info.shader);
 		break;
 	case EntityTypeEnum::ET_Plane:
 	{
-		auto p = new Plane(info.size, info.pos.x, info.pos.y, info.pos.z, info.shader);
-		p->SetPhysicsProperties(phys, true, 0.0f, info.size, 0.1f, info.size);
+		auto p = new Plane(info.uniformScale, info.pos.x, info.pos.y, info.pos.z, info.shader);
+		p->SetPhysicsProperties(phys, true, 0.0f, info.uniformScale, 0.1f, info.uniformScale);
 		newEntity = p;
 		break;
 	}
 	case EntityTypeEnum::ET_Sphere:
-		newEntity = new Sphere(10, 10, info.size, info.pos.x, info.pos.y, info.pos.z, info.shader);
+		newEntity = new Sphere(10, 10, info.uniformScale, info.pos.x, info.pos.y, info.pos.z, info.shader);
 		break;
 	case EntityTypeEnum::ET_Triangle:
-		newEntity = new Triangle(info.size, info.pos.x, info.pos.y, info.pos.z, info.shader);
+		newEntity = new Triangle(info.uniformScale, info.pos.x, info.pos.y, info.pos.z, info.shader);
 		break;
 	case EntityTypeEnum::ET_Skybox:
-		newEntity = new Skybox(info.size, info.pos, info.shader, info.textureID[0]);
+		newEntity = new Skybox(info.uniformScale, info.pos, info.shader, info.textureID[0]);
 		break;
 	}
 

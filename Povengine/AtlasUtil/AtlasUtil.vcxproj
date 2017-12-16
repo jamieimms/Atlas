@@ -145,7 +145,6 @@
     <ClInclude Include="AtlasLog.h" />
     <ClInclude Include="AtlasStopwatch.h" />
     <ClInclude Include="ImageLoader.h" />
-    <ClInclude Include="IRenderable.h" />
     <ClInclude Include="jpeg_decoder.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Random.h" />

@@ -2,6 +2,7 @@
 
 #include "glew.h"
 #include "..\AtlasUtil\ImageLoader.h"
+#include "Light.h"
 
 using namespace Atlas;
 
@@ -64,7 +65,7 @@ void BaseEntity::Update()
 
 }
 
-void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
+void BaseEntity::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights)
 {
 	int format = (int)_dataFormat;
 	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
@@ -95,7 +96,7 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 
 	glUseProgram(_shader->glProgramID);
 
-	if (_dataFormat == DataFormatEnum::DataColourTex) {
+	if (_dataFormat == DataFormatEnum::DataColourTex || _dataFormat == DataFormatEnum::DataColourTexNorm) {
 		glVertexAttribPointer(
 			2,
 			2,
@@ -132,8 +133,14 @@ void BaseEntity::Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos)
 
 	glUniform3f(_shader->objectColour, _material.diffuseColour.r, _material.diffuseColour.g, _material.diffuseColour.b);
 
-	glUniform3f(_shader->positionalLightColour, 1.0f, 1.0f, 1.0f);
-	glUniform3f(_shader->positionalLightPos, 0.0f, 5.0f, 0.0f);
+	auto temp = lights[0]->GetColour();
+
+	glUniform3f(_shader->ambientLightColour, temp.r, temp.g, temp.b);
+
+	temp = lights[1]->GetColour();
+	glUniform3f(_shader->positionalLightColour, temp.r, temp.g, temp.b);
+	temp = lights[1]->GetPosition();
+	glUniform3f(_shader->positionalLightPos, temp.x, temp.y, temp.z);
 	glUniform3f(_shader->viewerPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
 	if (_indices == nullptr) {

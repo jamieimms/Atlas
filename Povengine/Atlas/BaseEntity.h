@@ -1,5 +1,5 @@
 #pragma once
-#include "../AtlasUtil/IRenderable.h"
+#include "IRenderable.h"
 #include "Transformable.h"
 #include "DataFormatEnum.h"
 #include "EntityTypeEnum.h"
@@ -19,8 +19,8 @@ namespace Atlas
 
 
 		virtual void Update();
-		virtual void Render(glm::mat4 view, glm::mat4 proj, glm::vec3 cameraPos);
-
+		virtual void Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights);
+		
 		virtual void InitData() {}
 
 		virtual void Kill() { _dead = true; }

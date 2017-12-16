@@ -29,7 +29,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="AtlasGame.h" />
     <ClInclude Include="AtlasManager.h" />
+    <ClInclude Include="AtlasMessageBoxEnums.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="BaseEntity.h" />
     <ClInclude Include="BaseManager.h" />
@@ -155,7 +156,9 @@
     <ClInclude Include="FiniteEntity.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightTypeEnum.h" />
     <ClInclude Include="MapFileIndex.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Origin.h" />

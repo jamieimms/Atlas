@@ -157,6 +157,15 @@
     <ClInclude Include="SceneParser.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="LightTypeEnum.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasMessageBoxEnums.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderable.h">
+      <Filter>Game\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">

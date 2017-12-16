@@ -3,6 +3,7 @@
 #include "..\Atlas\AtlasManager.h"
 #include "..\Atlas\Win32Window.h"
 #include "TerraFormaGame.h"
+#include "..\Atlas\AtlasMessageBoxEnums.h"
 
 using namespace Atlas;
 using namespace TerraForma;
@@ -19,9 +20,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	window->setWindowVariables(hInstance, nCmdShow);
 
-	window->createWindow("Atlas Engine", 800, 600);
+	window->createWindow("Atlas Engine", 1024, 768);
 
-	atlasManager.Initialise();
+	if (!atlasManager.Initialise()) {
+		window->showMessageBox(AtlasMessageTypeEnum::AMT_Error, "Fatal Error", "Failed to initialise.", AtlasMessageButtonsEnum::AB_OK);
+		return -1;
+	}
 
 	int retVal = atlasManager.start();
 

@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
+#include "AtlasMessageBoxEnums.h"
 
 namespace Atlas
 {
 	class AtlasManager;
-
 
 	class Window
 	{
@@ -16,6 +16,8 @@ namespace Atlas
 		virtual bool createWindow(std::string title, unsigned int width, unsigned int height) = 0;
 
 		virtual void setCaptureMouse(bool enable);
+
+		virtual bool showMessageBox(AtlasMessageTypeEnum type, std::string title, std::string message, AtlasMessageButtonsEnum buttons) = 0;
 
 	protected:
 

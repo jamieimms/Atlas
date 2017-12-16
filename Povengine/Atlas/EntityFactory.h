@@ -17,7 +17,7 @@ namespace Atlas
 		glm::vec3 pos;
 		Shader* shader;
 
-		float size;
+		float uniformScale;
 		int quality;
 
 		unsigned int texCount;

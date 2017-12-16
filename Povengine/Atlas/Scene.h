@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 
-#include "../AtlasUtil/IRenderable.h"
+#include "IRenderable.h"
 #include "../AtlasUtil/AtlasStopwatch.h"
 #include "Audio.h"
 #include "Camera.h"
@@ -35,12 +35,13 @@ namespace Atlas
 		void RemoveEntity(BaseEntity* entity);
 
 		bool AddBackgroundMusic(std::string fileName);
-		void SetAmbientLight(float r, float g, float b);
 		void SetCamera(glm::vec3 pos, glm::vec3 target);
 		void AddEntity(EntityHolder* entity);
+		void AddLight(Light* light);
 
 	private:
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
+		std::vector<Light*> _lights;
 
 		Camera _cam;
 
@@ -49,15 +50,11 @@ namespace Atlas
 		ShaderManager* _shaderManager;
 		Audio* _audio;
 
-		glm::vec3 _ambientLight;
-
 		AtlasUtil::AtlasStopwatch _sceneClock;
 
+		bool _playMusic;
 		unsigned long _bgMusicId;
 
 		std::string _name;
-
-		//void Test();
-
 	};
 }

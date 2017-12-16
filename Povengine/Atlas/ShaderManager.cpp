@@ -84,6 +84,8 @@ unsigned int ShaderManager::LoadShader(const std::string& shaderName)
 	shader->positionalLightPos = glGetUniformLocation(shader->glProgramID, "lightPos");
 	shader->viewerPos = glGetUniformLocation(shader->glProgramID, "viewPos");
 
+	shader->ambientLightColour = glGetUniformLocation(shader->glProgramID, "ambientColour");
+
 	_loadedShaders.push_back(shader);
 
 	return shaderProgram;

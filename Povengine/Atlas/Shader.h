@@ -23,6 +23,7 @@ namespace Atlas
 		int positionalLightColour;
 		int positionalLightPos;
 		int viewerPos;
+		int ambientLightColour;
 
 	};
 
