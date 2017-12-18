@@ -66,7 +66,7 @@ bool SceneParser::ParseElement(Scene* scene, XMLElement* element, TextureManager
 		scene->SetCamera(pos, target);
 	}
 	else if (strcmp(element->Name(), "sky") == 0) {
-
+		ParseEntity(scene, element, texManager, physics, shaderManager, audio);
 	}
 	else if (strcmp(element->Name(), "lights") == 0) {
 		auto child = element->FirstChildElement();
@@ -119,6 +119,27 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 	}
 	else if (strcmp(element->Name(), "sky") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Skybox;
+
+		std::string name = element->FirstAttribute()->Value();
+		std::string texDir = IO::GetTextureDirectory();
+		auto skyTex = texManager->LoadTexture(texDir + name + "\\bk.jpg");
+		entityInfo.texCount = 2;
+		entityInfo.textureID[0] = skyTex;
+		skyTex = texManager->LoadTexture(texDir + name + "\\ft.jpg");
+		entityInfo.textureID[1] = skyTex;
+		skyTex = texManager->LoadTexture(texDir + name + "\\lt.jpg");
+		entityInfo.textureID[2] = skyTex;
+		skyTex = texManager->LoadTexture(texDir + name + "\\rt.jpg");
+		entityInfo.textureID[3] = skyTex;
+		skyTex = texManager->LoadTexture(texDir + name + "\\up.jpg");
+		entityInfo.textureID[4] = skyTex;
+		skyTex = texManager->LoadTexture(texDir + name + "\\dn.jpg");
+		entityInfo.textureID[5] = skyTex;
+		entityInfo.shader = shaderManager->GetShaderByName("texture");
+		entityInfo.uniformScale = 20;
+		entityInfo.pos = glm::vec3(0, 0, 0);
+		scene->AddEntity(EntityFactory::CreateEntity(entityInfo, physics));
+		return true;
 	}
 	else if (strcmp(element->Name(), "cube") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Cube;
@@ -170,12 +191,6 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 	//			//auto sky4 = _texManager->LoadTexture(texDir + "muddysky\\lt.jpg");	//bk ft dn lt rt up
 	//			//auto sky5 = _texManager->LoadTexture(texDir + "muddysky\\rt.jpg");	//bk ft dn lt rt up
 	//			//auto sky6 = _texManager->LoadTexture(texDir + "muddysky\\up.jpg");	//bk ft dn lt rt up
-	//
-	//			auto skybox = new Skybox(100, glm::vec3(0, 0, 0), _shaderManager->GetShaderAtIndex(1), sky1);
-	//			auto holder = new EntityHolder();
-	//			holder->Initialise(skybox);
-	//
-	//			_entities.push_back(holder);
 
 	return true;
 }

@@ -38,7 +38,7 @@ bool Scene::AddBackgroundMusic(std::string fileName)
 		return false;
 	}
 	_bgMusicId = info.soundId;
-	_playMusic = true;
+	_playMusic = false;
 	return true;
 }
 
@@ -102,6 +102,9 @@ void Scene::UnloadScene()
 
 void Scene::UpdateScene()
 {
+	static std::string tex = IO::GetTextureDirectory() + "crate.jpg";
+	static unsigned int texID = _texManager->LoadTexture(tex);
+
 	auto it = _entities.begin();
 	while (it != _entities.end()) {
 		if (*it == nullptr) {
@@ -128,16 +131,17 @@ void Scene::UpdateScene()
 		}
 	}
 
-	if (_sceneClock.GetElapsedMs() > 100) {
+	if (_sceneClock.GetElapsedMs() > 500) {
 		int random = rand() % 10;
 		double diff = (rand() % 10) / 10.0;
+		
 		// Test finite
 		EntityCreateInfo ei;
 		ei.type = EntityTypeEnum::ET_Cube;
 		ei.pos = glm::vec3(random - 5, 15, 0);
 		ei.uniformScale = diff;
-		ei.textureID[0] = 0;
-		ei.shader = _shaderManager->GetShaderAtIndex(2);
+		ei.textureID[0] = texID;
+		ei.shader = _shaderManager->GetShaderByName("littex");
 		//FiniteEntity* shortEntity = new FiniteEntity(10);
 		//_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
 

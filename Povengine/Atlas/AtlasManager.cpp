@@ -152,7 +152,7 @@ bool AtlasManager::Initialise()
 	_shaderManager->LoadShader("texture");
 	_shaderManager->LoadShader("lighting");
 	_shaderManager->LoadShader("text");
-	_shaderManager->LoadShader("littex");
+ 	_shaderManager->LoadShader("littex");
 	
 	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "main.as", _texManager, _phys, _shaderManager, _audio);
 	if (_currentScene == nullptr) {
@@ -287,8 +287,8 @@ void AtlasManager::inputProcessing()
 			_currentScene->GetCamera().GetPitch(camPitch);
 		}
 		if (!_frameCount) {
-			_currentScene->GetCamera().SetPosition(20, 10, 0);
-			_currentScene->GetCamera().SetLookAt(0, 0, 0);
+			//_currentScene->GetCamera().SetPosition(20, 10, 0);
+			//_currentScene->GetCamera().SetLookAt(0, 0, 0);
 
 			_input->ResetMouseInput();
 		}

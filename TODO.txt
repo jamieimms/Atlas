@@ -23,3 +23,4 @@ Gameplay:
 	
 Known Issues:
 Camera stuffs up when enabling free-look (also when window size changes) - it seems to be because the yaw and pitch are not set correctly when updating the non-freelook camera
+Loading some JPG textures doesn't seem to work

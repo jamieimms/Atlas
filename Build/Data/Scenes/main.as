@@ -29,13 +29,13 @@
 	<entities>
 		<origin/>
 		<plane name="ground" id="1">
-			<shader name="lighting"/>
+			<shader name="littex"/>
 			<position x="0" y="-0.01" z="0"/>
-			<uniformscale value="8"/>
-			<texture name="Dirt.png"/>
+			<uniformscale value="2"/>
+			<texture name="wall.jpg"/>
 		</plane>
 		<cube name="other" id="2">
-			<shader name="texture"/>
+			<shader name="littex"/>
 			<position x="0" y="5.0" z="0"/>
 			<uniformscale value="1"/>
 			<texture name="crate.jpg"/>

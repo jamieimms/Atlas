@@ -42,7 +42,7 @@ EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys,
 		newEntity = new Triangle(info.uniformScale, info.pos.x, info.pos.y, info.pos.z, info.shader);
 		break;
 	case EntityTypeEnum::ET_Skybox:
-		newEntity = new Skybox(info.uniformScale, info.pos, info.shader, info.textureID[0]);
+		newEntity = new Skybox(info.uniformScale, info.pos, info.shader, info.textureID);
 		break;
 	}
 
