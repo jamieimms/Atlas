@@ -18,7 +18,7 @@
 	
 	<lights>
 		<ambient>
-			<colour r="0.5" g="1.0" b="1.0"/>
+			<colour r="1.0" g="0.5" b="0.5"/>
 		</ambient>
 		<point id="1">
 			<position x="0" y="5.0" z="0.0"/>
@@ -31,7 +31,7 @@
 		<plane name="ground" id="1">
 			<shader name="littex"/>
 			<position x="0" y="-0.01" z="0"/>
-			<uniformscale value="2"/>
+			<uniformscale value="10"/>
 			<texture name="wall.jpg"/>
 		</plane>
 		<cube name="other" id="2">

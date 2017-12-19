@@ -13,6 +13,7 @@ namespace Atlas
 		virtual void Initialise(DataFormatEnum dataFormat);
 		virtual void InitData();
 		virtual void Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights);
+		virtual void Update();
 
 
 	private:

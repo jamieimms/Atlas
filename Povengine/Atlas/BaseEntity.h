@@ -27,6 +27,7 @@ namespace Atlas
 
 		// Getters
 		bool IsDead() { return _dead; }
+		EntityTypeEnum GetType() { return _entityType; }
 
 		// Setters
 		void SetTexture(unsigned int texID) { _texID = texID; }

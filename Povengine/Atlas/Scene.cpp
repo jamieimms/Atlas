@@ -126,6 +126,10 @@ void Scene::UpdateScene()
 			delete holder;
 		}
 		else {
+			if((*it)->GetEntity()->GetType() == EntityTypeEnum::ET_Skybox) {
+				auto camPos = _cam.GetPosition();
+				(*it)->GetEntity()->SetPosition(camPos.x, camPos.y, camPos.z);
+			}
 			(*it)->Update();
 			it++;
 		}

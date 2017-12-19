@@ -123,7 +123,7 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 		std::string name = element->FirstAttribute()->Value();
 		std::string texDir = IO::GetTextureDirectory();
 		auto skyTex = texManager->LoadTexture(texDir + name + "\\bk.jpg");
-		entityInfo.texCount = 2;
+		entityInfo.texCount = 6;
 		entityInfo.textureID[0] = skyTex;
 		skyTex = texManager->LoadTexture(texDir + name + "\\ft.jpg");
 		entityInfo.textureID[1] = skyTex;
@@ -136,7 +136,7 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 		skyTex = texManager->LoadTexture(texDir + name + "\\dn.jpg");
 		entityInfo.textureID[5] = skyTex;
 		entityInfo.shader = shaderManager->GetShaderByName("texture");
-		entityInfo.uniformScale = 20;
+		entityInfo.uniformScale = 55;
 		entityInfo.pos = glm::vec3(0, 0, 0);
 		scene->AddEntity(EntityFactory::CreateEntity(entityInfo, physics));
 		return true;

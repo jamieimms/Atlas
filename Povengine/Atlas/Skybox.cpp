@@ -10,10 +10,11 @@ using namespace Atlas;
 Skybox::Skybox(float size, glm::vec3 pos, Shader* shader, unsigned int* textureIDs)
 	:BaseEntity(pos, shader)
 {
-	_entityType = EntityTypeEnum::ET_Unknown;
+	_entityType = EntityTypeEnum::ET_Skybox;
 
 	_size = size;
 	
+	this->SetPosition(pos.x, pos.y, pos.z);
 
 	_bk = new Plane(size, pos.x, pos.y, pos.z - size, shader);
 	_bk->SetRotation(glm::radians(90.0f), 0, glm::radians(180.0f));
@@ -74,4 +75,16 @@ void Skybox::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std:
 	_rt->Render(view, proj, cameraPos, lights);
 	_up->Render(view, proj, cameraPos, lights);
 	_dn->Render(view, proj, cameraPos, lights);
+}
+
+void Skybox::Update()
+{
+	auto trans = this->GetTransform();
+	auto pos = this->GetPosition();
+	_bk->SetPosition(pos.x, pos.y, pos.z - _size);
+	_ft->SetPosition(pos.x, pos.y, pos.z + _size);
+	_lt->SetPosition(pos.x - _size, pos.y, pos.z);
+	_rt->SetPosition(pos.x + _size, pos.y, pos.z);
+	_up->SetPosition(pos.x, pos.y + _size, pos.z);
+	_dn->SetPosition(pos.x, pos.y - _size, pos.z);
 }
