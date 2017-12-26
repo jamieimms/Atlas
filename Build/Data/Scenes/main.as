@@ -10,7 +10,7 @@
 	<script file="main.asc"/>
 	
 	<camera>
-		<position x="0" y="3.0" z="5.0"/>
+		<position x="0" y="0.0" z="-1.0"/>
 		<target x="0" y="0.0" z="0.0"/>
 	</camera>
 		
@@ -34,12 +34,12 @@
 			<uniformscale value="10"/>
 			<texture name="wall.jpg"/>
 		</plane>
-		<cube name="other" id="2">
-			<shader name="littex"/>
-			<position x="0" y="5.0" z="0"/>
-			<uniformscale value="1"/>
-			<texture name="crate.jpg"/>
-		</cube>
+		<!-- <cube name="other" id="2"> -->
+			<!-- <shader name="littex"/> -->
+			<!-- <position x="0" y="5.0" z="0"/> -->
+			<!-- <uniformscale value="1"/> -->
+			<!-- <texture name="crate.jpg"/> -->
+		<!-- </cube> -->
 	</entities>
 </atlasscene>
 

@@ -185,12 +185,5 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 
 	scene->AddEntity(EntityFactory::CreateEntity(entityInfo, physics));
 
-	//			auto sky1 = _texManager->LoadTexture(texDir + "muddysky\\bk.jpg");		//bk ft dn lt rt up
-	//			//auto sky2 = _texManager->LoadTexture(texDir + "muddysky\\ft.jpg");	//bk ft dn lt rt up
-	//			//auto sky3 = _texManager->LoadTexture(texDir + "muddysky\\dn.jpg");	//bk ft dn lt rt up
-	//			//auto sky4 = _texManager->LoadTexture(texDir + "muddysky\\lt.jpg");	//bk ft dn lt rt up
-	//			//auto sky5 = _texManager->LoadTexture(texDir + "muddysky\\rt.jpg");	//bk ft dn lt rt up
-	//			//auto sky6 = _texManager->LoadTexture(texDir + "muddysky\\up.jpg");	//bk ft dn lt rt up
-
 	return true;
 }

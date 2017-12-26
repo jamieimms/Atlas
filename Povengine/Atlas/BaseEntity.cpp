@@ -35,11 +35,9 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 
 	InitData();
 	glGenVertexArrays(1, &_vbaID);
-	glBindVertexArray(_vbaID);
-
 	glGenBuffers(1, &_vbID);
-	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (_numVertices * ((int)_dataFormat)), _data, GL_STATIC_DRAW);
+
+	ReloadData();
 
 	if (_indices != nullptr) {
 		glGenBuffers(1, &_ibaID);
@@ -50,6 +48,13 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 	SetVisibility(true);
 }
 
+void BaseEntity::ReloadData()
+{
+	glBindVertexArray(_vbaID);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (_numVertices * ((int)_dataFormat)), _data, GL_STATIC_DRAW);
+}
 
 BaseEntity::~BaseEntity()
 {
@@ -133,14 +138,14 @@ void BaseEntity::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, 
 
 	glUniform3f(_shader->objectColour, _material.diffuseColour.r, _material.diffuseColour.g, _material.diffuseColour.b);
 
-	auto temp = lights[0]->GetColour();
+	auto tempVec = lights[0]->GetColour();
 
-	glUniform3f(_shader->ambientLightColour, temp.r, temp.g, temp.b);
+	glUniform3f(_shader->ambientLightColour, tempVec.r, tempVec.g, tempVec.b);
 
-	temp = lights[1]->GetColour();
-	glUniform3f(_shader->positionalLightColour, temp.r, temp.g, temp.b);
-	temp = lights[1]->GetPosition();
-	glUniform3f(_shader->positionalLightPos, temp.x, temp.y, temp.z);
+	tempVec = lights[1]->GetColour();
+	glUniform3f(_shader->positionalLightColour, tempVec.r, tempVec.g, tempVec.b);
+	tempVec = lights[1]->GetPosition();
+	glUniform3f(_shader->positionalLightPos, tempVec.x, tempVec.y, tempVec.z);
 	glUniform3f(_shader->viewerPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
 	if (_indices == nullptr) {

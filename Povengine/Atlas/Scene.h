@@ -13,6 +13,7 @@
 #include "glm.hpp"
 #include "EntityTypeEnum.h"
 #include "EntityFactory.h"
+#include "Text.h"
 
 namespace Atlas
 {
@@ -27,7 +28,7 @@ namespace Atlas
 		void Stop();
 
 		void UpdateScene();
-		void DrawScene(glm::mat4 proj);
+		void DrawScene(glm::mat4 proj, double& fps);
 
 		//IRenderable* GetEntity(int index) { return _entities[index]; }
 		Camera& GetCamera() { return _cam; }
@@ -42,6 +43,7 @@ namespace Atlas
 	private:
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
 		std::vector<Light*> _lights;
+		std::vector<Text*> _textItems;
 
 		Camera _cam;
 
@@ -51,10 +53,12 @@ namespace Atlas
 		Audio* _audio;
 
 		AtlasUtil::AtlasStopwatch _sceneClock;
+		AtlasUtil::AtlasStopwatch _textClock;
 
 		bool _playMusic;
 		unsigned long _bgMusicId;
 
 		std::string _name;
+		std::string _titleText;
 	};
 }

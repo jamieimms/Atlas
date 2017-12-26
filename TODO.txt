@@ -2,8 +2,8 @@ Absolute bare minimum game engine features:
 
 Graphics:
 	2D/3D geometry	- Partially implemented using OpenGL
-	camera			- Done (buggy, very simple)
-	2D text output	- TODO
+	camera			- Done (very simple)
+	2D text output	- Done using FreeType2 and opengl textured polygons
 	
 Audio:
 	Play sounds		- Done, audio implemented with FMOD

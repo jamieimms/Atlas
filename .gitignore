@@ -29,3 +29,5 @@
 *.app
 Debug
 Bullet
+freetype-2.8.1
+include

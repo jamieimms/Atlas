@@ -67,15 +67,28 @@ void Scene::Start()
 
 	_sceneClock.Start();
 
-	srand(48674);
+	Text* text = new Text();
+	_titleText = "Atlas Engine Test 2017.12. ";
+	text->init(_titleText, 40, 40, _shaderManager->GetShaderByName("text"));
+
+	_textItems.push_back(text);
+
+	srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
+
+	_textClock.Start();
 }
 
+///
+//
+//
 void Scene::Stop()
 {
 	_audio->UnloadSound(_bgMusicId);
 }
 
-
+///
+//
+//
 void Scene::RemoveEntity(BaseEntity* entity)
 {
 	// Remove entity from the list
@@ -83,8 +96,17 @@ void Scene::RemoveEntity(BaseEntity* entity)
 }
 
 ///
+//
+//
 void Scene::UnloadScene()
 {
+	for (auto i : _textItems)
+	{
+		delete i;
+	}
+
+	_textItems.clear();
+
 	for (auto i : _entities)
 	{
 		delete i;
@@ -100,6 +122,9 @@ void Scene::UnloadScene()
 	_lights.clear();
 }
 
+///
+///
+//
 void Scene::UpdateScene()
 {
 	static std::string tex = IO::GetTextureDirectory() + "crate.jpg";
@@ -169,7 +194,9 @@ void Scene::UpdateScene()
 }
 
 ///
-void Scene::DrawScene(glm::mat4 proj)
+///
+///
+void Scene::DrawScene(glm::mat4 proj, double& fps)
 {
 	auto view = _cam.GetViewMatrix();
 
@@ -191,5 +218,21 @@ void Scene::DrawScene(glm::mat4 proj)
 		if (entity->IsVisible()) {
 			entity->Render(view, proj, _cam.GetPosition(), _lights);
 		}
+	}
+	
+	for (auto i : _textItems) {
+		if (i == nullptr) {
+			continue;
+		}
+
+		Text* text = i;
+		if (_textClock.GetElapsedMs() > 100) {
+			std::string info = "Scene: " + _name + ", FPS: " + std::to_string(fps);
+			text->SetText(_titleText + info);
+			_textClock.Reset();
+			_textClock.Start();
+		}
+
+		text->Render(view, proj, _cam.GetPosition(), _lights);
 	}
 }

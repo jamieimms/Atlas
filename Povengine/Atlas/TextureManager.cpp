@@ -8,12 +8,14 @@ using namespace Atlas;
 TextureManager::TextureManager(AtlasUtil::AtlasLog* log)
 	: BaseManager(log)
 {
-
+	_loadedTextures = new std::list<AtlasTexture*>();
 }
 
 TextureManager::~TextureManager()
 {
 	FlushTextures();
+
+	delete _loadedTextures;
 }
 
 /// <summary>
@@ -58,7 +60,7 @@ unsigned int TextureManager::LoadTexture(std::string& path)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	_loadedTextures.push_back(tex);
+	_loadedTextures->push_back(tex);
 
 	return tex->TextureID;
 }
@@ -83,7 +85,9 @@ TextureType TextureManager::GetTextureType(std::string& path)
 /// </summary>
 void TextureManager::UnloadTexture(AtlasTexture* texture)
 {
-	// TODO: OpenGL texture deinit
+	if (texture != nullptr) {
+		glDeleteTextures(1, &texture->TextureID);
+	}
 
 	delete texture;
 }
@@ -93,11 +97,29 @@ void TextureManager::UnloadTexture(AtlasTexture* texture)
 /// </summary>
 void TextureManager::FlushTextures()
 {
-	while (_loadedTextures.size() > 0) {
-		auto item = _loadedTextures.front();
-		UnloadTexture(item);
-		_loadedTextures.pop_front();
+	while (_loadedTextures->size() > 0) {
+		auto item = _loadedTextures->front();
+		if (item != nullptr) {
+			UnloadTexture(item);
+		}
+		_loadedTextures->pop_front();
 	}
+}
+
+void TextureManager::DefragmentTextures()
+{
+	auto defrag = new std::list<AtlasTexture*>();
+	while (_loadedTextures->size() > 0) {
+		auto item = _loadedTextures->front();
+		if (item != nullptr) {
+			defrag->push_front(item);
+		}
+		_loadedTextures->pop_front();
+	}
+	
+	delete _loadedTextures;
+
+	_loadedTextures = defrag;
 }
 
 /// <summary>
@@ -105,7 +127,10 @@ void TextureManager::FlushTextures()
 /// </summary>
 bool TextureManager::IsLoaded(std::string& path)
 {
-	for (auto it : _loadedTextures) {
+	for (auto it : *_loadedTextures) {
+		if (it == nullptr) {
+			continue;
+		}
 		if (it->Path == path) {
 			return true;
 		}
@@ -119,7 +144,11 @@ bool TextureManager::IsLoaded(std::string& path)
 /// </summary>
 unsigned int TextureManager::GetTextureID(std::string& path)
 {
-	for (auto it : _loadedTextures) {
+	for (auto it : *_loadedTextures) {
+		if (it == nullptr) {
+			continue;
+		}
+
 		if (it->Path == path) {
 			return true;
 		}

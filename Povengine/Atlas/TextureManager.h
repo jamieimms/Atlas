@@ -29,6 +29,7 @@ namespace Atlas
 		unsigned int LoadTexture(std::string& path);
 
 		void FlushTextures();
+		void DefragmentTextures();
 
 		bool IsLoaded(std::string& path);
 		unsigned int GetTextureID(std::string& path);
@@ -38,7 +39,7 @@ namespace Atlas
 		TextureType GetTextureType(std::string& path);
 
 
-		std::list<AtlasTexture*> _loadedTextures;
+		std::list<AtlasTexture*>* _loadedTextures;
 	};
 
 }

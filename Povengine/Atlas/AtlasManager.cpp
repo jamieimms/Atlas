@@ -209,6 +209,8 @@ void AtlasManager::frameProcessing()
 	std::chrono::duration<double> elapsedSec = frameTime - _lastFrame;
 	_frameDelta = elapsedSec.count();
 
+	_fps = 1.0f / _frameDelta;
+
 	// Update game state
 	inputProcessing();
 
@@ -219,7 +221,7 @@ void AtlasManager::frameProcessing()
 	_renderer->beginRender();
 
 	// Render game objects
-	_currentScene->DrawScene(_renderer->GetProjection());
+	_currentScene->DrawScene(_renderer->GetProjection(), _fps);
 
 	_renderer->endRender();
 
