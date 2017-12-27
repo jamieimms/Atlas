@@ -10,6 +10,7 @@
 #include "Audio.h"
 #include "Physics.h"
 #include "TextureManager.h"
+#include "Fonts.h"
 #include "../AtlasUtil/AtlasStopwatch.h"
 #include "AtlasGame.h"
 
@@ -47,6 +48,7 @@ namespace Atlas
 		Audio* _audio;	// Handles audio functions
 		Physics* _phys;	// Handles physics calculations
 		TextureManager* _texManager; // Handles textures
+		Fonts* _fonts; // Handles fonts
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
 		double _frameDelta;

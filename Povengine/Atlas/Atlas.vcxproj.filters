@@ -166,6 +166,12 @@
     <ClInclude Include="IRenderable.h">
       <Filter>Game\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Game\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -254,6 +260,12 @@
     </ClCompile>
     <ClCompile Include="SceneParser.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Game\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

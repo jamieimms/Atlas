@@ -13,7 +13,6 @@ namespace Atlas
 
 		AtlasUtil::AtlasLog* _log;
 
-
 		bool _initialised;
 	};
 }

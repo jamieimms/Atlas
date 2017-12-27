@@ -49,6 +49,8 @@ AtlasManager::AtlasManager(AtlasGame* game)
 
 	_texManager = new TextureManager(_log);
 
+	_fonts = new Fonts(_log);
+
 	_lastFrame = std::chrono::high_resolution_clock::now();
 }
 
@@ -58,6 +60,8 @@ AtlasManager::AtlasManager(AtlasGame* game)
 AtlasManager::~AtlasManager()
 {
 	_log->Debug("Atlas Engine Stopping");
+
+	delete _fonts;
 
 	delete _texManager;
 
@@ -153,8 +157,10 @@ bool AtlasManager::Initialise()
 	_shaderManager->LoadShader("lighting");
 	_shaderManager->LoadShader("text");
  	_shaderManager->LoadShader("littex");
+
+	_fonts->LoadFont(AtlasAPI::AtlasAPIHelper::GetDataPath() + "Roboto-Regular.ttf");
 	
-	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "main.as", _texManager, _phys, _shaderManager, _audio);
+	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "main.as", _texManager, _phys, _shaderManager, _audio, _fonts);
 	if (_currentScene == nullptr) {
 		_log->Debug("The scene failed to load.");
 		return false;
@@ -214,14 +220,14 @@ void AtlasManager::frameProcessing()
 	// Update game state
 	inputProcessing();
 
-	_currentScene->UpdateScene();
+	_currentScene->UpdateScene(_fps);
 
 	_phys->doFrame(_frameDelta);
 
 	_renderer->beginRender();
 
 	// Render game objects
-	_currentScene->DrawScene(_renderer->GetProjection(), _fps);
+	_currentScene->DrawScene(_renderer->GetProjection());
 
 	_renderer->endRender();
 

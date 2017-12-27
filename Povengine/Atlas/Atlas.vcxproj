@@ -154,6 +154,8 @@
     <ClInclude Include="EntityHolder.h" />
     <ClInclude Include="EntityTypeEnum.h" />
     <ClInclude Include="FiniteEntity.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Fonts.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IRenderable.h" />
@@ -191,6 +193,8 @@
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="EntityHolder.cpp" />
     <ClCompile Include="FiniteEntity.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Fonts.cpp" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />

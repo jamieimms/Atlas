@@ -8,8 +8,8 @@
 using namespace Atlas;
 
 
-Scene::Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager)
-	: _name(name), _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager), _audio(audioManager)
+Scene::Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager, Fonts* fonts)
+	: _name(name), _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager), _audio(audioManager), _fonts(fonts)
 {
 	_bgMusicId = 0;
 }
@@ -67,15 +67,18 @@ void Scene::Start()
 
 	_sceneClock.Start();
 
-	Text* text = new Text();
 	_titleText = "Atlas Engine Test 2017.12. ";
-	text->init(_titleText, 40, 40, _shaderManager->GetShaderByName("text"));
+	Text* text = new Text(_titleText, 20, 40, _fonts->GetFont(0), _shaderManager->GetShaderByName("text"));
 
 	_textItems.push_back(text);
 
 	srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
 
 	_textClock.Start();
+
+	std::string test = "Total entities: ";
+	text = new Text(test, 20, 60, _fonts->GetFont(0), _shaderManager->GetShaderByName("text"));
+	_textItems.push_back(text);
 }
 
 ///
@@ -125,7 +128,7 @@ void Scene::UnloadScene()
 ///
 ///
 //
-void Scene::UpdateScene()
+void Scene::UpdateScene(double& fps)
 {
 	static std::string tex = IO::GetTextureDirectory() + "crate.jpg";
 	static unsigned int texID = _texManager->LoadTexture(tex);
@@ -191,12 +194,23 @@ void Scene::UpdateScene()
 		_sceneClock.Reset();
 		_sceneClock.Start();
 	}
+
+	if (_textClock.GetElapsedMs() > 100) {
+		std::string info = "Scene: " + _name + ", FPS: " + std::to_string(fps);
+		_textItems[0]->SetText(_titleText + info);
+
+		std::string entityInfo = "Total entities: " + std::to_string(_entities.size());
+		_textItems[1]->SetText(entityInfo);
+
+		_textClock.Reset();
+		_textClock.Start();
+	}
 }
 
 ///
 ///
 ///
-void Scene::DrawScene(glm::mat4 proj, double& fps)
+void Scene::DrawScene(glm::mat4 proj)
 {
 	auto view = _cam.GetViewMatrix();
 
@@ -219,20 +233,13 @@ void Scene::DrawScene(glm::mat4 proj, double& fps)
 			entity->Render(view, proj, _cam.GetPosition(), _lights);
 		}
 	}
-	
+
 	for (auto i : _textItems) {
 		if (i == nullptr) {
 			continue;
 		}
 
 		Text* text = i;
-		if (_textClock.GetElapsedMs() > 100) {
-			std::string info = "Scene: " + _name + ", FPS: " + std::to_string(fps);
-			text->SetText(_titleText + info);
-			_textClock.Reset();
-			_textClock.Start();
-		}
-
 		text->Render(view, proj, _cam.GetPosition(), _lights);
 	}
 }

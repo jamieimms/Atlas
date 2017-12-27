@@ -6,7 +6,7 @@ using namespace tinyxml2;
 
 //
 //
-Scene* SceneParser::ParseSceneFile(std::string& path, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio)
+Scene* SceneParser::ParseSceneFile(std::string& path, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio, Fonts* fonts)
 {
 	XMLError returnCode;
 
@@ -24,7 +24,7 @@ Scene* SceneParser::ParseSceneFile(std::string& path, TextureManager* texManager
 		return nullptr;
 	}
 
-	Scene* newScene = new Scene(root->FirstAttribute()->Value(), texManager, physics, shaderManager, audio);
+	Scene* newScene = new Scene(root->FirstAttribute()->Value(), texManager, physics, shaderManager, audio, fonts);
 	
 	auto sceneElement = root->FirstChildElement();
 

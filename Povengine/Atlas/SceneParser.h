@@ -14,7 +14,7 @@ namespace Atlas
 	class SceneParser
 	{
 	public:
-		static Scene* ParseSceneFile(std::string& path, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio);
+		static Scene* ParseSceneFile(std::string& path, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio, Fonts* fonts);
 
 	private:
 		static bool ParseElement(Scene* scene, tinyxml2::XMLElement* element, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio);

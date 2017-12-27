@@ -20,15 +20,15 @@ namespace Atlas
 	class Scene
 	{
 	public:
-		Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager);
+		Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager, Fonts* fonts);
 
 		void UnloadScene();
 
 		void Start();
 		void Stop();
 
-		void UpdateScene();
-		void DrawScene(glm::mat4 proj, double& fps);
+		void UpdateScene(double& fps);
+		void DrawScene(glm::mat4 proj);
 
 		//IRenderable* GetEntity(int index) { return _entities[index]; }
 		Camera& GetCamera() { return _cam; }
@@ -51,6 +51,7 @@ namespace Atlas
 		Physics* _physicsManager;
 		ShaderManager* _shaderManager;
 		Audio* _audio;
+		Fonts* _fonts;
 
 		AtlasUtil::AtlasStopwatch _sceneClock;
 		AtlasUtil::AtlasStopwatch _textClock;
