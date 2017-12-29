@@ -35,11 +35,10 @@ namespace Atlas
 	protected:
 		virtual void Initialise(DataFormatEnum dataFormat);
 		virtual void ReloadData();
+		virtual void Reset();
 
 		void SetVertex(int &dataPos, float x, float y, float z, float r, float g, float b);
 		void SetIndex(int &indexPos, unsigned short a, unsigned short b, unsigned short c);
-
-
 
 		float* _data;
 		unsigned short* _indices;

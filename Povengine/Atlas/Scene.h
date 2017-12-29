@@ -39,6 +39,8 @@ namespace Atlas
 		void SetCamera(glm::vec3 pos, glm::vec3 target);
 		void AddEntity(EntityHolder* entity);
 		void AddLight(Light* light);
+		void AddMesh(std::string& meshName, EntityCreateInfo& info);
+
 
 	private:
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)

@@ -107,6 +107,50 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 {
 	EntityCreateInfo entityInfo;
 
+	// Get common details
+	auto child = element->FirstChildElement("shader");
+	if (child == nullptr) {
+		entityInfo.shader = shaderManager->GetShaderByName("colour");
+	}
+	else {
+		entityInfo.shader = shaderManager->GetShaderByName(child->Attribute("name"));
+	}
+
+	child = element->FirstChildElement("position");
+	if (child == nullptr) {
+		entityInfo.pos = glm::vec3(0, 0, 0);
+	}
+	else {
+		entityInfo.pos = glm::vec3(child->FloatAttribute("x"), child->FloatAttribute("y"), child->FloatAttribute("z"));
+	}
+
+	child = element->FirstChildElement("uniformscale");
+	if (child == nullptr) {
+		entityInfo.uniformScale = 1.0f;
+	}
+	else {
+		entityInfo.uniformScale = child->FloatAttribute("value");
+	}
+
+	child = element->FirstChildElement("colour");
+	if (child == nullptr) {
+		entityInfo.colour = glm::vec3(1.0f, 1.0f, 1.0f);
+	}
+	else {
+		entityInfo.colour = glm::vec3(child->FloatAttribute("r"), child->FloatAttribute("g"), child->FloatAttribute("b"));
+	}
+
+	// Textures
+	child = element->FirstChildElement("texture");
+	if (child == nullptr) {
+		entityInfo.texCount = 0;
+	}
+	else {
+		std::string texDir = IO::GetTextureDirectory();
+		auto tex = texManager->LoadTexture(texDir + child->Attribute("name"));
+		entityInfo.textureID[entityInfo.texCount++] = tex;
+	}
+
 	// Get the type
 	if (strcmp(element->Name(), "origin") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Origin;
@@ -116,6 +160,8 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 	}
 	else if (strcmp(element->Name(), "cone") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Cone;
+		entityInfo.quality = 5;
+		entityInfo.uniformScale = 0.2f;
 	}
 	else if (strcmp(element->Name(), "sky") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Skybox;
@@ -144,43 +190,16 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 	else if (strcmp(element->Name(), "cube") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Cube;
 	}
+	else if (strcmp(element->Name(), "model") == 0) {
+		entityInfo.type = EntityTypeEnum::ET_Mesh;
+		
+		child = element->FirstChildElement("mesh");
+
+		scene->AddMesh(std::string(child->Attribute("name")), entityInfo);
+		return true;
+	}
 	else {
 		return false;
-	}
-
-	auto child = element->FirstChildElement("shader");
-	if (child == nullptr) {
-		entityInfo.shader = shaderManager->GetShaderByName("colour");
-	}
-	else {
-		entityInfo.shader = shaderManager->GetShaderByName(child->Attribute("name"));
-	}
-
-	child = element->FirstChildElement("position");
-	if (child == nullptr) {
-		entityInfo.pos = glm::vec3(0, 0, 0);
-	}
-	else {
-		entityInfo.pos = glm::vec3(child->FloatAttribute("x"), child->FloatAttribute("y"), child->FloatAttribute("z"));
-	}
-
-	child = element->FirstChildElement("uniformscale");
-	if (child == nullptr) {
-		entityInfo.uniformScale = 1.0f;
-	}
-	else {
-		entityInfo.uniformScale = child->FloatAttribute("value");
-	}
-
-	// Textures
-	child = element->FirstChildElement("texture");
-	if (child == nullptr) {
-		entityInfo.texCount = 0;
-	}
-	else {
-		std::string texDir = IO::GetTextureDirectory();
-		auto tex = texManager->LoadTexture(texDir + child->Attribute("name"));
-		entityInfo.textureID[entityInfo.texCount++] = tex;
 	}
 
 	scene->AddEntity(EntityFactory::CreateEntity(entityInfo, physics));

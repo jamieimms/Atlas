@@ -13,7 +13,7 @@ namespace Atlas
 
 		virtual ~Window();
 
-		virtual bool createWindow(std::string title, unsigned int width, unsigned int height) = 0;
+		virtual bool createWindow(std::string& title, unsigned int width, unsigned int height) = 0;
 
 		virtual void setCaptureMouse(bool enable);
 

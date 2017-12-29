@@ -15,6 +15,7 @@ namespace Atlas
 
 		EntityTypeEnum type;
 		glm::vec3 pos;
+		glm::vec3 colour;
 		Shader* shader;
 
 		float uniformScale;

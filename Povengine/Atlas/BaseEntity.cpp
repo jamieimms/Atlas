@@ -9,18 +9,27 @@ using namespace Atlas;
 BaseEntity::BaseEntity()
 	: Transformable(glm::vec3())
 {
+	Reset();
 }
 
 BaseEntity::BaseEntity(glm::vec3 pos, Shader* shader)
 	: Transformable(pos), _shader(shader)
 {
+	Reset();
 	SetUniformScale(1.0f);
 }
 
 BaseEntity::BaseEntity(float x, float y, float z, Shader* shader)
 	: Transformable(x,y,z), _shader(shader)
 {
+	Reset();
 	SetUniformScale(1.0f);
+}
+
+void BaseEntity::Reset()
+{
+	_data = nullptr;
+	_indices = nullptr;
 }
 
 void BaseEntity::Initialise(DataFormatEnum dataFormat)
@@ -30,7 +39,6 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 
 	_mode = GL_TRIANGLES;
 
-	_indices = nullptr;
 	_ibaID = -1;
 
 	InitData();

@@ -160,7 +160,7 @@ bool AtlasManager::Initialise()
 
 	_fonts->LoadFont(AtlasAPI::AtlasAPIHelper::GetDataPath() + "Roboto-Regular.ttf");
 	
-	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "main.as", _texManager, _phys, _shaderManager, _audio, _fonts);
+	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "01.as", _texManager, _phys, _shaderManager, _audio, _fonts);
 	if (_currentScene == nullptr) {
 		_log->Debug("The scene failed to load.");
 		return false;

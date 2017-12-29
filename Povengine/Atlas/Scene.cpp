@@ -81,6 +81,25 @@ void Scene::Start()
 	_textItems.push_back(text);
 }
 
+void Scene::AddMesh(std::string& meshName, EntityCreateInfo& info)
+{
+	std::vector<glm::vec3>* verts = new std::vector<glm::vec3>();
+	std::vector<glm::vec3>* norms = new std::vector<glm::vec3>();
+	std::vector<unsigned short>* indices = new std::vector<unsigned short>();
+	std::vector<unsigned short>* normalIndices = new std::vector<unsigned short>();
+
+	IO::ParseObjFile(IO::GetModelDirectory() + meshName, verts, norms, indices, normalIndices);
+	auto mesh = new Mesh(verts, norms, indices, normalIndices, info.pos, info.colour, _shaderManager->GetShaderByName("lighting"));
+	mesh->SetUniformScale(info.uniformScale);
+	auto eh = new EntityHolder();
+	eh->Initialise(mesh);
+	_entities.push_back(eh);
+	delete normalIndices;
+	delete indices;
+	delete norms;
+	delete verts;
+}
+
 ///
 //
 //
@@ -130,8 +149,8 @@ void Scene::UnloadScene()
 //
 void Scene::UpdateScene(double& fps)
 {
-	static std::string tex = IO::GetTextureDirectory() + "crate.jpg";
-	static unsigned int texID = _texManager->LoadTexture(tex);
+	//static std::string tex = IO::GetTextureDirectory() + "crate.jpg";
+	//static unsigned int texID = _texManager->LoadTexture(tex);
 
 	auto it = _entities.begin();
 	while (it != _entities.end()) {
@@ -163,37 +182,37 @@ void Scene::UpdateScene(double& fps)
 		}
 	}
 
-	if (_sceneClock.GetElapsedMs() > 500) {
-		int random = rand() % 10;
-		double diff = (rand() % 10) / 10.0;
-		
-		// Test finite
-		EntityCreateInfo ei;
-		ei.type = EntityTypeEnum::ET_Cube;
-		ei.pos = glm::vec3(random - 5, 15, 0);
-		ei.uniformScale = diff;
-		ei.textureID[0] = texID;
-		ei.shader = _shaderManager->GetShaderByName("littex");
-		//FiniteEntity* shortEntity = new FiniteEntity(10);
-		//_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
+	//if (_sceneClock.GetElapsedMs() > 500) {
+	//	int random = rand() % 10;
+	//	double diff = (rand() % 10) / 10.0;
+	//	
+	//	// Test finite
+	//	EntityCreateInfo ei;
+	//	ei.type = EntityTypeEnum::ET_Cube;
+	//	ei.pos = glm::vec3(random - 5, 15, 0);
+	//	ei.uniformScale = diff;
+	//	ei.textureID[0] = texID;
+	//	ei.shader = _shaderManager->GetShaderByName("littex");
+	//	//FiniteEntity* shortEntity = new FiniteEntity(10);
+	//	//_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
 
-		random = rand() % 10;
-		diff = (rand() % 10) / 10.0;
-		ei.uniformScale = diff;
-		ei.pos = glm::vec3(random - 5, 15, 5);
-		FiniteEntity* shortEntity = new FiniteEntity(10);
-		_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
+	//	random = rand() % 10;
+	//	diff = (rand() % 10) / 10.0;
+	//	ei.uniformScale = diff;
+	//	ei.pos = glm::vec3(random - 5, 15, 5);
+	//	FiniteEntity* shortEntity = new FiniteEntity(10);
+	//	_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
 
-		random = rand() % 10;
-		diff = (rand() % 10) / 10.0;
-		ei.uniformScale = diff;
-		ei.pos = glm::vec3(random - 5, 15, -5);
-		shortEntity = new FiniteEntity(10);
-		_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
+	//	random = rand() % 10;
+	//	diff = (rand() % 10) / 10.0;
+	//	ei.uniformScale = diff;
+	//	ei.pos = glm::vec3(random - 5, 15, -5);
+	//	shortEntity = new FiniteEntity(10);
+	//	_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
 
-		_sceneClock.Reset();
-		_sceneClock.Start();
-	}
+	//	_sceneClock.Reset();
+	//	_sceneClock.Start();
+	//}
 
 	if (_textClock.GetElapsedMs() > 100) {
 		std::string info = "Scene: " + _name + ", FPS: " + std::to_string(fps);

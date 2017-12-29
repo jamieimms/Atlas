@@ -8,3 +8,4 @@
 #include "Light.h"
 #include "FiniteEntity.h"
 #include "Skybox.h"
+#include "Mesh.h"

@@ -28,7 +28,7 @@ void Win32Window::setWindowVariables(HINSTANCE hInstance, int nCmdShow)
 
 // createWindow
 // Creates a new window with the given title.
-bool Win32Window::createWindow(std::string title, unsigned int width, unsigned int height)
+bool Win32Window::createWindow(std::string& title, unsigned int width, unsigned int height)
 {
 	if (!initialiseWindow()) {
 		return false;
@@ -38,11 +38,9 @@ bool Win32Window::createWindow(std::string title, unsigned int width, unsigned i
 	_width = width;
 	_height = height;
 
-	std::string w32Title = "Atlas Engine";
-
 	RECT rc = { 0, 0, _width, _height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-	_hWnd = CreateWindow(MAIN_WINDOW_CLASS_NAME.c_str(), w32Title.c_str(), WS_OVERLAPPEDWINDOW,
+	_hWnd = CreateWindow(MAIN_WINDOW_CLASS_NAME.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, _hInstance,
 		this);
 	if (!_hWnd) {

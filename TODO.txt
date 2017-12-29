@@ -4,6 +4,9 @@ Graphics:
 	2D/3D geometry	- Partially implemented using OpenGL
 	camera			- Done (very simple)
 	2D text output	- Done using FreeType2 and opengl textured polygons
+	3D Meshes		- Done loading of meshes is possible using Wavefront .obj format
+	Instancing		- TODO
+	Animation		- TODO
 	
 Audio:
 	Play sounds		- Done, audio implemented with FMOD
@@ -13,9 +16,10 @@ Input:
 	
 Physics:
 	Gravity				- Done, physics implemented with Bullet Physics
-	Collision detection	- Done via Bullet but no API hooks yet
+	Collision detection	- TODO via Bullet but no API hooks yet
 	
 Gameplay:
+	Game loading	- TODO: Atlas manager needs to be told what to load etc.
 	State			- TODO
 	End condition	- TODO
 	

@@ -172,6 +172,9 @@
     <ClInclude Include="Fonts.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -267,5 +270,11 @@
     <ClCompile Include="Fonts.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\AtlasCheckers\AtlasCheckers.vcxproj" />
   </ItemGroup>
 </Project>

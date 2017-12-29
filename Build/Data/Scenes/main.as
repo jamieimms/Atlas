@@ -14,7 +14,7 @@
 		<target x="0" y="0.0" z="0.0"/>
 	</camera>
 		
-	<sky name="muddysky"/>
+	<!-- <sky name="muddysky"/> -->
 	
 	<lights>
 		<ambient>
@@ -28,6 +28,9 @@
 	
 	<entities>
 		<origin/>
+		<cone>
+			<position x="0" y="5.0" z="0.0"/>
+		</cone>
 		<plane name="ground" id="1">
 			<shader name="littex"/>
 			<position x="0" y="-0.01" z="0"/>

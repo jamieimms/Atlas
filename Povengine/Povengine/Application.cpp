@@ -20,7 +20,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	window->setWindowVariables(hInstance, nCmdShow);
 
-	window->createWindow("Atlas Engine", 1024, 768);
+	window->createWindow(std::string("Atlas Engine"), 1024, 768);
 
 	if (!atlasManager.Initialise()) {
 		window->showMessageBox(AtlasMessageTypeEnum::AMT_Error, "Fatal Error", "Failed to initialise.", AtlasMessageButtonsEnum::AB_OK);

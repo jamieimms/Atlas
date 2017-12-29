@@ -14,7 +14,7 @@ namespace Atlas
 		void setWindowVariables(HINSTANCE hInstance, int nCmdShow);
 
 		// Abstract methods we need to implement
-		bool createWindow(std::string title, unsigned int width, unsigned int height);
+		bool createWindow(std::string& title, unsigned int width, unsigned int height);
 		bool showMessageBox(AtlasMessageTypeEnum type, std::string title, std::string message, AtlasMessageButtonsEnum buttons);
 
 
