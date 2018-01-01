@@ -30,6 +30,8 @@ AtlasManager::AtlasManager(AtlasGame* game)
 
 	_log->Debug("Atlas Engine Starting");
 
+	_game = game;
+
 	_shaderManager = new ShaderManager(_log, _mainDir);
 
 	_input = new Input(_log);
@@ -62,21 +64,13 @@ AtlasManager::~AtlasManager()
 	_log->Debug("Atlas Engine Stopping");
 
 	delete _fonts;
-
 	delete _texManager;
-
 	delete _phys;
-
 	delete _audio;
-
 	delete _currentScene;
-
 	delete _input;
-
 	delete _renderer;
-
 	delete _applicationWindow;
-
 	delete _log;
 }
 
@@ -147,20 +141,21 @@ bool AtlasManager::Initialise()
 
 	/*      Set the pixel format to the device context*/
 	SetPixelFormat(context, nPixelFormat, &pfd);
-	if (!_renderer->Initialise(1024, 768, context)) {
+	if (!_renderer->Initialise(_applicationWindow->GetWidth(), _applicationWindow->GetHeight(), context)) {
 		_log->Debug("Win32 OpenGL renderer failed to initialise.");
 	}
 #endif
 
-	_shaderManager->LoadShader("colour");
-	_shaderManager->LoadShader("texture");
-	_shaderManager->LoadShader("lighting");
-	_shaderManager->LoadShader("text");
- 	_shaderManager->LoadShader("littex");
+	LoadShaders();
 
-	_fonts->LoadFont(AtlasAPI::AtlasAPIHelper::GetDataPath() + "Roboto-Regular.ttf");
+	std::string fontName = AtlasAPI::AtlasAPIHelper::GetDataPath() + "Roboto-Regular.ttf";
+
+	_fonts->LoadFont(fontName, 32);
+	_fonts->LoadFont(fontName, 128);
+
+	std::string initialScene = _game->GetInitialScene();
 	
-	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "01.as", _texManager, _phys, _shaderManager, _audio, _fonts);
+	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + initialScene, _texManager, _phys, _shaderManager, _audio, _fonts);
 	if (_currentScene == nullptr) {
 		_log->Debug("The scene failed to load.");
 		return false;
@@ -169,15 +164,26 @@ bool AtlasManager::Initialise()
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();
 
-	_frameCount = 0;
+	windowSizeChanged(_applicationWindow->GetWidth(), _applicationWindow->GetHeight());
 
-	toggleMouseLook(true);
+	//toggleMouseLook(true);
 
 	_initialised = true;
 
 	return true;
 }
 
+/// <summary>
+/// Load the shaders
+/// </summary>
+void AtlasManager::LoadShaders()
+{
+	_shaderManager->LoadShader("colour");
+	_shaderManager->LoadShader("texture");
+	_shaderManager->LoadShader("lighting");
+	_shaderManager->LoadShader("text");
+	_shaderManager->LoadShader("littex");
+}
 
 /// <summary>
 /// Starts the engine running by entering the application loop (this may be better moved to the Window classes)
@@ -227,14 +233,13 @@ void AtlasManager::frameProcessing()
 	_renderer->beginRender();
 
 	// Render game objects
-	_currentScene->DrawScene(_renderer->GetProjection());
+	_currentScene->DrawScene(_renderer->GetProjection(), _renderer->Get2DProjection());
 
 	_renderer->endRender();
 
 	_audio->ProcessAudio(_currentScene->GetCamera().GetPosition());
 
 	_lastFrame = frameTime;
-	_frameCount++;
 }
 
 /// <summary>
@@ -294,14 +299,7 @@ void AtlasManager::inputProcessing()
 			_currentScene->GetCamera().GetYaw(camYaw);
 			_currentScene->GetCamera().GetPitch(camPitch);
 		}
-		if (!_frameCount) {
-			//_currentScene->GetCamera().SetPosition(20, 10, 0);
-			//_currentScene->GetCamera().SetLookAt(0, 0, 0);
-
-			_input->ResetMouseInput();
-		}
 		else if (_input->GetMouseX() != 0 && _input->GetMouseY() != 0) {
-			//_input->ResetMouseInput();
 
 			camYaw += (_input->GetMouseX() * _frameDelta) * _input->GetMouseSensitivity();
 			camPitch += (_input->GetMouseY() * _frameDelta) * _input->GetMouseSensitivity();
@@ -328,6 +326,9 @@ void AtlasManager::inputProcessing()
 	_renderer->ToggleWireframe(_input->IsKeyPressed(0x57));
 }
 
+/// <summary>
+/// Enable/disable mouse look with the camera 
+/// </summary>
 void AtlasManager::toggleMouseLook(bool enable)
 {
 	_enableMouseLook = enable;
@@ -335,6 +336,9 @@ void AtlasManager::toggleMouseLook(bool enable)
 	_input->ResetMouseInput();
 }
 
+/// <summary>
+/// If the size of the window changes, this method adjusts the viewport
+/// </summary>
 void AtlasManager::windowSizeChanged(int width, int height)
 {
 	_input->SetSize(width, height);

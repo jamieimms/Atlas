@@ -28,7 +28,7 @@ namespace Atlas
 		void Stop();
 
 		void UpdateScene(double& fps);
-		void DrawScene(glm::mat4 proj);
+		void DrawScene(glm::mat4 proj, glm::mat4 proj2D);
 
 		//IRenderable* GetEntity(int index) { return _entities[index]; }
 		Camera& GetCamera() { return _cam; }
@@ -40,7 +40,7 @@ namespace Atlas
 		void AddEntity(EntityHolder* entity);
 		void AddLight(Light* light);
 		void AddMesh(std::string& meshName, EntityCreateInfo& info);
-
+		void AddText(std::string& text, int x, int y, FontType type);
 
 	private:
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
@@ -60,6 +60,8 @@ namespace Atlas
 
 		bool _playMusic;
 		unsigned long _bgMusicId;
+
+		glm::mat4 _identity;
 
 		std::string _name;
 		std::string _titleText;

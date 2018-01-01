@@ -17,6 +17,8 @@ namespace Atlas
 		bool createWindow(std::string& title, unsigned int width, unsigned int height);
 		bool showMessageBox(AtlasMessageTypeEnum type, std::string title, std::string message, AtlasMessageButtonsEnum buttons);
 
+		unsigned int GetWidth() { return _width; }
+		unsigned int GetHeight() { return _height; }
 
 		virtual void setCaptureMouse(bool enable);
 
@@ -53,9 +55,6 @@ namespace Atlas
 		int _nCmdShow;
 
 		HWND _hWnd;
-
-		unsigned int _width;
-		unsigned int _height;
 
 	private:
 

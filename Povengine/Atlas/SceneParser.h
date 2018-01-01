@@ -21,5 +21,7 @@ namespace Atlas
 
 		static bool ParseLight(Scene* scene, tinyxml2::XMLElement* element);
 		static bool ParseEntity(Scene* scene, tinyxml2::XMLElement* element, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio);
+
+		static bool ParseUI(Scene* scene, tinyxml2::XMLElement* element);
 	};
 }

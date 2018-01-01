@@ -23,6 +23,7 @@ namespace Atlas
 		virtual void Resize(unsigned int width, unsigned int height) = 0;
 
 		glm::mat4 GetProjection() { return _proj; }
+		glm::mat4 Get2DProjection() { return _2DProj; }
 
 		virtual void beginRender() = 0;
 		virtual void endRender() = 0;
@@ -47,6 +48,7 @@ namespace Atlas
 		bool _initialised;
 
 		glm::mat4 _proj;
+		glm::mat4 _2DProj;
 
 	};
 }

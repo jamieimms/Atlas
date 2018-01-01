@@ -75,6 +75,9 @@ bool SceneParser::ParseElement(Scene* scene, XMLElement* element, TextureManager
 			child = child->NextSiblingElement();
 		}
 	}
+	else if (strcmp(element->Name(), "ui") == 0) {
+		ParseUI(scene, element);
+	}
 
 	return true;
 }
@@ -203,6 +206,21 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, TextureManager*
 	}
 
 	scene->AddEntity(EntityFactory::CreateEntity(entityInfo, physics));
+
+	return true;
+}
+
+bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element)
+{
+	auto child = element->FirstChildElement("text");
+	while (child != nullptr) {
+		if (strcmp(child->Name(), "text") == 0) {
+			FontType style = (FontType)child->IntAttribute("style");
+			scene->AddText(std::string(child->Attribute("content")), child->IntAttribute("x", 20), child->IntAttribute("y", 20), style);
+		}
+
+		child = child->NextSiblingElement();
+	}
 
 	return true;
 }

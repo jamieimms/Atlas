@@ -12,8 +12,15 @@ Scene::Scene(std::string name, TextureManager* texManager, Physics* physManager,
 	: _name(name), _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager), _audio(audioManager), _fonts(fonts)
 {
 	_bgMusicId = 0;
+
+	_identity = glm::mat4();
+
+	AddText(std::string("Atlas Engine Test 2017.12. "), 20, 40, FontType::Normal);
+
+	AddText(std::string("Total entities: "), 20, 60, FontType::Normal);
 }
 
+///
 int GetInt(std::stringstream& ss)
 {
 	char curLine[256];
@@ -22,6 +29,7 @@ int GetInt(std::stringstream& ss)
 	return atoi(curLine);
 }
 
+///
 float GetFloat(std::stringstream& ss)
 {
 	char curLine[256];
@@ -30,7 +38,7 @@ float GetFloat(std::stringstream& ss)
 	return atof(curLine);
 }
 
-
+///
 bool Scene::AddBackgroundMusic(std::string fileName)
 {
 	SoundInfo info;
@@ -42,23 +50,33 @@ bool Scene::AddBackgroundMusic(std::string fileName)
 	return true;
 }
 
-
+///
 void Scene::SetCamera(glm::vec3 pos, glm::vec3 target)
 {
 	_cam.SetPosition(pos.x, pos.y, pos.z);
 	_cam.SetLookAt(target.x, target.y, target.z);
 }
 
+///
 void Scene::AddEntity(EntityHolder* entity)
 {
 	_entities.push_back(entity);
 }
 
+///
 void Scene::AddLight(Light* light)
 {
 	_lights.push_back(light);
 }
 
+///
+void Scene::AddText(std::string& text, int x, int y, FontType type)
+{
+	_textItems.push_back(new Text(text, x, y, type == FontType::Normal ? _fonts->GetFont(0) : _fonts->GetFont(1), _shaderManager->GetShaderByName("text"), glm::vec3(1.0f, 1.0f, 1.0f)));
+}
+
+///
+///
 void Scene::Start()
 {
 	if (_playMusic) {
@@ -67,20 +85,13 @@ void Scene::Start()
 
 	_sceneClock.Start();
 
-	_titleText = "Atlas Engine Test 2017.12. ";
-	Text* text = new Text(_titleText, 20, 40, _fonts->GetFont(0), _shaderManager->GetShaderByName("text"));
-
-	_textItems.push_back(text);
-
 	srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
 
 	_textClock.Start();
-
-	std::string test = "Total entities: ";
-	text = new Text(test, 20, 60, _fonts->GetFont(0), _shaderManager->GetShaderByName("text"));
-	_textItems.push_back(text);
 }
 
+///
+///
 void Scene::AddMesh(std::string& meshName, EntityCreateInfo& info)
 {
 	std::vector<glm::vec3>* verts = new std::vector<glm::vec3>();
@@ -229,7 +240,7 @@ void Scene::UpdateScene(double& fps)
 ///
 ///
 ///
-void Scene::DrawScene(glm::mat4 proj)
+void Scene::DrawScene(glm::mat4 proj, glm::mat4 proj2D)
 {
 	auto view = _cam.GetViewMatrix();
 
@@ -259,6 +270,6 @@ void Scene::DrawScene(glm::mat4 proj)
 		}
 
 		Text* text = i;
-		text->Render(view, proj, _cam.GetPosition(), _lights);
+		text->Render(_identity, proj2D, _cam.GetPosition(), _lights);
 	}
 }

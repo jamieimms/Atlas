@@ -74,7 +74,7 @@ bool Input::IsToggleKeyPressed(unsigned int keyID)
 /// <returns>true if key is pressed, otherwise false. False if invalid key</returns>
 void Input::HandleMouseInput(int x, int y)
 {
-	_mouseX = x - (_width /2);
+	_mouseX = x - (_width / 2);
 	_mouseY = y - (_height / 2);
 }
 
@@ -82,4 +82,15 @@ void Input::ResetMouseInput()
 {
 	_mouseX = 0;
 	_mouseY = 0;
+}
+
+/// <summary>
+///	Receive mouse input from window
+/// </summary>
+void Input::HandleMouseClick(int x, int y, bool isLeft)
+{
+	_lastClickX = x;
+	_lastClickY = y;
+	_wasLastClickLeft = isLeft;
+	_clickPending = true;
 }

@@ -4,12 +4,14 @@
 
 namespace Atlas
 {
-	Text::Text(std::string text, float x, float y, Font* font, Shader* shader)
+	Text::Text(std::string text, float x, float y, Font* font, Shader* shader, glm::vec3 colour)
 		: BaseEntity(0,0,0, shader), _initialised(false), _font(font), _x(x), _y(y)
 	{
 		_entityType = EntityTypeEnum::ET_Plane;
 
 		Initialise(DataFormatEnum::DataColourTex);
+
+		_material.diffuseColour = glm::vec3(colour.r, colour.g, colour.b);
 
 		SetText(text);
 	}
@@ -19,6 +21,8 @@ namespace Atlas
 
 	}
 
+	///
+	///
 	void Text::InitData()
 	{
 		_numIndices = 6;
@@ -36,19 +40,6 @@ namespace Atlas
 			0, 0, 0,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,
 			1, 0, 0,		1.0f, 1.0f, 1.0f,		1.0f, 0.0f,
 		};
-
-		_identity = glm::mat4();
-		ComputeMatrix(1024, 768);
-	}
-
-	///
-	///
-	void Text::ComputeMatrix(float windowWidth, float windowHeight)
-	{
-		glLoadIdentity();
-		glMatrixMode(GL_PROJECTION);
-		glOrtho(0.f, 1024, 768, 0.f, 0.f, 1.f);
-		glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(_textProjection));
 	}
 
 	///
@@ -100,7 +91,7 @@ namespace Atlas
 			
 			SetPosition(stepX + xOffset, _y - height + (height - yOffset), 0);
 
-			BaseEntity::Render(_identity, _textProjection, glm::vec3(0, 0, 0), lights);
+			BaseEntity::Render(view, proj, glm::vec3(0, 0, 0), lights);
 
 			stepX += (glyph->Advance >> 6) / scaleFactor;
 		}

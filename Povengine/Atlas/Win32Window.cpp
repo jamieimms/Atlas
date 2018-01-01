@@ -20,14 +20,18 @@ Win32Window::Win32Window(AtlasManager* parent)
 Win32Window::~Win32Window() {
 }
 
+/// <summary>
+///
+/// </summary>
 void Win32Window::setWindowVariables(HINSTANCE hInstance, int nCmdShow)
 {
 	_hInstance = hInstance;
 	_nCmdShow = nCmdShow;
 }
 
-// createWindow
-// Creates a new window with the given title.
+/// <summary>
+/// Creates a new window with the given title.
+/// </summary>
 bool Win32Window::createWindow(std::string& title, unsigned int width, unsigned int height)
 {
 	if (!initialiseWindow()) {
@@ -52,6 +56,9 @@ bool Win32Window::createWindow(std::string& title, unsigned int width, unsigned 
 	return true;
 }
 
+/// <summary>
+/// Implements the interface to show a message box
+/// </summary>
 bool Win32Window::showMessageBox(AtlasMessageTypeEnum type, std::string title, std::string message, AtlasMessageButtonsEnum buttons)
 {
 	unsigned int button;
@@ -92,7 +99,9 @@ bool Win32Window::showMessageBox(AtlasMessageTypeEnum type, std::string title, s
 	return false;
 }
 
-
+/// <summary>
+/// Enables or disables mouse capture inside the window
+/// </summary>
 void Win32Window::setCaptureMouse(bool enable)
 {
 	static HWND _prevCap;
@@ -107,6 +116,9 @@ void Win32Window::setCaptureMouse(bool enable)
 	}
 }
 
+/// <summary>
+/// Set up and register the window class
+/// </summary>
 bool Win32Window::initialiseWindow()
 {
 	// Register class
@@ -214,11 +226,21 @@ LRESULT Win32Window::wmInputHandler(WPARAM wParam, LPARAM lParam)
 
 LRESULT Win32Window::wmLButtonDownHandler(WPARAM wParam, LPARAM lParam)
 {
+	int mx = GET_X_LPARAM(lParam);
+	int my = GET_Y_LPARAM(lParam);
+
+	_parent->GetInput()->HandleMouseClick(mx, my, true);
+
 	return 0;
 }
 
 LRESULT Win32Window::wmRButtonDownHandler(WPARAM wParam, LPARAM lParam)
 {
+	int mx = GET_X_LPARAM(lParam);
+	int my = GET_Y_LPARAM(lParam);
+
+	_parent->GetInput()->HandleMouseClick(mx, my, true);
+
 	return 0;
 }
 LRESULT Win32Window::wmLButtonUpHandler(WPARAM wParam, LPARAM lParam)

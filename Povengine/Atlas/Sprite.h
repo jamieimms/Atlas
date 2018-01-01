@@ -10,14 +10,12 @@ namespace Atlas
 	class Text : public BaseEntity
 	{
 	public:
-		Text(std::string text, float x, float y, Font* fonts, Shader* shader, glm::vec3 colour);
+		Text(std::string text, float x, float y, Font* fonts, Shader* shader);
 		virtual ~Text();
 
 		virtual void InitData();
 
 		virtual void Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights);
-
-		void SetText(std::string& text);
 
 	private:
 
@@ -27,6 +25,8 @@ namespace Atlas
 
 		float _x;
 		float _y;
+
+		glm::mat4 _identity;
 
 		Font* _font;
 

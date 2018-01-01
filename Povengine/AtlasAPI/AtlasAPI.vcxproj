@@ -18,10 +18,18 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="APIException.h" />
+    <ClInclude Include="AtlasAPIHelper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="APIException.cpp" />
+    <ClCompile Include="AtlasAPIHelper.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3584BF6A-2D13-4B3D-B905-8CD6C23FDD4D}</ProjectGuid>
+    <ProjectGuid>{099B236C-E340-4D58-83DE-614AE2628E29}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Atlas</RootNamespace>
+    <RootNamespace>AtlasAPI</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -29,7 +37,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -72,40 +80,30 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>S:\Development\Povengine\Dependencies\GLEW\include;S:\Development\Povengine\Dependencies\glm;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc;S:\Development\Povengine\Dependencies\Bullet;S:\Development\Povengine\Dependencies\tinyxml\include;S:\Development\Povengine\Dependencies\freetype-2.8.1\include;S:\Development\Povengine\Dependencies\freetype-2.8.1\include\freetype\config;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>S:\Development\Povengine\Dependencies\GLEW\lib\Win32;C:\Program Files %28x86%29\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib;S:\Development\Povengine\Dependencies\Bullet\bin;S:\Development\Povengine\Dependencies\freetype-2.8.1\objs\vc2010\Win32;S:\Development\Povengine\Dependencies\tinyxml\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;OpenGL32.lib;glew32s.lib;BulletCollision_vs2015_debug.lib;BulletDynamics_vs2015_debug.lib;LinearMath_vs2015_debug.lib;freetype281d.lib;fmod_vc.lib;tinyxml2_debug.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -113,7 +111,6 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
@@ -121,8 +118,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -130,99 +126,10 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AtlasGame.h" />
-    <ClInclude Include="AtlasManager.h" />
-    <ClInclude Include="AtlasMessageBoxEnums.h" />
-    <ClInclude Include="Audio.h" />
-    <ClInclude Include="BaseEntity.h" />
-    <ClInclude Include="BaseManager.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Cone.h" />
-    <ClInclude Include="Cube.h" />
-    <ClInclude Include="DataFormatEnum.h" />
-    <ClInclude Include="Entities.h" />
-    <ClInclude Include="EntityFactory.h" />
-    <ClInclude Include="EntityHolder.h" />
-    <ClInclude Include="EntityTypeEnum.h" />
-    <ClInclude Include="FiniteEntity.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="Fonts.h" />
-    <ClInclude Include="IO.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="IRenderable.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="LightTypeEnum.h" />
-    <ClInclude Include="MapFileIndex.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Origin.h" />
-    <ClInclude Include="PhysicsEntity.h" />
-    <ClInclude Include="Physics.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="SceneParser.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Skybox.h" />
-    <ClInclude Include="Spawner.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="Text.h" />
-    <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="Transformable.h" />
-    <ClInclude Include="OpenGLRenderer.h" />
-    <ClInclude Include="AtlasRenderer.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="ShaderManager.h" />
-    <ClInclude Include="Triangle.h" />
-    <ClInclude Include="Win32Window.h" />
-    <ClInclude Include="Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="AtlasManager.cpp" />
-    <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="BaseEntity.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Cone.cpp" />
-    <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="EntityFactory.cpp" />
-    <ClCompile Include="EntityHolder.cpp" />
-    <ClCompile Include="FiniteEntity.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="Fonts.cpp" />
-    <ClCompile Include="IO.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="OpenGLRenderer.cpp" />
-    <ClCompile Include="AtlasRenderer.cpp" />
-    <ClCompile Include="Origin.cpp" />
-    <ClCompile Include="PhysicsEntity.cpp" />
-    <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="Plane.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneParser.cpp" />
-    <ClCompile Include="ShaderManager.cpp" />
-    <ClCompile Include="Skybox.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="Text.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="Triangle.cpp" />
-    <ClCompile Include="Transformable.cpp" />
-    <ClCompile Include="Win32Window.cpp" />
-    <ClCompile Include="Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\AtlasCheckers\AtlasCheckers.vcxproj" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

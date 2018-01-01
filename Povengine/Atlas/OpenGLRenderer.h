@@ -15,9 +15,11 @@ namespace Atlas
 		void beginRender();
 		void endRender();
 
+
 	private:
 
 		void Destroy();
+		void Compute2DMatrix(unsigned int width, unsigned int height);
 
 		bool _useVer45;
 

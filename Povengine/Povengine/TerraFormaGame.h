@@ -10,6 +10,8 @@ namespace TerraForma
 		TerraFormaGame() { }
 		virtual ~TerraFormaGame() { }
 
+		virtual std::string GetInitialScene();
+
 
 	};
 }

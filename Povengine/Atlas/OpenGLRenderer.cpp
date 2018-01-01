@@ -82,6 +82,11 @@ void OpenGLRenderer::Resize(unsigned int width, unsigned int height)
 
 	_proj = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
 
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glOrtho(0.f, width, height, 0.f, 0.f, 1.f);
+	glGetFloatv(GL_PROJECTION_MATRIX, glm::value_ptr(_2DProj));
+
 #endif
 #ifdef __linux__
 #endif

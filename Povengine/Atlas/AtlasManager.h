@@ -39,6 +39,8 @@ namespace Atlas
 
 		void toggleMouseLook(bool enable);
 
+		void LoadShaders();
+
 		// Members
 		Window* _applicationWindow;	// The desktop window we're rendering inside
 
@@ -53,7 +55,6 @@ namespace Atlas
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
 		double _frameDelta;
 		double _fps;
-		long _frameCount;
 
 		Scene* _currentScene;
 
@@ -63,5 +64,7 @@ namespace Atlas
 		std::string _mainDir;
 
 		bool _enableMouseLook;
+
+		glm::mat4 _2DProjection;
 	};
 }

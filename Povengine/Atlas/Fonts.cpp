@@ -43,7 +43,7 @@ bool Fonts::Initialise()
 
 ///
 ///
-bool Fonts::LoadFont(std::string fontPath)
+bool Fonts::LoadFont(std::string fontPath, unsigned int fontSize)
 {
 	if (!_initialised) {
 		return false;
@@ -65,7 +65,7 @@ bool Fonts::LoadFont(std::string fontPath)
 		return false;
 	}
 
-	FT_Set_Pixel_Sizes(face, 0, 48);
+	FT_Set_Pixel_Sizes(face, 0, fontSize);
 
 	Font* loadedFont = new Font(_loadedFonts.size()+1, face);
 
@@ -74,6 +74,8 @@ bool Fonts::LoadFont(std::string fontPath)
 	return true;
 }
 
+///
+///
 void Fonts::StringToGlyph(std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font)
 {
 	glyphIndices.clear();

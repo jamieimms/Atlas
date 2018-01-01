@@ -175,6 +175,9 @@
     <ClInclude Include="Mesh.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">
@@ -271,6 +274,9 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
