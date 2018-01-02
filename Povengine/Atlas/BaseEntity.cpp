@@ -146,14 +146,22 @@ void BaseEntity::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, 
 
 	glUniform3f(_shader->objectColour, _material.diffuseColour.r, _material.diffuseColour.g, _material.diffuseColour.b);
 
-	auto tempVec = lights[0]->GetColour();
+	if (lights.size() > 0) {
+		for (auto lt : lights) {
+			glm::vec3 lightVec;
+			if (lt->GetType() == LightTypeEnum::LT_Ambient) {
+				lightVec = lt->GetColour();
+				glUniform3f(_shader->ambientLightColour, lightVec.r, lightVec.g, lightVec.b);
+			}
+			else if (lt->GetType() == LightTypeEnum::LT_Point) {
+				lightVec = lights[1]->GetColour();
+				glUniform3f(_shader->positionalLightColour, lightVec.r, lightVec.g, lightVec.b);
+				lightVec = lights[1]->GetPosition();
+				glUniform3f(_shader->positionalLightPos, lightVec.x, lightVec.y, lightVec.z);
+			}
+		}
+	}
 
-	glUniform3f(_shader->ambientLightColour, tempVec.r, tempVec.g, tempVec.b);
-
-	tempVec = lights[1]->GetColour();
-	glUniform3f(_shader->positionalLightColour, tempVec.r, tempVec.g, tempVec.b);
-	tempVec = lights[1]->GetPosition();
-	glUniform3f(_shader->positionalLightPos, tempVec.x, tempVec.y, tempVec.z);
 	glUniform3f(_shader->viewerPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
 	if (_indices == nullptr) {

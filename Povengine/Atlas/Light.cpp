@@ -15,6 +15,7 @@ Light::Light(LightTypeEnum type, float r, float g, float b)
 }
 
 Light::Light(LightTypeEnum type, float r, float g, float b, float x, float y, float z)
+	:_type(type)
 {
 	_lightColour.r = r;
 	_lightColour.g = g;

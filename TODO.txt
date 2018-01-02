@@ -7,6 +7,7 @@ Graphics:
 	3D Meshes		- Done loading of meshes is possible using Wavefront .obj format
 	Instancing		- TODO
 	Animation		- TODO
+	Dynamic Lighting- Partial - Supports ambient + single point light
 	
 Audio:
 	Play sounds		- Done, audio implemented with FMOD
@@ -22,6 +23,7 @@ Gameplay:
 	Game loading	- TODO: Atlas manager needs to be told what to load etc.
 	State			- TODO
 	End condition	- TODO
+	Scene control	- Game needs control of the scene (currently AtlasManager does)
 	
 	
 	

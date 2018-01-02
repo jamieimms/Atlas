@@ -2,15 +2,9 @@
 #include "BaseManager.h"
 #include <chrono>
 #include "Window.h"
-#include "AtlasRenderer.h"
 #include "Scene.h"
 #include "../AtlasUtil/AtlasLog.h"
-#include "ShaderManager.h"
-#include "Input.h"
-#include "Audio.h"
-#include "Physics.h"
-#include "TextureManager.h"
-#include "Fonts.h"
+#include "Subsystems.h"
 #include "../AtlasUtil/AtlasStopwatch.h"
 #include "AtlasGame.h"
 
@@ -30,7 +24,7 @@ namespace Atlas
 
 		int start();
 
-		Input* GetInput() { return _input; }
+		Input* GetInput() { return _subsystems._input; }
 
 	private:
 
@@ -44,13 +38,7 @@ namespace Atlas
 		// Members
 		Window* _applicationWindow;	// The desktop window we're rendering inside
 
-		AtlasRenderer* _renderer;	// The renderer, could be DirectX (win32 only) or OpenGL (win32 and linux), currently we only support OpenGL
-		ShaderManager* _shaderManager; // The shader loader
-		Input* _input;	// Handles user input
-		Audio* _audio;	// Handles audio functions
-		Physics* _phys;	// Handles physics calculations
-		TextureManager* _texManager; // Handles textures
-		Fonts* _fonts; // Handles fonts
+		Subsystems _subsystems;
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
 		double _frameDelta;

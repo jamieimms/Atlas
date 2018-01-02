@@ -16,6 +16,7 @@ namespace Atlas
 
 		glm::vec3 GetColour() { return _lightColour; }
 		glm::vec3 GetPosition() { return _position; }
+		LightTypeEnum GetType() { return _type; }
 
 		void SetPosition(glm::vec3& pos) { _position = pos; }
 

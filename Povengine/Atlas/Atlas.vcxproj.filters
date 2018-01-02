@@ -178,6 +178,12 @@
     <ClInclude Include="Sprite.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="FontStyleEnum.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="Subsystems.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Win32Window.cpp">

@@ -10,6 +10,10 @@ EntityCreateInfo::EntityCreateInfo()
 	}
 }
 
+/// <summary>
+/// Receives entity creation info and returns an entity based on that info
+/// </summary>
+/// <param name="character">character to retrieve the glyph index for</param>
 EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys, EntityHolder* holder)
 {
 	BaseEntity* newEntity = nullptr;

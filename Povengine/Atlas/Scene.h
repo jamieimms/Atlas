@@ -7,20 +7,18 @@
 #include "../AtlasUtil/AtlasStopwatch.h"
 #include "Audio.h"
 #include "Camera.h"
-#include "TextureManager.h"
-#include "Physics.h"
-#include "ShaderManager.h"
 #include "glm.hpp"
 #include "EntityTypeEnum.h"
 #include "EntityFactory.h"
 #include "Text.h"
+#include "Subsystems.h"
 
 namespace Atlas
 {
 	class Scene
 	{
 	public:
-		Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager, Fonts* fonts);
+		Scene(std::string name, Subsystems subsystems);
 
 		void UnloadScene();
 
@@ -40,7 +38,7 @@ namespace Atlas
 		void AddEntity(EntityHolder* entity);
 		void AddLight(Light* light);
 		void AddMesh(std::string& meshName, EntityCreateInfo& info);
-		void AddText(std::string& text, int x, int y, FontType type);
+		void AddText(std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment);
 
 	private:
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
@@ -49,11 +47,7 @@ namespace Atlas
 
 		Camera _cam;
 
-		TextureManager* _texManager;
-		Physics* _physicsManager;
-		ShaderManager* _shaderManager;
-		Audio* _audio;
-		Fonts* _fonts;
+		Subsystems _subsystems;
 
 		AtlasUtil::AtlasStopwatch _sceneClock;
 		AtlasUtil::AtlasStopwatch _textClock;

@@ -58,7 +58,7 @@ void Camera::Update()
 		//_camDirection = glm::normalize(_camPos - _camTarget);
 		//_rightVec = glm::normalize(glm::cross(_upVec, _camDirection));
 		//_camUp = glm::cross(_camDirection, _rightVec);
- 		_viewMat = glm::lookAt(_camPos, _freeLook ? _camPos + _front : _front, _upVec);
+  		_viewMat = glm::lookAt(_camPos, _freeLook ? _camPos + _front : _front, _upVec);
 
 		_needsUpdate = false;
 	}

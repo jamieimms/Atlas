@@ -22,8 +22,8 @@ namespace Atlas
 
 		void ResetMouseInput();
 
-		bool IsKeyPressed(unsigned int keyID);
-		bool IsToggleKeyPressed(unsigned int keyID);
+		bool IsKeyPressed(const unsigned int keyID) const;
+		bool IsToggleKeyPressed(const unsigned int keyID);
 
 		int GetMouseX() { return _mouseX; }
 		int GetMouseY() { return _mouseInvertedY ? _mouseY : -_mouseY; }

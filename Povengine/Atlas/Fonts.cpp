@@ -43,7 +43,7 @@ bool Fonts::Initialise()
 
 ///
 ///
-bool Fonts::LoadFont(std::string fontPath, unsigned int fontSize)
+bool Fonts::LoadFont(std::string fontPath, FontStyleEnum style)
 {
 	if (!_initialised) {
 		return false;
@@ -51,7 +51,6 @@ bool Fonts::LoadFont(std::string fontPath, unsigned int fontSize)
 
 	FT_Error error;
 	FT_Face face;
-
 
 	error = FT_New_Face(_ftLib, fontPath.c_str(), 0, &face);
 	if(error != FT_Err_Ok) {
@@ -65,9 +64,31 @@ bool Fonts::LoadFont(std::string fontPath, unsigned int fontSize)
 		return false;
 	}
 
+	// Check if this font is already loaded and if so just return
+	for (auto f : _loadedFonts) {
+		if (f->IsFamilyAndStyle(std::string(face->family_name), style)) {
+			return true;
+		}
+	}
+
+	unsigned int fontSize = 12;
+	switch (style) {
+	case FontStyleEnum::Small:
+		fontSize = 8;
+		break;
+	case FontStyleEnum::Normal:
+		fontSize = 14;
+		break;
+	case FontStyleEnum::Big:
+		fontSize = 32;
+			break;
+	case FontStyleEnum::Title:
+		fontSize = 64;
+	}
+
 	FT_Set_Pixel_Sizes(face, 0, fontSize);
 
-	Font* loadedFont = new Font(_loadedFonts.size()+1, face);
+	Font* loadedFont = new Font(_loadedFonts.size()+1, face, style);
 
 	_loadedFonts.push_back(loadedFont);
 
@@ -76,11 +97,30 @@ bool Fonts::LoadFont(std::string fontPath, unsigned int fontSize)
 
 ///
 ///
-void Fonts::StringToGlyph(std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font)
+void Fonts::StringToGlyph(std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font, unsigned int& width, unsigned int& height)
 {
 	glyphIndices.clear();
 
 	for (int i = 0; i < text.length(); i++) {
-		glyphIndices.push_back(font->GetGlyphIndex(text[i]));
+		unsigned int index = font->GetGlyphIndex(text[i]);
+		glyphIndices.push_back(index);
+
+		width += font->GetGlyphWidth(index);
+		auto glyphHeight = font->GetGlyphHeight(index);
+		if (glyphHeight > height) {
+			height = glyphHeight;
+		}
+	}
+}
+
+///
+///
+Font* Fonts::GetFont(FontStyleEnum style)
+{
+	// Check if this font is already loaded and if so just return
+	for (auto f : _loadedFonts) {
+		if (f->IsFamilyAndStyle(std::string("*"), style)) {
+			return f;
+		}
 	}
 }

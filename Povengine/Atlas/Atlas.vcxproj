@@ -156,6 +156,7 @@
     <ClInclude Include="FiniteEntity.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Fonts.h" />
+    <ClInclude Include="FontStyleEnum.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="IRenderable.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Spawner.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Subsystems.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transformable.h" />

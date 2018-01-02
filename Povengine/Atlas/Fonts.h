@@ -10,12 +10,6 @@
 
 namespace Atlas
 {
-	enum FontType
-	{
-		Normal,
-		Heading1
-	};
-
 	class Fonts : public BaseManager
 	{
 	public:
@@ -24,12 +18,11 @@ namespace Atlas
 
 		bool Initialise();
 
-		bool LoadFont(std::string fontPath, unsigned int fontSize);
+		bool LoadFont(std::string fontPath, FontStyleEnum style);
 
-		static void StringToGlyph(std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font);
+		static void StringToGlyph(std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font, unsigned int& width, unsigned int& height);
 
-		Font* GetFont(unsigned int index) { return _loadedFonts[index]; }
-
+		Font* GetFont(FontStyleEnum style);
 
 	private:
 

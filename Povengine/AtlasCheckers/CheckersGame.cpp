@@ -29,3 +29,20 @@ void CheckersGame::SetupGame()
 	_turnsCount = 0;
 	_playerTurn = BoardStatesEnum::White;
 }
+
+void CheckersGame::InputProcessing(const Atlas::Input* input)
+{
+	if (input->IsKeyPressed(0x28)) {
+
+	}
+
+	if (input->IsKeyPressed(0x0D)) {
+		// Make menu selection
+	}
+}
+
+void CheckersGame::UpdateGame()
+{
+
+}
+

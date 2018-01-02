@@ -8,16 +8,16 @@
 using namespace Atlas;
 
 
-Scene::Scene(std::string name, TextureManager* texManager, Physics* physManager, ShaderManager* shaderManager, Audio* audioManager, Fonts* fonts)
-	: _name(name), _texManager(texManager), _physicsManager(physManager), _shaderManager(shaderManager), _audio(audioManager), _fonts(fonts)
+Scene::Scene(std::string name, Subsystems subsystems)
+	: _name(name), _subsystems(subsystems)
 {
 	_bgMusicId = 0;
 
 	_identity = glm::mat4();
 
-	AddText(std::string("Atlas Engine Test 2017.12. "), 20, 40, FontType::Normal);
+	//AddText(std::string("Atlas Engine Test 2017.12. "), 20, 40, FontStyleEnum::Normal);
 
-	AddText(std::string("Total entities: "), 20, 60, FontType::Normal);
+	//AddText(std::string("Total entities: "), 20, 60, FontStyleEnum::Normal);
 }
 
 ///
@@ -42,11 +42,11 @@ float GetFloat(std::stringstream& ss)
 bool Scene::AddBackgroundMusic(std::string fileName)
 {
 	SoundInfo info;
-	if (!_audio->LoadSound(fileName, &info)) {
+	if (!_subsystems._audio->LoadSound(fileName, &info)) {
 		return false;
 	}
 	_bgMusicId = info.soundId;
-	_playMusic = false;
+	_playMusic = true;
 	return true;
 }
 
@@ -69,10 +69,18 @@ void Scene::AddLight(Light* light)
 	_lights.push_back(light);
 }
 
-///
-void Scene::AddText(std::string& text, int x, int y, FontType type)
+/// <summary>
+/// Add a text object to the scene
+/// </summary>
+/// <param name="text">Text string to display</param>
+/// <param name="x">x position (screen coordinates) of the text. If x is negative, text will be horizontally centred</param>
+/// <param name="y">y position (screen coordinates) of the text. If y is negative, text will be vertically centred</param>
+/// <param name="style">style of the text</param>
+void Scene::AddText(std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment = TextAlignmentEnum::Left, TextAlignmentEnum verticalAlignment = TextAlignmentEnum::Top)
 {
-	_textItems.push_back(new Text(text, x, y, type == FontType::Normal ? _fonts->GetFont(0) : _fonts->GetFont(1), _shaderManager->GetShaderByName("text"), glm::vec3(1.0f, 1.0f, 1.0f)));
+	Text* newText = new Text(text, x, y, _subsystems._fonts->GetFont(style), _subsystems._shaderManager->GetShaderByName("text"), glm::vec3(1.0f, 1.0f, 1.0f), horizontalAlignment, verticalAlignment);
+
+	_textItems.push_back(newText);
 }
 
 ///
@@ -80,12 +88,16 @@ void Scene::AddText(std::string& text, int x, int y, FontType type)
 void Scene::Start()
 {
 	if (_playMusic) {
-		_audio->queueSoundForNextFrame(_bgMusicId, glm::vec3(), glm::vec3());
+		_subsystems._audio->queueSoundForNextFrame(_bgMusicId, glm::vec3(), glm::vec3());
 	}
 
 	_sceneClock.Start();
 
 	srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
+
+	for (auto t : _textItems) {
+		t->AdjustAlignment(_subsystems._renderer->GetWidth(), _subsystems._renderer->GetHeight());
+	}
 
 	_textClock.Start();
 }
@@ -100,7 +112,7 @@ void Scene::AddMesh(std::string& meshName, EntityCreateInfo& info)
 	std::vector<unsigned short>* normalIndices = new std::vector<unsigned short>();
 
 	IO::ParseObjFile(IO::GetModelDirectory() + meshName, verts, norms, indices, normalIndices);
-	auto mesh = new Mesh(verts, norms, indices, normalIndices, info.pos, info.colour, _shaderManager->GetShaderByName("lighting"));
+	auto mesh = new Mesh(verts, norms, indices, normalIndices, info.pos, info.colour, _subsystems._shaderManager->GetShaderByName("lighting"));
 	mesh->SetUniformScale(info.uniformScale);
 	auto eh = new EntityHolder();
 	eh->Initialise(mesh);
@@ -116,7 +128,7 @@ void Scene::AddMesh(std::string& meshName, EntityCreateInfo& info)
 //
 void Scene::Stop()
 {
-	_audio->UnloadSound(_bgMusicId);
+	_subsystems._audio->UnloadSound(_bgMusicId);
 }
 
 ///
@@ -177,7 +189,7 @@ void Scene::UpdateScene(double& fps)
 
 			PhysicsEntity* tmp = dynamic_cast<PhysicsEntity*>(entity);
 			if (tmp != nullptr) {
-				tmp->RemoveFromSimulation(_physicsManager);
+				tmp->RemoveFromSimulation(_subsystems._phys);
 			}
 
 			delete entity;
@@ -225,16 +237,16 @@ void Scene::UpdateScene(double& fps)
 	//	_sceneClock.Start();
 	//}
 
-	if (_textClock.GetElapsedMs() > 100) {
-		std::string info = "Scene: " + _name + ", FPS: " + std::to_string(fps);
-		_textItems[0]->SetText(_titleText + info);
+	//if (_textClock.GetElapsedMs() > 100) {
+	//	std::string info = "Scene: " + _name + ", FPS: " + std::to_string(fps);
+	//	_textItems[0]->SetText(_titleText + info);
 
-		std::string entityInfo = "Total entities: " + std::to_string(_entities.size());
-		_textItems[1]->SetText(entityInfo);
+	//	std::string entityInfo = "Total entities: " + std::to_string(_entities.size());
+	//	_textItems[1]->SetText(entityInfo);
 
-		_textClock.Reset();
-		_textClock.Start();
-	}
+	//	_textClock.Reset();
+	//	_textClock.Start();
+	//}
 }
 
 ///
@@ -256,7 +268,7 @@ void Scene::DrawScene(glm::mat4 proj, glm::mat4 proj2D)
 
 		PhysicsEntity* tmp = dynamic_cast<PhysicsEntity*>(entity);
 		if (tmp != nullptr) {
-			tmp->UpdateFromPhysics(_physicsManager);
+			tmp->UpdateFromPhysics(_subsystems._phys);
 		}
 
 		if (entity->IsVisible()) {

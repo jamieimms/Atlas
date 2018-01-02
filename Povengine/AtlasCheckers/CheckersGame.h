@@ -14,7 +14,10 @@ namespace AtlasCheckers
 
 		virtual std::string GetInitialScene();
 
-		
+		virtual void InputProcessing(const Atlas::Input* input);
+		virtual void UpdateGame();
+
+
 
 	private:
 		void SetupGame();

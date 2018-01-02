@@ -11,6 +11,8 @@ namespace TerraForma
 		virtual ~TerraFormaGame() { }
 
 		virtual std::string GetInitialScene();
+		virtual void InputProcessing(const Atlas::Input* input) {}
+		virtual void UpdateGame() {}
 
 
 	};

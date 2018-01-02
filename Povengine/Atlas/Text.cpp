@@ -4,8 +4,8 @@
 
 namespace Atlas
 {
-	Text::Text(std::string text, float x, float y, Font* font, Shader* shader, glm::vec3 colour)
-		: BaseEntity(0,0,0, shader), _initialised(false), _font(font), _x(x), _y(y)
+	Text::Text(std::string text, float x, float y, Font* font, Shader* shader, glm::vec3 colour, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment)
+		: BaseEntity(0,0,0, shader), _initialised(false), _font(font), _x(x),_y(y), _horizontalAlignment(horizontalAlignment), _verticalAlignment(verticalAlignment)
 	{
 		_entityType = EntityTypeEnum::ET_Plane;
 
@@ -29,7 +29,7 @@ namespace Atlas
 		_indices = new unsigned short[_numIndices]
 		{
 			0, 1, 2,
-				2, 3, 0,
+			2, 3, 0,
 		};
 
 		_numVertices = 4;
@@ -69,7 +69,7 @@ namespace Atlas
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		float scaleFactor = 3.0f;
+		float scaleFactor = 1.0f;
 		int stepX = _x;
 
 		for (int i = 0; i < _glyphIndices.size(); i++) {
@@ -83,8 +83,8 @@ namespace Atlas
 
 			float width = glyph->Width / scaleFactor;
 			float height = (glyph->Height / scaleFactor);
-			float yOffset = (glyph->Top / scaleFactor);
-			float xOffset = (glyph->Left / scaleFactor);
+			float yOffset = _yAlignOffset + (glyph->Top / scaleFactor);
+			float xOffset = _xAlignOffset + (glyph->Left / scaleFactor);
 
 			UpdateGlyphSize(width, height);
 			SetTexture(_font->GetTexture(_glyphIndices[i]));
@@ -104,6 +104,32 @@ namespace Atlas
 	///
 	void Text::SetText(std::string& text)
 	{
-		Fonts::StringToGlyph(text, _glyphIndices, _font);
+		_totalWidth = 0;
+		_totalHeight = 0;
+		Fonts::StringToGlyph(text, _glyphIndices, _font, _totalWidth, _totalHeight);
 	}
+
+	///
+	///
+	void Text::AdjustAlignment(const unsigned int containerWidth, const unsigned int containerHeight)
+	{
+		_xAlignOffset = 0;
+		_yAlignOffset = 0;
+
+		if (_horizontalAlignment == TextAlignmentEnum::Centre) {
+			_xAlignOffset = containerWidth / 2.0f - _totalWidth / 2.0f;
+		}
+		else if (_horizontalAlignment == TextAlignmentEnum::Right) {
+			_xAlignOffset = containerWidth - _totalWidth;
+		}
+
+		//if (_verticalAlignment == TextAlignmentEnum::Centre) {
+		//	_yAlignOffset = containerHeight / 2.0f - _totalHeight / 2.0f;
+		//}
+		//else if (_verticalAlignment == TextAlignmentEnum::Bottom) {
+		//	_yAlignOffset = containerHeight - _totalHeight;
+		//}
+
+	}
+
 }

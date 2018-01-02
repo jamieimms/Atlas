@@ -4,8 +4,8 @@
 
 using namespace Atlas;
 
-Font::Font(unsigned int id, FT_Face face)
-	: _id(id), _ftFace(face)
+Font::Font(unsigned int id, FT_Face face, FontStyleEnum style)
+	: _id(id), _ftFace(face), _style(style)
 {
 	_glyphCount = face->num_glyphs;
 	_textureIDs = new unsigned int[_glyphCount];
@@ -24,8 +24,10 @@ Font::~Font()
 	delete[] _textureIDs;
 }
 
-///
-///
+/// <summary>
+/// Goes through the entire font face loading all glyphs into memory
+/// </summary>
+/// <param name="keyID">The freetype font face to load glyphs from</param>
 bool Font::AddFontGlyphs(FT_Face face)
 {
 	FT_Error error;
@@ -66,8 +68,10 @@ bool Font::AddFontGlyphs(FT_Face face)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
 
-///
-//
+/// <summary>
+/// Gets the glyph metrics corresponding to the given glyph index
+/// </summary>
+/// <param name="index">glyph index to retrieve</param>
 const GlyphMetrics* Font::GetGlyph(const unsigned int index)
 {
 	if (index < 0 || index > _glyphs.size()) {
@@ -77,8 +81,10 @@ const GlyphMetrics* Font::GetGlyph(const unsigned int index)
 	return _glyphs[index];
 }
 
-///
-///
+/// <summary>
+/// Gets the texture id corresponding to the given glyph index
+/// </summary>
+/// <param name="index">glyph index to retrieve</param>
 unsigned int Font::GetTexture(const unsigned int index) const
 {
 	if (index < 0 || index > _glyphs.size()) {
@@ -88,9 +94,43 @@ unsigned int Font::GetTexture(const unsigned int index) const
 	return _textureIDs[index];
 }
 
-///
-///
+/// <summary>
+/// Gets the glyph index corresponding to the given character code
+/// </summary>
+/// <param name="character">character to retrieve the glyph index for</param>
 unsigned int Font::GetGlyphIndex(const char character) const
 {
 	return FT_Get_Char_Index(_ftFace, character);
+}
+
+/// <summary>
+/// Get whether or not this font matches the given family and style.
+/// </summary>
+/// <param name="fontFamily">The font family to check for. This can be a wildcard "*" to ignore the family</param>
+/// <param name="style">the style the caller is looking for</param>
+bool Font::IsFamilyAndStyle(std::string& fontFamily, FontStyleEnum style)
+{
+	if (style != _style) {
+		return false;
+	}
+
+	return fontFamily == "*" || fontFamily == _name;
+}
+
+const unsigned int Font::GetGlyphWidth(const unsigned int index) const
+{
+	if (index < 0 || index > _glyphs.size()) {
+		return 0;
+	}
+
+	return _glyphs[index]->Advance >> 6;
+}
+
+const unsigned int Font::GetGlyphHeight(const unsigned int index) const
+{
+	if (index < 0 || index > _glyphs.size()) {
+		return 0;
+	}
+
+	return _glyphs[index]->Top;
 }

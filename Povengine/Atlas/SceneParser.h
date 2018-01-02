@@ -11,17 +11,54 @@
 
 namespace Atlas
 {
+
 	class SceneParser
 	{
 	public:
-		static Scene* ParseSceneFile(std::string& path, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio, Fonts* fonts);
+		static Scene* ParseSceneFile(std::string& path, Subsystems& subsystems);
+
 
 	private:
-		static bool ParseElement(Scene* scene, tinyxml2::XMLElement* element, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio);
+		/// Atlas Scene format elements
+		static const char* SP_ASROOT;// "atlasscene";
+
+		/// Atlas top-level scene elements
+		static const char* SP_EL_BGMUSIC;
+		static const char* SP_EL_ENTITIES;
+		static const char* SP_EL_CAM;
+		static const char* SP_EL_UI;
+		static const char* SP_EL_LIGHTS;
+		static const char* SP_EL_SND;
+
+		/// Atlas scene child elements
+		static const char* SP_EL_TEXT;
+		static const char* SP_EL_SHADER;
+
+		/// Atlas scene attributes
+		static const char* SP_ATTR_POS;
+		static const char* SP_ATTR_COLOUR;
+		static const char* SP_ATTR_NAME;
+		static const char* SP_ATTR_VAL;
+		static const char* SP_ATTR_X;
+		static const char* SP_ATTR_Y;
+		static const char* SP_ATTR_Z;
+
+		// Text attributes
+		static const char* SP_ATTR_CONTENT;
+		static const char* SP_ATTR_STYLE;
+		static const char* SP_ATTR_HALIGN;
+		static const char* SP_ATTR_VALIGN;
+
+		static bool ParseElement(Scene* scene, tinyxml2::XMLElement* element, Subsystems& subsystems);
 
 		static bool ParseLight(Scene* scene, tinyxml2::XMLElement* element);
-		static bool ParseEntity(Scene* scene, tinyxml2::XMLElement* element, TextureManager* texManager, Physics* physics, ShaderManager* shaderManager, Audio* audio);
+		static bool ParseEntity(Scene* scene, tinyxml2::XMLElement* element, Subsystems& subsystems);
 
 		static bool ParseUI(Scene* scene, tinyxml2::XMLElement* element);
+
+		static FontStyleEnum ParseTextStyle(std::string& style);
+		static TextAlignmentEnum ParseAlignment(std::string& alignment);
+		
+			
 	};
 }

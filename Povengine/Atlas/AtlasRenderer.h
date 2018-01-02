@@ -34,6 +34,9 @@ namespace Atlas
 
 		void ToggleWireframe(bool newValue) { _wireframe = newValue; }
 
+		unsigned int GetWidth() { return _width; }
+		unsigned int GetHeight() { return _height; }
+
 	protected:
 
 		virtual void Destroy() = 0;
