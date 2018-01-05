@@ -9,3 +9,5 @@
 #include "FiniteEntity.h"
 #include "Skybox.h"
 #include "Mesh.h"
+#include "Text.h"
+#include "Sprite.h"

@@ -2,22 +2,27 @@
 #include "glew.h"
 #include "IO.h"
 #include "..\AtlasAPI\AtlasAPIHelper.h"
-#include "Text.h"
-#include "MapFileIndex.h"
 
 using namespace Atlas;
 
 
-Scene::Scene(std::string name, Subsystems subsystems)
-	: _name(name), _subsystems(subsystems)
+Scene::Scene(std::string name)
+	:_name(name)
 {
-	_bgMusicId = 0;
-
-	_identity = glm::mat4();
-
 	//AddText(std::string("Atlas Engine Test 2017.12. "), 20, 40, FontStyleEnum::Normal);
 
 	//AddText(std::string("Total entities: "), 20, 60, FontStyleEnum::Normal);
+}
+
+bool Scene::Initialise( Subsystems subsystems)
+{
+	_subsystems = subsystems;
+	_bgMusicId = 0;
+
+	_identity = glm::mat4();
+	_zeroVec = glm::vec3(0, 0, 0);
+
+	return true;
 }
 
 ///
@@ -76,11 +81,12 @@ void Scene::AddLight(Light* light)
 /// <param name="x">x position (screen coordinates) of the text. If x is negative, text will be horizontally centred</param>
 /// <param name="y">y position (screen coordinates) of the text. If y is negative, text will be vertically centred</param>
 /// <param name="style">style of the text</param>
-void Scene::AddText(std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment = TextAlignmentEnum::Left, TextAlignmentEnum verticalAlignment = TextAlignmentEnum::Top)
+void Scene::AddText(std::string& id, std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment = TextAlignmentEnum::Left, TextAlignmentEnum verticalAlignment = TextAlignmentEnum::Top)
 {
 	Text* newText = new Text(text, x, y, _subsystems._fonts->GetFont(style), _subsystems._shaderManager->GetShaderByName("text"), glm::vec3(1.0f, 1.0f, 1.0f), horizontalAlignment, verticalAlignment);
+	newText->SetID(id);
 
-	_textItems.push_back(newText);
+	_spriteEntities.push_back(newText);
 }
 
 ///
@@ -95,9 +101,12 @@ void Scene::Start()
 
 	srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
 
-	for (auto t : _textItems) {
+	for (auto t : _spriteEntities) {
 		t->AdjustAlignment(_subsystems._renderer->GetWidth(), _subsystems._renderer->GetHeight());
 	}
+
+	//Sprite* s = new Sprite(50, 50, _subsystems._shaderManager->GetShaderByName("texture"), glm::vec3(1.0f, 1.0f, 1.0f));
+	//_spriteEntities.push_back(s);
 
 	_textClock.Start();
 }
@@ -124,6 +133,13 @@ void Scene::AddMesh(std::string& meshName, EntityCreateInfo& info)
 }
 
 ///
+///
+void Scene::AddSprite(Sprite* sprite)
+{
+	_spriteEntities.push_back(sprite);
+}
+
+///
 //
 //
 void Scene::Stop()
@@ -145,12 +161,12 @@ void Scene::RemoveEntity(BaseEntity* entity)
 //
 void Scene::UnloadScene()
 {
-	for (auto i : _textItems)
+	for (auto i : _spriteEntities)
 	{
 		delete i;
 	}
 
-	_textItems.clear();
+	_spriteEntities.clear();
 
 	for (auto i : _entities)
 	{
@@ -172,9 +188,6 @@ void Scene::UnloadScene()
 //
 void Scene::UpdateScene(double& fps)
 {
-	//static std::string tex = IO::GetTextureDirectory() + "crate.jpg";
-	//static unsigned int texID = _texManager->LoadTexture(tex);
-
 	auto it = _entities.begin();
 	while (it != _entities.end()) {
 		if (*it == nullptr) {
@@ -276,12 +289,30 @@ void Scene::DrawScene(glm::mat4 proj, glm::mat4 proj2D)
 		}
 	}
 
-	for (auto i : _textItems) {
+	// Sprites should be rendered farthest to nearest in order to ensure correct blending
+	for (auto i : _spriteEntities) {
 		if (i == nullptr) {
 			continue;
 		}
 
-		Text* text = i;
-		text->Render(_identity, proj2D, _cam.GetPosition(), _lights);
+		i->Render(_identity, proj2D, glm::vec3(0,0,0), _lights);
 	}
+}
+
+Sprite* Scene::GetSpriteById(std::string& id)
+{
+	for (auto i : _spriteEntities) {
+		if (i == nullptr) {
+			continue;
+		}
+
+		if (i->GetID() == id) {
+			return i;
+		}
+	}
+}
+
+void Scene::SceneLoaded()
+{
+
 }

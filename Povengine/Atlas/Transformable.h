@@ -4,10 +4,12 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
+#include "AtlasObject.h"
+
 namespace Atlas
 {
 
-	class Transformable
+	class Transformable : public AtlasObject
 	{
 	public:
 
@@ -24,6 +26,9 @@ namespace Atlas
 
 		void SetTransform(glm::mat4 newTransform);
 
+		float GetScaleX() { return _scale.x; }
+		float GetScaleY() { return _scale.y; }
+		float GetScaleZ() { return _scale.z; }
 
 	private:
 		void UpdateTransform();

@@ -139,9 +139,6 @@
     <ClInclude Include="Physics.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="MapFileIndex.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="FiniteEntity.h">
       <Filter>Entities</Filter>
     </ClInclude>
@@ -183,6 +180,12 @@
     </ClInclude>
     <ClInclude Include="Subsystems.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasKey.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasObject.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

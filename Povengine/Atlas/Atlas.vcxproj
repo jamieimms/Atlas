@@ -140,8 +140,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AtlasGame.h" />
+    <ClInclude Include="AtlasKey.h" />
     <ClInclude Include="AtlasManager.h" />
     <ClInclude Include="AtlasMessageBoxEnums.h" />
+    <ClInclude Include="AtlasObject.h" />
     <ClInclude Include="Audio.h" />
     <ClInclude Include="BaseEntity.h" />
     <ClInclude Include="BaseManager.h" />
@@ -162,7 +164,6 @@
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightTypeEnum.h" />
-    <ClInclude Include="MapFileIndex.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Origin.h" />

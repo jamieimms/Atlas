@@ -65,6 +65,9 @@ unsigned int TextureManager::LoadTexture(std::string& path)
 	return tex->TextureID;
 }
 
+/// <summary>
+/// Gets the texture type (PNG,JPG) based on the file name
+/// </summary>
 TextureType TextureManager::GetTextureType(std::string& path)
 {
 	auto index = path.find_last_of('.');
@@ -106,6 +109,9 @@ void TextureManager::FlushTextures()
 	}
 }
 
+/// <summary>
+/// Go through the loaded textures and remove any items that have been deleted.
+/// </summary>
 void TextureManager::DefragmentTextures()
 {
 	auto defrag = new std::list<AtlasTexture*>();

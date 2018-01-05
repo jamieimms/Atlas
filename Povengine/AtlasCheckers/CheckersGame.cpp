@@ -1,16 +1,32 @@
 #include "CheckersGame.h"
-
+#include "MainMenuScene.h"
 #include <string>
 
 using namespace AtlasCheckers;
+using namespace Atlas;
 
-std::string CheckersGame::GetInitialScene()
+/// <summary>
+// Set the initial state for the game
+/// </summary>
+bool CheckersGame::InitialiseGame()
 {
-	return "01.as";
+	SetState(CheckersStateEnum::MainMenu);
+
+	return true;
 }
 
-///
-///
+/// <summary>
+// Process game input
+/// </summary>
+Scene* CheckersGame::GetInitialScene()
+{
+	_menuScene = new MainMenuScene("01.as");
+	return _menuScene;
+}
+
+/// <summary>
+// Process game input
+/// </summary>
 void CheckersGame::SetupGame()
 {
 	// Is a game already running? Ask if sure they want to restart
@@ -30,19 +46,42 @@ void CheckersGame::SetupGame()
 	_playerTurn = BoardStatesEnum::White;
 }
 
-void CheckersGame::InputProcessing(const Atlas::Input* input)
+/// <summary>
+// Process game input
+/// </summary>
+void CheckersGame::InputProcessing(const Input* input)
 {
-	if (input->IsKeyPressed(0x28)) {
+	if (_gameState == CheckersStateEnum::MainMenu) {
+		if (input->IsKeyPressed((int)AtlasKey::Up)) {
+			// Change menu selection
+			_menuScene->UpdateMenuSelection(true);
+		}
+		if (input->IsKeyPressed((int)AtlasKey::Down)) {
+			_menuScene->UpdateMenuSelection(false);
+		}
 
-	}
+		if (input->IsKeyPressed((int)AtlasKey::Enter)) {
+			// Make menu selection
 
-	if (input->IsKeyPressed(0x0D)) {
-		// Make menu selection
+
+		}
 	}
 }
 
+/// <summary>
+// Render the text string
+/// </summary>
 void CheckersGame::UpdateGame()
 {
 
 }
+
+/// <summary>
+// Render the text string
+/// </summary>
+void CheckersGame::SetState(CheckersStateEnum newState)
+{
+	_gameState = newState;
+}
+
 

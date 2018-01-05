@@ -7,30 +7,25 @@
 
 namespace Atlas
 {
-	class Text : public BaseEntity
+	class Sprite : public BaseEntity
 	{
 	public:
-		Text(std::string text, float x, float y, Font* fonts, Shader* shader);
-		virtual ~Text();
+		Sprite(float x, float y, float width, float height, Shader* shader);
+		Sprite(float x, float y, float width, float height, Shader* shader, glm::vec3 colour);
+		virtual ~Sprite();
 
 		virtual void InitData();
-
 		virtual void Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights);
 
-	private:
+		virtual void AdjustAlignment(const unsigned int containerWidth, const unsigned int containerHeight);
 
-		bool _initialised;
+		void SetColour(glm::vec3 newColour);
 
-		std::vector<unsigned int> _glyphIndices;	// The string is converted into indices into the glyphs array
-
+	protected:
 		float _x;
 		float _y;
 
-		glm::mat4 _identity;
-
-		Font* _font;
-
-		void UpdateGlyphSize(float width, float height);
-
+		float _width;
+		float _height;
 	};
 }

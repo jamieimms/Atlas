@@ -7,20 +7,20 @@
 using namespace Atlas;
 
 BaseEntity::BaseEntity()
-	: Transformable(glm::vec3())
+	: Transformable(glm::vec3()), _initialised(false)
 {
 	Reset();
 }
 
 BaseEntity::BaseEntity(glm::vec3 pos, Shader* shader)
-	: Transformable(pos), _shader(shader)
+	: Transformable(pos), _shader(shader), _initialised(false)
 {
 	Reset();
 	SetUniformScale(1.0f);
 }
 
 BaseEntity::BaseEntity(float x, float y, float z, Shader* shader)
-	: Transformable(x,y,z), _shader(shader)
+	: Transformable(x,y,z), _shader(shader), _initialised(false)
 {
 	Reset();
 	SetUniformScale(1.0f);
@@ -28,8 +28,20 @@ BaseEntity::BaseEntity(float x, float y, float z, Shader* shader)
 
 void BaseEntity::Reset()
 {
-	_data = nullptr;
+	if (_initialised) {
+		glDeleteBuffers(1, &_ibaID);
+		glDeleteBuffers(1, &_vbID);
+		glDeleteVertexArrays(1, &_vbaID);
+	
+		delete[] _indices;
+		delete[] _data;
+	}
+
 	_indices = nullptr;
+
+	_data = nullptr;
+
+	_initialised = false;
 }
 
 void BaseEntity::Initialise(DataFormatEnum dataFormat)
@@ -38,8 +50,6 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 	_dataFormat = dataFormat;
 
 	_mode = GL_TRIANGLES;
-
-	_ibaID = -1;
 
 	InitData();
 	glGenVertexArrays(1, &_vbaID);
@@ -54,6 +64,8 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 	}
 
 	SetVisibility(true);
+
+	_initialised = true;
 }
 
 void BaseEntity::ReloadData()
@@ -66,11 +78,7 @@ void BaseEntity::ReloadData()
 
 BaseEntity::~BaseEntity()
 {
-	glDeleteBuffers(1, &_ibaID);
-	glDeleteBuffers(1, &_vbID);
-	glDeleteVertexArrays(1, &_vbaID);
-	delete[] _indices;
-	delete[] _data;
+	Reset();
 }
 
 void BaseEntity::Update()

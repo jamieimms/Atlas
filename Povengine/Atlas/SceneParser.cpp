@@ -15,9 +15,11 @@ const char* SceneParser::SP_EL_SND = "sound";
 
 /// Atlas scene child elements
 const char* SceneParser::SP_EL_TEXT = "text";
+const char* SceneParser::SP_EL_SPRITE = "sprite";
 const char* SceneParser::SP_EL_SHADER = "shader";
 
 /// Atlas common scene attributes
+const char* SceneParser::SP_ATTR_ID = "id";
 const char* SceneParser::SP_ATTR_POS = "position";
 const char* SceneParser::SP_ATTR_COLOUR = "colour";
 const char* SceneParser::SP_ATTR_NAME = "name";
@@ -26,15 +28,17 @@ const char* SceneParser::SP_ATTR_X = "x";
 const char* SceneParser::SP_ATTR_Y = "y";
 const char* SceneParser::SP_ATTR_Z = "z";
 
-// Text attributes
+// Sprite attributes
 const char* SceneParser::SP_ATTR_STYLE = "style";
 const char* SceneParser::SP_ATTR_HALIGN = "horizontalalignment";
 const char* SceneParser::SP_ATTR_VALIGN = "verticalalignment";
+const char* SceneParser::SP_ATTR_WIDTH = "width";
+const char* SceneParser::SP_ATTR_HEIGHT = "height";
 
 
 //
 //
-Scene* SceneParser::ParseSceneFile(std::string& path, Subsystems& subsystems)
+Scene* SceneParser::ParseSceneFile(Scene* emptyScene, std::string& path, Subsystems& subsystems)
 {
 	XMLError returnCode;
 
@@ -52,23 +56,31 @@ Scene* SceneParser::ParseSceneFile(std::string& path, Subsystems& subsystems)
 		return nullptr;
 	}
 
-	Scene* newScene = new Scene(root->FirstAttribute()->Value(), subsystems);
+	//Scene* newScene = new Scene(root->FirstAttribute()->Value(), subsystems);
+	if (emptyScene == nullptr) {
+		return nullptr;
+	}
+
+	emptyScene->Initialise(subsystems);
 	
 	auto sceneElement = root->FirstChildElement();
 
 	while (sceneElement != nullptr) {
-		if (!ParseElement(newScene, sceneElement, subsystems)) {
+		if (!ParseElement(emptyScene, sceneElement, subsystems)) {
 			// There was an error parsing the scene file. Bail.
 			return nullptr;
 		}
 		sceneElement = sceneElement->NextSiblingElement();
 	}
 
-	return newScene;
+	emptyScene->SceneLoaded();
+
+	return emptyScene;
 }
 
-//
-//
+/// <summary>
+/// Determine the further action required to process an XML element within the root node and call it
+/// </summary>
 bool SceneParser::ParseElement(Scene* scene, XMLElement* element, Subsystems& subsystems)
 {
 	// Determine the element and parse it accordingly
@@ -104,7 +116,7 @@ bool SceneParser::ParseElement(Scene* scene, XMLElement* element, Subsystems& su
 		}
 	}
 	else if (strcmp(element->Name(), SP_EL_UI) == 0) {
-		ParseUI(scene, element);
+		ParseUI(scene, element, subsystems);
 	}
 
 	return true;
@@ -132,8 +144,9 @@ bool SceneParser::ParseLight(Scene* scene, XMLElement* element)
 	return true;
 }
 
-//
-//
+/// <summary>
+/// Parse an entity tag in the scene file and create the corresponding entity in the current scene
+/// </summary>
 bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, Subsystems& subsystems)
 {
 	EntityCreateInfo entityInfo;
@@ -238,9 +251,31 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, Subsystems& sub
 	return true;
 }
 
-bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element)
+/// <summary>
+/// Parse UI items in the scene file. UI items are all 2D text or sprites. ZOrder is determined by the order of the items in the file. Text is always on top
+/// </summary>
+bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element, Subsystems& subsystems)
 {
-	auto child = element->FirstChildElement(SP_EL_TEXT);
+	float zOrder = 0;
+	auto child = element->FirstChildElement(SP_EL_SPRITE);
+	while (child != nullptr) {
+		if (strcmp(child->Name(), SP_EL_SPRITE) == 0) {
+
+			auto sp = new Sprite(child->IntAttribute(SP_ATTR_X), child->IntAttribute(SP_ATTR_Y), child->IntAttribute(SP_ATTR_WIDTH), child->IntAttribute(SP_ATTR_HEIGHT), subsystems._shaderManager->GetShaderByName("texture"));
+			sp->SetID(std::string(child->Attribute(SP_ATTR_ID)));
+
+			// Textures
+			auto innerChild = child->FirstChildElement("texture");
+			if (innerChild != nullptr) {
+				sp->SetTexture(subsystems._texManager->LoadTexture(IO::GetTextureDirectory() + innerChild->Attribute(SP_ATTR_NAME)));
+			}
+
+			scene->AddSprite(sp);
+		}
+		child = child->NextSiblingElement();
+	}
+
+	child = element->FirstChildElement(SP_EL_TEXT);
 	while (child != nullptr) {
 		if (strcmp(child->Name(), SP_EL_TEXT) == 0) {
 			FontStyleEnum style = ParseTextStyle(std::string(child->Attribute(SP_ATTR_STYLE)));
@@ -251,11 +286,11 @@ bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element)
 			auto hAlign = hAlignStr == nullptr ? TextAlignmentEnum::Left : ParseAlignment(std::string(hAlignStr));
 			auto vAlign = vAlignStr == nullptr ? TextAlignmentEnum::Top : ParseAlignment(std::string(vAlignStr));
 
-			scene->AddText(std::string(child->Attribute(SP_ATTR_VAL)), child->IntAttribute(SP_ATTR_X, 0), child->IntAttribute(SP_ATTR_Y, 0), style, hAlign, vAlign);
+			scene->AddText(std::string(child->Attribute(SP_ATTR_ID)), std::string(child->Attribute(SP_ATTR_VAL)), child->IntAttribute(SP_ATTR_X, 0), child->IntAttribute(SP_ATTR_Y, 0), style, hAlign, vAlign);
 		}
-
 		child = child->NextSiblingElement();
 	}
+
 
 	return true;
 }

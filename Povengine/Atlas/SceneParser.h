@@ -15,7 +15,7 @@ namespace Atlas
 	class SceneParser
 	{
 	public:
-		static Scene* ParseSceneFile(std::string& path, Subsystems& subsystems);
+		static Scene* ParseSceneFile(Scene* emptyScene, std::string& path, Subsystems& subsystems);
 
 
 	private:
@@ -32,9 +32,11 @@ namespace Atlas
 
 		/// Atlas scene child elements
 		static const char* SP_EL_TEXT;
+		static const char* SP_EL_SPRITE;
 		static const char* SP_EL_SHADER;
 
 		/// Atlas scene attributes
+		static const char* SP_ATTR_ID;
 		static const char* SP_ATTR_POS;
 		static const char* SP_ATTR_COLOUR;
 		static const char* SP_ATTR_NAME;
@@ -43,18 +45,20 @@ namespace Atlas
 		static const char* SP_ATTR_Y;
 		static const char* SP_ATTR_Z;
 
-		// Text attributes
+		// 2D Sprite (including text) attributes
 		static const char* SP_ATTR_CONTENT;
 		static const char* SP_ATTR_STYLE;
 		static const char* SP_ATTR_HALIGN;
-		static const char* SP_ATTR_VALIGN;
+		static const char* SP_ATTR_VALIGN; 
+		static const char* SP_ATTR_WIDTH;
+		static const char* SP_ATTR_HEIGHT;
 
 		static bool ParseElement(Scene* scene, tinyxml2::XMLElement* element, Subsystems& subsystems);
 
 		static bool ParseLight(Scene* scene, tinyxml2::XMLElement* element);
 		static bool ParseEntity(Scene* scene, tinyxml2::XMLElement* element, Subsystems& subsystems);
 
-		static bool ParseUI(Scene* scene, tinyxml2::XMLElement* element);
+		static bool ParseUI(Scene* scene, tinyxml2::XMLElement* element, Subsystems& subsystems);
 
 		static FontStyleEnum ParseTextStyle(std::string& style);
 		static TextAlignmentEnum ParseAlignment(std::string& alignment);

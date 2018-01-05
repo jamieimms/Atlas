@@ -13,5 +13,6 @@ namespace Atlas
 		ET_Sphere,
 		ET_Skybox,
 		ET_Mesh,
+		ET_Sprite,
 	};
 }

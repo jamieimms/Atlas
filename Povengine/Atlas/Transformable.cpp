@@ -8,12 +8,15 @@ Transformable::Transformable(float x, float y, float z)
 {
 	SetPosition(x, y, z);
 	SetRotation(0, 0, 0);
+	SetUniformScale(1.0f);
 }
 
 
 Transformable::Transformable(glm::vec3 pos)
 {
 	SetPosition(pos.x, pos.y, pos.z);
+	SetRotation(0, 0, 0);
+	SetUniformScale(1.0f);
 }
 
 

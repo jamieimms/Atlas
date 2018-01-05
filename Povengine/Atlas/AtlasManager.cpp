@@ -164,12 +164,14 @@ bool AtlasManager::Initialise()
 
 	//toggleMouseLook(true);
 
-	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "loading.as", _subsystems);
-	_currentScene->Start();
+	//_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "loading.as", _subsystems);
+	//_currentScene->Start();
 
-	std::string initialScene = _game->GetInitialScene();
+	_game->InitialiseGame();
 	
-	_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + initialScene, _subsystems);
+	_currentScene = _game->GetInitialScene();
+	
+	_currentScene = SceneParser::ParseSceneFile(_currentScene, IO::GetSceneDirectory() + _currentScene->GetName(), _subsystems);
 	if (_currentScene == nullptr) {
 		_log->Debug("The scene failed to load.");
 		return false;
@@ -264,14 +266,14 @@ void AtlasManager::inputProcessing()
 	static float camPitch = 0.0f;
 	static float camYaw = 0.0f;
 
-	if (_subsystems._input->IsKeyPressed(VK_UP))
-	{
-		_currentScene->GetCamera().MoveForward();
-	}
-	if (_subsystems._input->IsKeyPressed(VK_DOWN))
-	{
-		_currentScene->GetCamera().Backpedal();
-	}
+	//if (_subsystems._input->IsKeyPressed(VK_UP))
+	//{
+	//	_currentScene->GetCamera().MoveForward();
+	//}
+	//if (_subsystems._input->IsKeyPressed(VK_DOWN))
+	//{
+	//	_currentScene->GetCamera().Backpedal();
+	//}
 	if (_subsystems._input->IsKeyPressed(VK_LEFT))
 	{
 		_currentScene->GetCamera().Strafe(true);
@@ -280,14 +282,14 @@ void AtlasManager::inputProcessing()
 	{
 		_currentScene->GetCamera().Strafe(false);
 	}
-	if (_subsystems._input->IsKeyPressed(VK_PRIOR))
-	{
+	//if (_subsystems._input->IsKeyPressed(VK_PRIOR))
+	//{
 
-	}
-	if (_subsystems._input->IsKeyPressed(VK_NEXT))
-	{
+	//}
+	//if (_subsystems._input->IsKeyPressed(VK_NEXT))
+	//{
 
-	}
+	//}
 	if (_subsystems._input->IsKeyPressed(VK_SPACE)) {
 		_currentScene->GetCamera().SetLookAt(0, 0, 0);
 	}

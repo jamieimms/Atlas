@@ -3,19 +3,30 @@
 #include "..\Atlas\AtlasGame.h"
 
 #include "BoardStatesEnum.h"
+#include "MainMenuScene.h"
 
 namespace AtlasCheckers
 {
+	enum CheckersStateEnum
+	{
+		MainMenu,
+		Playing
+	};
+
 	class CheckersGame : public Atlas::AtlasGame
 	{
 	public:
 		CheckersGame() { }
 		virtual ~CheckersGame() { }
 
-		virtual std::string GetInitialScene();
+		virtual bool InitialiseGame();
+
+		virtual Atlas::Scene* GetInitialScene();
 
 		virtual void InputProcessing(const Atlas::Input* input);
 		virtual void UpdateGame();
+
+		void SetState(CheckersStateEnum newState);
 
 
 
@@ -26,8 +37,10 @@ namespace AtlasCheckers
 
 		int _turnsCount;
 		BoardStatesEnum _playerTurn;
-		
 
+		CheckersStateEnum _gameState;
+		
+		MainMenuScene* _menuScene;
 
 
 	};

@@ -66,5 +66,7 @@ namespace Atlas
 		unsigned int _texID;
 
 		Shader* _shader;
+
+		bool _initialised;
 	};
 }

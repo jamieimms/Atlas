@@ -18,14 +18,17 @@ namespace Atlas
 	class Scene
 	{
 	public:
-		Scene(std::string name, Subsystems subsystems);
+		Scene(std::string name);
 
+		bool Initialise(Subsystems subsystems);
+
+		virtual void SceneLoaded();
 		void UnloadScene();
 
 		void Start();
 		void Stop();
 
-		void UpdateScene(double& fps);
+		virtual void UpdateScene(double& fps);
 		void DrawScene(glm::mat4 proj, glm::mat4 proj2D);
 
 		//IRenderable* GetEntity(int index) { return _entities[index]; }
@@ -38,12 +41,21 @@ namespace Atlas
 		void AddEntity(EntityHolder* entity);
 		void AddLight(Light* light);
 		void AddMesh(std::string& meshName, EntityCreateInfo& info);
-		void AddText(std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment);
+		void AddText(std::string& id, std::string& text, int x, int y , FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment);
+		void AddSprite(Sprite* sprite);
+
+		std::string GetName() { return _name; }
+
+	protected:
+		Sprite* GetSpriteById(std::string& id);
+		//EntityHolder* GetEntityById(std::string& id);
 
 	private:
+
+		bool _initialised;
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
 		std::vector<Light*> _lights;
-		std::vector<Text*> _textItems;
+		std::vector<Sprite*> _spriteEntities;
 
 		Camera _cam;
 
@@ -56,6 +68,7 @@ namespace Atlas
 		unsigned long _bgMusicId;
 
 		glm::mat4 _identity;
+		glm::vec3 _zeroVec;
 
 		std::string _name;
 		std::string _titleText;

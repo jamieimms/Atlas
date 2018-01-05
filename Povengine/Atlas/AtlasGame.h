@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Input.h"
+#include "Scene.h"
 
 namespace Atlas
 {
@@ -11,7 +12,9 @@ namespace Atlas
 		AtlasGame() {}
 		~AtlasGame() {}
 
-		virtual std::string GetInitialScene() = 0;
+		virtual bool InitialiseGame() = 0;
+
+		virtual Scene* GetInitialScene() = 0;
 
 		virtual void InputProcessing(const Input* input) = 0;
 

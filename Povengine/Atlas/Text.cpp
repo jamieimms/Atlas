@@ -5,14 +5,8 @@
 namespace Atlas
 {
 	Text::Text(std::string text, float x, float y, Font* font, Shader* shader, glm::vec3 colour, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment)
-		: BaseEntity(0,0,0, shader), _initialised(false), _font(font), _x(x),_y(y), _horizontalAlignment(horizontalAlignment), _verticalAlignment(verticalAlignment)
+		: Sprite(0, 0, 1, 1, shader, colour), _font(font), _x(x), _y(y), _horizontalAlignment(horizontalAlignment), _verticalAlignment(verticalAlignment)
 	{
-		_entityType = EntityTypeEnum::ET_Plane;
-
-		Initialise(DataFormatEnum::DataColourTex);
-
-		_material.diffuseColour = glm::vec3(colour.r, colour.g, colour.b);
-
 		SetText(text);
 	}
 
@@ -21,29 +15,9 @@ namespace Atlas
 
 	}
 
-	///
-	///
-	void Text::InitData()
-	{
-		_numIndices = 6;
-		_indices = new unsigned short[_numIndices]
-		{
-			0, 1, 2,
-			2, 3, 0,
-		};
-
-		_numVertices = 4;
-		// An array of 3 vectors which represents 3 vertices
-		_data = new float[_numVertices * _dataFormat]{
-			1, 1, 0,		1.0f, 0.0f, 0.0f,		1.0f, 1.0f,
-			0, 1, 0,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f,
-			0, 0, 0,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,
-			1, 0, 0,		1.0f, 1.0f, 1.0f,		1.0f, 0.0f,
-		};
-	}
-
-	///
-	///
+	/// <summary>
+	// Update the underlying sprite size to ensure correct display of the next character
+	/// </summary>
 	void Text::UpdateGlyphSize(float width, float height)
 	{
 		if (width == 0) {
@@ -61,15 +35,17 @@ namespace Atlas
 		ReloadData();
 	}
 
-	///
-	///
+	/// <summary>
+	// Render the text string
+	/// </summary>
 	void Text::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights)
 	{
 		// Enable blending so we only render the glyph
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		float scaleFactor = 1.0f;
+		float scaleFactorX = GetScaleX();
+		float scaleFactorY = GetScaleY();
 		int stepX = _x;
 
 		for (int i = 0; i < _glyphIndices.size(); i++) {
@@ -77,31 +53,32 @@ namespace Atlas
 			auto glyph = _font->GetGlyph(_glyphIndices[i]);
 
 			if (glyph->Width == 0 && glyph->Height == 0) {
-				stepX += (glyph->Advance >> 6) / scaleFactor;
+				stepX += (glyph->Advance >> 6) * scaleFactorX;
 				continue;
 			}
 
-			float width = glyph->Width / scaleFactor;
-			float height = (glyph->Height / scaleFactor);
-			float yOffset = _yAlignOffset + (glyph->Top / scaleFactor);
-			float xOffset = _xAlignOffset + (glyph->Left / scaleFactor);
+			float width = glyph->Width * scaleFactorX;
+			float height = glyph->Height * scaleFactorY;
+			float yOffset = _yAlignOffset + (glyph->Top * scaleFactorY);
+			float xOffset = _xAlignOffset + (glyph->Left * scaleFactorX);
 
 			UpdateGlyphSize(width, height);
 			SetTexture(_font->GetTexture(_glyphIndices[i]));
 			
 			SetPosition(stepX + xOffset, _y - height + (height - yOffset), 0);
 
-			BaseEntity::Render(view, proj, glm::vec3(0, 0, 0), lights);
+			BaseEntity::Render(view, proj, cameraPos, lights);
 
-			stepX += (glyph->Advance >> 6) / scaleFactor;
+			stepX += (glyph->Advance >> 6) / scaleFactorX;
 		}
 
 		glDisable(GL_BLEND);
-		glPopMatrix();
 	}
 
-	///
-	///
+	/// <summary>
+	// Sets the text string of this text object; this is done by converting the string characters into
+	// glyph indices.
+	/// </summary>
 	void Text::SetText(std::string& text)
 	{
 		_totalWidth = 0;
@@ -109,8 +86,9 @@ namespace Atlas
 		Fonts::StringToGlyph(text, _glyphIndices, _font, _totalWidth, _totalHeight);
 	}
 
-	///
-	///
+	/// <summary>
+	// Adjust the alignment of text. This needs to be called whenever the container dimensions change
+	/// </summary>
 	void Text::AdjustAlignment(const unsigned int containerWidth, const unsigned int containerHeight)
 	{
 		_xAlignOffset = 0;
