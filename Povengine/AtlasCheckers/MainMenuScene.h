@@ -12,11 +12,20 @@ namespace AtlasCheckers
 	public:
 		MainMenuScene(std::string name);
 
-		void UpdateMenuSelection(bool prev);
-
+		// Overidden scene methods
+		virtual void UpdateScene(double& fps);
 		virtual void SceneLoaded();
 
+
+		// Methods for this scene
+		void UpdateMenuSelection(bool prev);
+		void MakeSelection();
+
+
 	private:
+
+		void SetSelectedLabel(Atlas::Sprite* label, bool isSelected);
+
 
 		// Maintain a pointer to some things we need
 		Atlas::Sprite* _newGameLabel;
@@ -27,6 +36,9 @@ namespace AtlasCheckers
 
 		glm::vec3 _activeColour;
 		glm::vec3 _inactiveColour;
+
+		unsigned int _sndPipId;
+		unsigned int _sndSelectId;
 
 	};
 }

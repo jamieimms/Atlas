@@ -55,6 +55,22 @@ bool Scene::AddBackgroundMusic(std::string fileName)
 	return true;
 }
 
+/// <summary>
+/// Add a new sound object to the scene
+/// </summary>
+bool Scene::AddSound(std::string fileName)
+{
+	SoundInfo* info = new SoundInfo();
+	if (!_subsystems._audio->LoadSound(fileName, info)) {
+		return false;
+	}
+
+	_loadedSounds.push_back(info);
+
+	return true;
+}
+
+
 ///
 void Scene::SetCamera(glm::vec3 pos, glm::vec3 target)
 {
@@ -62,13 +78,17 @@ void Scene::SetCamera(glm::vec3 pos, glm::vec3 target)
 	_cam.SetLookAt(target.x, target.y, target.z);
 }
 
-///
+/// <summary>
+/// Add an entity (holder) object to the scene
+/// </summary>
 void Scene::AddEntity(EntityHolder* entity)
 {
 	_entities.push_back(entity);
 }
 
-///
+/// <summary>
+/// Add a light object to the scene
+/// </summary>
 void Scene::AddLight(Light* light)
 {
 	_lights.push_back(light);
@@ -94,7 +114,7 @@ void Scene::AddText(std::string& id, std::string& text, int x, int y, FontStyleE
 void Scene::Start()
 {
 	if (_playMusic) {
-		_subsystems._audio->queueSoundForNextFrame(_bgMusicId, glm::vec3(), glm::vec3());
+		PlaySound(_bgMusicId);
 	}
 
 	_sceneClock.Start();
@@ -105,11 +125,14 @@ void Scene::Start()
 		t->AdjustAlignment(_subsystems._renderer->GetWidth(), _subsystems._renderer->GetHeight());
 	}
 
-	//Sprite* s = new Sprite(50, 50, _subsystems._shaderManager->GetShaderByName("texture"), glm::vec3(1.0f, 1.0f, 1.0f));
-	//_spriteEntities.push_back(s);
-
 	_textClock.Start();
 }
+
+void Scene::PlaySound(unsigned int soundID)
+{
+	_subsystems._audio->queueSoundForNextFrame(soundID, _zeroVec, _zeroVec);
+}
+
 
 ///
 ///
@@ -161,6 +184,11 @@ void Scene::RemoveEntity(BaseEntity* entity)
 //
 void Scene::UnloadScene()
 {
+	for (auto i : _loadedSounds) {
+		_subsystems._audio->UnloadSound(i->soundId);
+		delete i;
+	}
+
 	for (auto i : _spriteEntities)
 	{
 		delete i;
@@ -257,8 +285,7 @@ void Scene::UpdateScene(double& fps)
 	//	std::string entityInfo = "Total entities: " + std::to_string(_entities.size());
 	//	_textItems[1]->SetText(entityInfo);
 
-	//	_textClock.Reset();
-	//	_textClock.Start();
+	//	_textClock.Restart();
 	//}
 }
 
@@ -310,7 +337,26 @@ Sprite* Scene::GetSpriteById(std::string& id)
 			return i;
 		}
 	}
+
+	return nullptr;
 }
+
+
+SoundInfo* Scene::GetSoundByName(std::string& soundName)
+{
+
+	for (auto s : _loadedSounds) {
+		if (s == nullptr) {
+			continue;
+		}
+
+		if (s->soundName == soundName) {
+			return s;
+		}
+	}
+	return nullptr;
+}
+
 
 void Scene::SceneLoaded()
 {

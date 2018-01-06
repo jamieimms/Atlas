@@ -21,6 +21,11 @@ void MainMenuScene::SceneLoaded()
 	_newGameLabel = GetSpriteById(std::string("m_newresume"));
 	_loadGameLabel = GetSpriteById(std::string("m_loadgame"));
 	_exitLabel = GetSpriteById(std::string("m_exit"));
+
+	_sndPipId = GetSoundByName(std::string("pip01.wav"))->soundId;
+	_sndSelectId = GetSoundByName(std::string("porcSmall.wav"))->soundId;
+
+	SetSelectedLabel(_newGameLabel, true);
 }
 
 
@@ -40,9 +45,31 @@ void MainMenuScene::UpdateMenuSelection(bool prev)
 		break;
 	}
 
+	PlaySound(_sndPipId);
 
-	_newGameLabel->SetColour(_selectedMenu == MenuItemsEnum::NewResumeGame ? _activeColour : _inactiveColour);
-	_loadGameLabel->SetColour(_selectedMenu == MenuItemsEnum::LoadGame ? _activeColour : _inactiveColour);
-	_exitLabel->SetColour(_selectedMenu == MenuItemsEnum::Exit ? _activeColour : _inactiveColour);
+	SetSelectedLabel(_newGameLabel, _selectedMenu == MenuItemsEnum::NewResumeGame);
+	SetSelectedLabel(_loadGameLabel, _selectedMenu == MenuItemsEnum::LoadGame);
+	SetSelectedLabel(_exitLabel, _selectedMenu == MenuItemsEnum::Exit);
+}
+
+void MainMenuScene::SetSelectedLabel(Atlas::Sprite* label, bool isSelected)
+{
+	label->SetColour(isSelected ? _activeColour : _inactiveColour);
+}
+
+void MainMenuScene::MakeSelection()
+{
+	PlaySound(_sndSelectId);
+
+	if (_selectedMenu == MenuItemsEnum::Exit) {
+		exit(0);
+	}
+}
+
+void MainMenuScene::UpdateScene(double& fps)
+{
+	GetCamera().Strafe(false);
+
+	Scene::UpdateScene(fps);
 }
 

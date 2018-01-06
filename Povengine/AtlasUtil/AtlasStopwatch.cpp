@@ -35,6 +35,12 @@ void AtlasStopwatch::Reset()
 	_running = false;
 }
 
+void AtlasStopwatch::Restart()
+{
+	Reset();
+	Start();
+}
+
 double AtlasStopwatch::GetElapsedMs()
 {
 

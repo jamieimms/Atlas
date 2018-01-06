@@ -12,6 +12,7 @@ namespace AtlasUtil
 		void Start();
 		void Stop();
 		void Reset();	
+		void Restart();
 
 		double GetElapsedMs();
 		double GetElapsedSec();

@@ -41,12 +41,12 @@ bool Audio::Init()
 
 bool Audio::LoadSound(const std::string& fileName, SoundInfo* outInfo)
 {
-	auto it = availableSounds.begin();
-	while (it != availableSounds.end()) {
-		if ((*it)->soundName == fileName) {
-			outInfo->soundId = (*it)->soundId;
-			outInfo->soundLocation = (*it)->soundLocation;
-			outInfo->soundName = (*it)->soundName;
+	for (auto it : availableSounds)
+	{
+		if (it->soundName == fileName) {
+			outInfo->soundId = it->soundId;
+			outInfo->soundLocation = it->soundLocation;
+			outInfo->soundName = it->soundName;
 			return true;
 		}
 	}
@@ -88,12 +88,12 @@ bool Audio::LoadSound(const std::string& fileName, SoundInfo* outInfo)
 
 bool Audio::UnloadSound(const unsigned long soundId)
 {
-	auto it = availableSounds.begin();
-	while (it != availableSounds.end()) {
-		if ((*it)->soundId == soundId) {
-			auto sound = (*it);
-			availableSounds.erase(it);
+	for (auto it : availableSounds)
+	{
+		if (it->soundId == soundId) {
+			auto sound = it;
 			delete sound;
+			sound = nullptr;
 			return true;
 		}
 	}
@@ -102,18 +102,19 @@ bool Audio::UnloadSound(const unsigned long soundId)
 	return false;
 }
 
-bool Audio::GetLoadedSound(const unsigned long soundId, SoundInfo* outInfo) {
-
-	auto it = availableSounds.begin();
-	while (it != availableSounds.end()) {
-		if ((*it)->soundId == soundId) {
-			outInfo->soundId = (*it)->soundId;
-			outInfo->soundName = (*it)->soundName;
-			outInfo->soundLocation = (*it)->soundLocation;
+bool Audio::GetLoadedSound(const unsigned long soundId, SoundInfo* outInfo) 
+{
+	for (auto it : availableSounds)
+	{
+		if (it->soundId == soundId) {
+			outInfo->soundId = it->soundId;
+			outInfo->soundName = it->soundName;
+			outInfo->soundLocation = it->soundLocation;
 
 			return true;
 		}
 	}
+
 	return false;
 }
 

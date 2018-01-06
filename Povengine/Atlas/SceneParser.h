@@ -28,12 +28,13 @@ namespace Atlas
 		static const char* SP_EL_CAM;
 		static const char* SP_EL_UI;
 		static const char* SP_EL_LIGHTS;
-		static const char* SP_EL_SND;
+		static const char* SP_EL_SNDS;
 
 		/// Atlas scene child elements
 		static const char* SP_EL_TEXT;
 		static const char* SP_EL_SPRITE;
 		static const char* SP_EL_SHADER;
+		static const char* SP_EL_SND;
 
 		/// Atlas scene attributes
 		static const char* SP_ATTR_ID;

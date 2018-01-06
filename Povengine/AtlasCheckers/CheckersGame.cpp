@@ -52,6 +52,10 @@ void CheckersGame::SetupGame()
 void CheckersGame::InputProcessing(const Input* input)
 {
 	if (_gameState == CheckersStateEnum::MainMenu) {
+		if (_uiKeystrokeDelay.GetElapsedMs() < 100) {
+			return;
+		}
+		_uiKeystrokeDelay.Restart();
 		if (input->IsKeyPressed((int)AtlasKey::Up)) {
 			// Change menu selection
 			_menuScene->UpdateMenuSelection(true);
@@ -62,8 +66,7 @@ void CheckersGame::InputProcessing(const Input* input)
 
 		if (input->IsKeyPressed((int)AtlasKey::Enter)) {
 			// Make menu selection
-
-
+			_menuScene->MakeSelection();
 		}
 	}
 }
@@ -74,6 +77,7 @@ void CheckersGame::InputProcessing(const Input* input)
 void CheckersGame::UpdateGame()
 {
 
+
 }
 
 /// <summary>
@@ -82,6 +86,9 @@ void CheckersGame::UpdateGame()
 void CheckersGame::SetState(CheckersStateEnum newState)
 {
 	_gameState = newState;
+	if (_gameState == CheckersStateEnum::MainMenu) {
+		_uiKeystrokeDelay.Restart();
+	}
 }
 
 

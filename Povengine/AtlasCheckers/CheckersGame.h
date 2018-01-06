@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\Atlas\AtlasGame.h"
+#include "..\AtlasUtil\AtlasStopwatch.h"
 
 #include "BoardStatesEnum.h"
 #include "MainMenuScene.h"
@@ -28,8 +29,6 @@ namespace AtlasCheckers
 
 		void SetState(CheckersStateEnum newState);
 
-
-
 	private:
 		void SetupGame();
 
@@ -42,6 +41,7 @@ namespace AtlasCheckers
 		
 		MainMenuScene* _menuScene;
 
+		AtlasUtil::AtlasStopwatch _uiKeystrokeDelay;
 
 	};
 }

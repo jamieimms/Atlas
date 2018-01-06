@@ -37,6 +37,7 @@ namespace Atlas
 		void RemoveEntity(BaseEntity* entity);
 
 		bool AddBackgroundMusic(std::string fileName);
+		bool AddSound(std::string fileName);
 		void SetCamera(glm::vec3 pos, glm::vec3 target);
 		void AddEntity(EntityHolder* entity);
 		void AddLight(Light* light);
@@ -48,7 +49,10 @@ namespace Atlas
 
 	protected:
 		Sprite* GetSpriteById(std::string& id);
+		SoundInfo* GetSoundByName(std::string& soundName);
 		//EntityHolder* GetEntityById(std::string& id);
+
+		void PlaySound(unsigned int soundID);
 
 	private:
 
@@ -56,6 +60,7 @@ namespace Atlas
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
 		std::vector<Light*> _lights;
 		std::vector<Sprite*> _spriteEntities;
+		std::vector<SoundInfo*> _loadedSounds;
 
 		Camera _cam;
 

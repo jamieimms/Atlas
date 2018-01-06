@@ -33,24 +33,20 @@ AtlasManager::AtlasManager(AtlasGame* game)
 	_game = game;
 
 	_subsystems._shaderManager = new ShaderManager(_log, _mainDir);
-
 	_subsystems._input = new Input(_log);
-
+	
 	_subsystems._audio = new Audio(_log);
-
 	if (!_subsystems._audio->Init()) {
 		_log->Error("Audio manager failed to init.");
 	}
 
 	_subsystems._phys = new Physics(_log);
-
 	if (!_subsystems._phys->initialisePhysicsEngine()) {
 		// fall over in heap. No recovering from this.
 		_log->Error("Atlas init failed.");
 	}
 
 	_subsystems._texManager = new TextureManager(_log);
-
 	_subsystems._fonts = new Fonts(_log);
 
 	_lastFrame = std::chrono::high_resolution_clock::now();
@@ -274,14 +270,14 @@ void AtlasManager::inputProcessing()
 	//{
 	//	_currentScene->GetCamera().Backpedal();
 	//}
-	if (_subsystems._input->IsKeyPressed(VK_LEFT))
-	{
-		_currentScene->GetCamera().Strafe(true);
-	}
-	if (_subsystems._input->IsKeyPressed(VK_RIGHT))
-	{
-		_currentScene->GetCamera().Strafe(false);
-	}
+	//if (_subsystems._input->IsKeyPressed(VK_LEFT))
+	//{
+	//	_currentScene->GetCamera().Strafe(true);
+	//}
+	//if (_subsystems._input->IsKeyPressed(VK_RIGHT))
+	//{
+	//	_currentScene->GetCamera().Strafe(false);
+	//}
 	//if (_subsystems._input->IsKeyPressed(VK_PRIOR))
 	//{
 
@@ -294,13 +290,10 @@ void AtlasManager::inputProcessing()
 		_currentScene->GetCamera().SetLookAt(0, 0, 0);
 	}
 
-	if (_subsystems._input->IsKeyPressed(VK_F1)) {
-		//_audio->QueueSound(0);
-	}
-	if (_subsystems._input->IsToggleKeyPressed(VK_F2)) {
-	}
-	if (_subsystems._input->IsToggleKeyPressed(VK_F3)) {
-	}
+	//if (_subsystems._input->IsToggleKeyPressed(VK_F2)) {
+	//}
+	//if (_subsystems._input->IsToggleKeyPressed(VK_F3)) {
+	//}
 	
 	if (_subsystems._input->IsKeyPressed(VK_ESCAPE)) {
 		exit(0);

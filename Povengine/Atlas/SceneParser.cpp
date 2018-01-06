@@ -11,12 +11,14 @@ const char* SceneParser::SP_EL_ENTITIES = "entities";
 const char* SceneParser::SP_EL_CAM = "camera";
 const char* SceneParser::SP_EL_UI = "ui";
 const char* SceneParser::SP_EL_LIGHTS = "lights";
-const char* SceneParser::SP_EL_SND = "sound";
+const char* SceneParser::SP_EL_SNDS = "sounds";
+
 
 /// Atlas scene child elements
 const char* SceneParser::SP_EL_TEXT = "text";
 const char* SceneParser::SP_EL_SPRITE = "sprite";
 const char* SceneParser::SP_EL_SHADER = "shader";
+const char* SceneParser::SP_EL_SND = "sound";
 
 /// Atlas common scene attributes
 const char* SceneParser::SP_ATTR_ID = "id";
@@ -88,6 +90,13 @@ bool SceneParser::ParseElement(Scene* scene, XMLElement* element, Subsystems& su
 	if (strcmp(element->Name(),SP_EL_BGMUSIC) == 0) {
 		auto sound = element->FirstChildElement(SP_EL_SND);
 		scene->AddBackgroundMusic(sound->FirstAttribute()->Value());
+	}
+	else if (strcmp(element->Name(), SP_EL_SNDS) == 0) {
+		auto sound = element->FirstChildElement(SP_EL_SND);
+		while (sound != nullptr) {
+			scene->AddSound(sound->Attribute("file"));
+			sound = sound->NextSiblingElement(SP_EL_SND);
+		}
 	}
 	else if (strcmp(element->Name(), SP_EL_ENTITIES) == 0) {
 		auto child = element->FirstChildElement();
