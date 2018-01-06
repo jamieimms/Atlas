@@ -22,6 +22,8 @@ bool Scene::Initialise( Subsystems subsystems)
 	_identity = glm::mat4();
 	_zeroVec = glm::vec3(0, 0, 0);
 
+	_isLoaded = false;
+
 	return true;
 }
 
@@ -184,30 +186,30 @@ void Scene::RemoveEntity(BaseEntity* entity)
 //
 void Scene::UnloadScene()
 {
+	Stop();
+
 	for (auto i : _loadedSounds) {
 		_subsystems._audio->UnloadSound(i->soundId);
 		delete i;
 	}
+	_loadedSounds.clear();
 
 	for (auto i : _spriteEntities)
 	{
 		delete i;
 	}
-
 	_spriteEntities.clear();
 
 	for (auto i : _entities)
 	{
 		delete i;
 	}
-
 	_entities.clear();
 
 	for (auto i : _lights)
 	{
 		delete i;
 	}
-
 	_lights.clear();
 }
 
@@ -360,5 +362,6 @@ SoundInfo* Scene::GetSoundByName(std::string& soundName)
 
 void Scene::SceneLoaded()
 {
+	_isLoaded = true;
 
 }

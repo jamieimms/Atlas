@@ -18,7 +18,7 @@ using namespace AtlasUtil;
 /// Construct the manager
 /// </summary>
 AtlasManager::AtlasManager(AtlasGame* game)
-	: BaseManager(nullptr), _name("Atlas"), _applicationWindow(nullptr)
+	: BaseManager(nullptr), _name("Atlas"), _applicationWindow(nullptr), _currentScene(nullptr)
 {
 	std::stringstream fmt;
 	fmt << AtlasAPI::AtlasAPIHelper::GetUserDataPath() << AtlasAPI::AtlasAPIHelper::GetPathSeparator() << _name;
@@ -153,30 +153,61 @@ bool AtlasManager::Initialise()
 	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Big);
 	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Title);
 
-
 	AtlasAPI::AtlasAPIHelper::GetTicks();
 
 	windowSizeChanged(_applicationWindow->GetWidth(), _applicationWindow->GetHeight());
 
 	//toggleMouseLook(true);
 
-	//_currentScene = SceneParser::ParseSceneFile(IO::GetSceneDirectory() + "loading.as", _subsystems);
-	//_currentScene->Start();
-
 	_game->InitialiseGame();
-	
-	_currentScene = _game->GetInitialScene();
-	
-	_currentScene = SceneParser::ParseSceneFile(_currentScene, IO::GetSceneDirectory() + _currentScene->GetName(), _subsystems);
-	if (_currentScene == nullptr) {
-		_log->Debug("The scene failed to load.");
-		return false;
-	}
-	_currentScene->Start();
+
+	//BeginSceneChange(_game->GetInitialScene());
 
 	_initialised = true;
 
 	return true;
+}
+
+/// <summary>
+/// Begins a scene change. Will show a loading screen and allow it to render before completing the load of the next
+/// scene
+/// </summary>
+void AtlasManager::BeginSceneChange(Scene* nextScene)
+{
+	_oldScene = _currentScene;
+
+	_currentScene = new Scene("loading");
+	SceneParser::ParseSceneFile(_currentScene, IO::GetSceneDirectory() + "loading.as", _subsystems);
+	_currentScene->Start();
+
+	_nextScene = nextScene;
+}
+
+/// <summary>
+/// If a scene change has begun, finish will actually load the scene
+/// </summary>
+void AtlasManager::FinishSceneChange()
+{
+	if (_oldScene != nullptr) {
+		_oldScene->Stop();
+		_oldScene->UnloadScene();
+		delete _oldScene;
+		_oldScene = nullptr;
+	}
+
+	_subsystems._audio->StopAllSounds();
+
+	SceneParser::ParseSceneFile(_nextScene, IO::GetSceneDirectory() + _nextScene->GetName(), _subsystems);
+	Scene* temp = _currentScene;
+	
+	_currentScene = _nextScene;
+	_currentScene->Start();
+
+	_nextScene = nullptr;
+	
+	temp->Stop();
+	temp->UnloadScene();
+	delete temp;
 }
 
 /// <summary>
@@ -222,6 +253,11 @@ int AtlasManager::start()
 /// </summary>
 void AtlasManager::frameProcessing()
 {
+	auto newScene = _game->GetPendingScene();
+	if (newScene != nullptr) {
+		BeginSceneChange(newScene);
+	}
+
 	auto frameTime = std::chrono::high_resolution_clock::now();
 
 	std::chrono::duration<double> elapsedSec = frameTime - _lastFrame;
@@ -248,6 +284,10 @@ void AtlasManager::frameProcessing()
 	_subsystems._audio->ProcessAudio(_currentScene->GetCamera().GetPosition());
 
 	_lastFrame = frameTime;
+
+	if (_nextScene != nullptr) {
+		FinishSceneChange();
+	}
 }
 
 /// <summary>

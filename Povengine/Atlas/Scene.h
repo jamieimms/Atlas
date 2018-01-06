@@ -46,6 +46,7 @@ namespace Atlas
 		void AddSprite(Sprite* sprite);
 
 		std::string GetName() { return _name; }
+		bool IsLoaded() { return _isLoaded; }
 
 	protected:
 		Sprite* GetSpriteById(std::string& id);
@@ -56,6 +57,7 @@ namespace Atlas
 
 	private:
 
+		bool _isLoaded;
 		bool _initialised;
 		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
 		std::vector<Light*> _lights;

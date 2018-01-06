@@ -49,6 +49,8 @@ namespace Atlas {
 
 		void queueSoundForNextFrame(const unsigned long soundId, glm::vec3& pos, glm::vec3& vel);
 
+		void StopAllSounds();
+
 		// Play all the sounds for the frame.
 		void ProcessAudio(glm::vec3& pos);
 

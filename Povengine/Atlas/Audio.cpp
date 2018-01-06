@@ -43,6 +43,9 @@ bool Audio::LoadSound(const std::string& fileName, SoundInfo* outInfo)
 {
 	for (auto it : availableSounds)
 	{
+		if (it == nullptr) {
+			continue;
+		}
 		if (it->soundName == fileName) {
 			outInfo->soundId = it->soundId;
 			outInfo->soundLocation = it->soundLocation;
@@ -58,19 +61,6 @@ bool Audio::LoadSound(const std::string& fileName, SoundInfo* outInfo)
 		_log->Error("Out of audio buffers");
 		return false;
 	}
-
-	//long fileSize = AtlasAPI::AtlasAPIHelper::GetFileSizeBytes(fullPath);
-
-	//std::ifstream file(fullPath, std::ios::in | std::ios::binary);
-
-	//if (!file.good()) {
-	//	_log->Error("Failed to load sound file: " + fullPath);
-	//	return false;
-	//}
-	//char* buf = new char[fileSize];
-	//file.read(buf, fileSize);
-
-	//file.close();
 
 	auto si = new SoundInfo();
 	si->soundId = _nextSoundId++;
@@ -88,15 +78,17 @@ bool Audio::LoadSound(const std::string& fileName, SoundInfo* outInfo)
 
 bool Audio::UnloadSound(const unsigned long soundId)
 {
-	for (auto it : availableSounds)
-	{
-		if (it->soundId == soundId) {
-			auto sound = it;
+	auto it = availableSounds.begin();
+	while (it != availableSounds.end()) {
+		if ((*it)->soundId == soundId) {
+			auto sound = *it;
 			delete sound;
-			sound = nullptr;
+			availableSounds.erase(it);
 			return true;
 		}
+		it++;
 	}
+
 
 	// sound wasn't found
 	return false;
@@ -106,6 +98,9 @@ bool Audio::GetLoadedSound(const unsigned long soundId, SoundInfo* outInfo)
 {
 	for (auto it : availableSounds)
 	{
+		if (it == nullptr) {
+			continue;
+		}
 		if (it->soundId == soundId) {
 			outInfo->soundId = it->soundId;
 			outInfo->soundName = it->soundName;
@@ -212,6 +207,14 @@ bool Audio::initialiseFMod()
 
 	return true;
 }
+
+void Audio::StopAllSounds()
+{
+	for (int i = 0; i < _activeChannels.size(); i++) {
+		_activeChannels[i]->stop();
+	}
+}
+
 
 //bool AudioManager::loadSoundInfoList()
 //{

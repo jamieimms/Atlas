@@ -148,11 +148,13 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="CheckersGame.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardStatesEnum.h" />
     <ClInclude Include="CheckersGame.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="MenuItemsEnum.h" />
   </ItemGroup>

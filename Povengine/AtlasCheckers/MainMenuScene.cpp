@@ -21,11 +21,14 @@ void MainMenuScene::SceneLoaded()
 	_newGameLabel = GetSpriteById(std::string("m_newresume"));
 	_loadGameLabel = GetSpriteById(std::string("m_loadgame"));
 	_exitLabel = GetSpriteById(std::string("m_exit"));
+	_helpLabel = GetSpriteById(std::string("m_help"));
 
 	_sndPipId = GetSoundByName(std::string("pip01.wav"))->soundId;
 	_sndSelectId = GetSoundByName(std::string("porcSmall.wav"))->soundId;
 
 	SetSelectedLabel(_newGameLabel, true);
+
+	Scene::SceneLoaded();
 }
 
 
@@ -37,10 +40,14 @@ void MainMenuScene::UpdateMenuSelection(bool prev)
 		_selectedMenu = prev ? MenuItemsEnum::Exit : MenuItemsEnum::LoadGame;
 		break;
 	case MenuItemsEnum::LoadGame:
-		_selectedMenu = prev ? MenuItemsEnum::NewResumeGame : MenuItemsEnum::Exit;
+		_selectedMenu = prev ? MenuItemsEnum::NewResumeGame : MenuItemsEnum::Help;
+		break;
+	case MenuItemsEnum::Help:
+		_selectedMenu = prev ? MenuItemsEnum::LoadGame : MenuItemsEnum::Exit;
 		break;
 	case MenuItemsEnum::Exit:
-		_selectedMenu = prev ? MenuItemsEnum::LoadGame : MenuItemsEnum::NewResumeGame;
+		_selectedMenu = prev ? MenuItemsEnum::Help : MenuItemsEnum::NewResumeGame;
+		break;
 	default:
 		break;
 	}
@@ -49,6 +56,7 @@ void MainMenuScene::UpdateMenuSelection(bool prev)
 
 	SetSelectedLabel(_newGameLabel, _selectedMenu == MenuItemsEnum::NewResumeGame);
 	SetSelectedLabel(_loadGameLabel, _selectedMenu == MenuItemsEnum::LoadGame);
+	SetSelectedLabel(_helpLabel, _selectedMenu == MenuItemsEnum::Help);
 	SetSelectedLabel(_exitLabel, _selectedMenu == MenuItemsEnum::Exit);
 }
 
@@ -57,15 +65,19 @@ void MainMenuScene::SetSelectedLabel(Atlas::Sprite* label, bool isSelected)
 	label->SetColour(isSelected ? _activeColour : _inactiveColour);
 }
 
-void MainMenuScene::MakeSelection()
+///
+///
+///
+MenuItemsEnum MainMenuScene::MakeSelection()
 {
 	PlaySound(_sndSelectId);
 
-	if (_selectedMenu == MenuItemsEnum::Exit) {
-		exit(0);
-	}
+	return _selectedMenu;
 }
 
+///
+///
+///
 void MainMenuScene::UpdateScene(double& fps)
 {
 	GetCamera().Strafe(false);

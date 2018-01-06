@@ -5,6 +5,7 @@ namespace AtlasCheckers
 	{
 		NewResumeGame,
 		LoadGame,
+		Help,
 		Exit
 	};
 }

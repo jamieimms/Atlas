@@ -26,10 +26,14 @@ namespace Atlas
 
 		Input* GetInput() { return _subsystems._input; }
 
+		void BeginSceneChange(Scene* nextScene);
+
+
 	private:
 
 		void inputProcessing();
 		void frameProcessing();
+		void FinishSceneChange();
 
 		void toggleMouseLook(bool enable);
 
@@ -44,7 +48,9 @@ namespace Atlas
 		double _frameDelta;
 		double _fps;
 
+		Scene* _oldScene;
 		Scene* _currentScene;
+		Scene* _nextScene;
 
 		AtlasGame* _game;
 

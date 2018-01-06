@@ -14,7 +14,7 @@ namespace Atlas
 
 		virtual bool InitialiseGame() = 0;
 
-		virtual Scene* GetInitialScene() = 0;
+		virtual Scene* GetPendingScene() = 0;
 
 		virtual void InputProcessing(const Input* input) = 0;
 

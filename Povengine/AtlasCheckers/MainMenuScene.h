@@ -16,20 +16,18 @@ namespace AtlasCheckers
 		virtual void UpdateScene(double& fps);
 		virtual void SceneLoaded();
 
-
 		// Methods for this scene
 		void UpdateMenuSelection(bool prev);
-		void MakeSelection();
-
+		MenuItemsEnum MakeSelection();
 
 	private:
 
 		void SetSelectedLabel(Atlas::Sprite* label, bool isSelected);
 
-
 		// Maintain a pointer to some things we need
 		Atlas::Sprite* _newGameLabel;
 		Atlas::Sprite* _loadGameLabel;
+		Atlas::Sprite* _helpLabel;
 		Atlas::Sprite* _exitLabel;
 
 		MenuItemsEnum _selectedMenu;
