@@ -43,6 +43,12 @@ void Transformable::SetPosition(float x, float y, float z)
 	_requiresUpdate = true;
 }
 
+void Transformable::SetPosition(glm::vec3 pos)
+{
+	_pos = pos;
+	_requiresUpdate = true;
+}
+
 
 void Transformable::SetRotation(float x, float y, float z)
 {

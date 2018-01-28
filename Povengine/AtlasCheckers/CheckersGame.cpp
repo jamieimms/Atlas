@@ -56,14 +56,20 @@ void CheckersGame::NewGame()
 	gameBoard[2][0] = BoardStatesEnum::White; gameBoard[2][1] = BoardStatesEnum::Empty; gameBoard[2][2] = BoardStatesEnum::White; gameBoard[2][3] = BoardStatesEnum::Empty; gameBoard[2][4] = BoardStatesEnum::White; gameBoard[2][5] = BoardStatesEnum::Empty; gameBoard[2][6] = BoardStatesEnum::White; gameBoard[2][7] = BoardStatesEnum::Empty;
 	gameBoard[1][0] = BoardStatesEnum::Empty; gameBoard[1][1] = BoardStatesEnum::White; gameBoard[1][2] = BoardStatesEnum::Empty; gameBoard[1][3] = BoardStatesEnum::White; gameBoard[1][4] = BoardStatesEnum::Empty; gameBoard[1][5] = BoardStatesEnum::White; gameBoard[1][6] = BoardStatesEnum::Empty; gameBoard[1][7] = BoardStatesEnum::White;
 	gameBoard[0][0] = BoardStatesEnum::White; gameBoard[0][1] = BoardStatesEnum::Empty; gameBoard[0][2] = BoardStatesEnum::White; gameBoard[0][3] = BoardStatesEnum::Empty; gameBoard[0][4] = BoardStatesEnum::White; gameBoard[0][5] = BoardStatesEnum::Empty; gameBoard[0][6] = BoardStatesEnum::White; gameBoard[0][7] = BoardStatesEnum::Empty;
-
+	
 	_turnsCount = 0;
-	_playerTurn = BoardStatesEnum::White;
 
-	_selectedSquareX = 0;
-	_selectedSquareY = 0;
+	_whiteSelectedSquareX = 0;
+	_whiteSelectedSquareY = 0;
+
+	_redSelectedSquareX = 7;
+	_redSelectedSquareY = 7;
 
 	SetState(CheckersStateEnum::Playing);
+	_playerTurn = BoardStatesEnum::White;
+	_gameScene->ChangeTurn(true, _redSelectedSquareX, _redSelectedSquareY, _whiteSelectedSquareX, _whiteSelectedSquareY);
+
+	_gameClock.Restart();
 }
 
 /// <summary>
@@ -75,7 +81,8 @@ void CheckersGame::InputProcessing(const Input* input)
 		if (_uiKeystrokeDelay.GetElapsedMs() < 120) {
 			return;
 		}
-		_uiKeystrokeDelay.Restart();
+		_uiKeystrokeDelay.Stop();
+
 		if (input->IsKeyPressed((int)AtlasKey::Up)) {
 			// Change menu selection
 			_menuScene->UpdateMenuSelection(true);
@@ -99,17 +106,32 @@ void CheckersGame::InputProcessing(const Input* input)
 	else if (_gameState == CheckersStateEnum::Playing && _gameScene != nullptr) {
 		if (input->IsKeyPressed((int)AtlasKey::Up)) {
 			// cursor position up
+			_gameScene->GetCamera().MoveForward();
 		}
 		if (input->IsKeyPressed((int)AtlasKey::Down)) {
 			// Cursor position down
+			_gameScene->GetCamera().Backpedal();
 		}
 		if (input->IsKeyPressed((int)AtlasKey::Left)) {
 			// cursor position left
+			_gameScene->GetCamera().Strafe(true);
 		}
 		if (input->IsKeyPressed((int)AtlasKey::Right)) {
 			// cursor position right
+			_gameScene->GetCamera().Strafe(false);
+		}
+		if (input->IsKeyPressed((int)AtlasKey::Enter)) {
+			EndTurn();
 		}
 	}
+
+	_uiKeystrokeDelay.Restart();
+}
+
+void CheckersGame::EndTurn()
+{
+	_playerTurn = _playerTurn == BoardStatesEnum::White ? BoardStatesEnum::Red : BoardStatesEnum::White;
+	_gameScene->ChangeTurn(_playerTurn == BoardStatesEnum::White, _redSelectedSquareX, _redSelectedSquareY, _whiteSelectedSquareX, _whiteSelectedSquareY);
 }
 
 /// <summary>
@@ -117,7 +139,7 @@ void CheckersGame::InputProcessing(const Input* input)
 /// </summary>
 void CheckersGame::UpdateGame()
 {
-
+	
 
 }
 

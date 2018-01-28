@@ -29,8 +29,8 @@ namespace Atlas
 
 		_data[0] = width;
 		_data[1] = height;
-		_data[9] = height;
-		_data[24] = width;
+		_data[6] = height;
+		_data[15] = width;
 
 		ReloadData();
 	}

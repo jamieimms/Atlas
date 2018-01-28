@@ -34,13 +34,17 @@ namespace AtlasCheckers
 	private:
 		void SetupGame();
 		void NewGame();
+		void EndTurn();
+
 
 		int gameBoard[8][8];
 		int _turnsCount;
 		BoardStatesEnum _playerTurn;
 
-		int _selectedSquareX;
-		int _selectedSquareY;
+		int _whiteSelectedSquareX;
+		int _whiteSelectedSquareY;
+		int _redSelectedSquareX;
+		int _redSelectedSquareY;
 
 		CheckersStateEnum _gameState;
 		
@@ -50,8 +54,9 @@ namespace AtlasCheckers
 		Atlas::Scene* _pendingScene;
 
 		AtlasUtil::AtlasStopwatch _uiKeystrokeDelay;
+		AtlasUtil::AtlasStopwatch _gameClock;
 
-
+		AtlasUtil::AtlasStopwatch _gameTick;
 
 	};
 }

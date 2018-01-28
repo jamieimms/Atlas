@@ -16,7 +16,7 @@ namespace Atlas
 	{
 		_entityType = EntityTypeEnum::ET_Sprite;
 
-		Initialise(DataFormatEnum::DataColourTex);
+		Initialise(DataFormatEnum::DataTex);
 
 		_material.diffuseColour = glm::vec3(colour.r, colour.g, colour.b);
 	}
@@ -40,10 +40,10 @@ namespace Atlas
 		_numVertices = 4;
 		// An array of 3 vectors which represents 3 vertices
 		_data = new float[_numVertices * _dataFormat]{
-			_width, _height, 0,	1.0f, 0.0f, 0.0f,		1.0f, 1.0f,
-			0, _height, 0,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f,
-			0, 0, 0,			0.0f, 0.0f, 1.0f,		0.0f, 0.0f,
-			_width, 0, 0,		1.0f, 1.0f, 1.0f,		1.0f, 0.0f,
+			_width, _height, 0,		1.0f, 1.0f,
+			0, _height, 0,			0.0f, 1.0f,
+			0, 0, 0,				0.0f, 0.0f,
+			_width, 0, 0,			1.0f, 0.0f,
 		};
 	}
 

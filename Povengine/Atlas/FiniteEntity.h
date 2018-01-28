@@ -1,11 +1,11 @@
 #pragma once
 #include <chrono>
-#include "EntityHolder.h"
+#include "EntityInstance.h"
 #include "..\AtlasUtil\AtlasStopwatch.h"
 
 namespace Atlas
 {
-	class FiniteEntity : public EntityHolder
+	class FiniteEntity : public EntityInstance
 	{
 	public:
 		FiniteEntity(unsigned int lifeSeconds);

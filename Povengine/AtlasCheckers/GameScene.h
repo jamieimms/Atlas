@@ -16,9 +16,14 @@ namespace AtlasCheckers
 		virtual void UpdateScene(double& fps);
 		virtual void SceneLoaded();
 
+		void ChangeTurn(bool isWhite, int redX, int redY, int whiteX, int whiteY);
+
 	private:
 
+		Atlas::Text* _turnLabel;
 
+		Atlas::EntityInstance* _redSelect;
+		Atlas::EntityInstance* _whiteSelect;
 
 	};
 }

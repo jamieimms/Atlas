@@ -4,14 +4,15 @@
 using namespace Atlas;
 
 ///
-Plane::Plane(float size, float x, float y, float z, Shader* shader)
+Plane::Plane(float size, float x, float y, float z, Shader* shader, unsigned int texRepeat)
 	:PhysicsEntity(x, y, z, shader)
 {
 	_entityType = EntityTypeEnum::ET_Plane;
 
 	_size = size;
 
-	Initialise(DataFormatEnum::DataColourTexNorm);
+	_texRepeat = texRepeat;
+	Initialise(DataFormatEnum::DataTexNorm);
 }
 
 /// <summary>
@@ -29,10 +30,10 @@ void Plane::InitData()
 	_numVertices = 4;
 	// An array of 3 vectors which represents 3 vertices
 	_data = new float[_numVertices * _dataFormat] {
-		-_size, 0, -_size,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f,
-		_size, 0, -_size,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
-		_size, 0, _size,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-		-_size, 0, _size,		1.0f, 1.0f, 1.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+		-_size, 0, -_size,		_texRepeat * 1.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+		_size, 0, -_size,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+		_size, 0, _size,		0.0f, _texRepeat * 1.0f,		0.0f, 1.0f, 0.0f,
+		-_size, 0, _size,		_texRepeat * 1.0f, _texRepeat * 1.0f,		0.0f, 1.0f, 0.0f,
 	};
 
 	_material.ambientColour = glm::vec3(0x00, 0x15, 0x58);

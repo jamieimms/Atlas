@@ -1,21 +1,35 @@
-#include "EntityFactory.h"
+#include "Geometry.h"
 
 using namespace Atlas;
 
-EntityCreateInfo::EntityCreateInfo()
+Mesh* Geometry::GetMesh(std::string& id)
 {
-	texCount = 0;
-	for (int i = 0; i < 6; i++) {
-		textureID[i] = 0;
+	for (auto it : _loadedMeshes) {
+		if (it->GetID() == id) {
+			return it;
+		}
 	}
+
+	return nullptr;
+}
+
+void Geometry::AddMesh(Mesh* mesh)
+{
+	for (auto it : _loadedMeshes) {
+		if (it == mesh) {
+			return;
+		}
+	}
+
+	_loadedMeshes.push_back(mesh);
 }
 
 /// <summary>
 /// Receives entity creation info and returns an entity based on that info
 /// </summary>
 /// <param name="character">character to retrieve the glyph index for</param>
-EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys, EntityHolder* holder)
-{
+EntityInstance* Geometry::CreateEntity(EntityCreateInfo& info, Physics* phys)
+{	
 	BaseEntity* newEntity = nullptr;
 	switch (info.type)
 	{
@@ -34,7 +48,7 @@ EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys,
 		break;
 	case EntityTypeEnum::ET_Plane:
 	{
-		auto p = new Plane(info.uniformScale, info.pos.x, info.pos.y, info.pos.z, info.shader);
+		auto p = new Plane(info.uniformScale, info.pos.x, info.pos.y, info.pos.z, info.shader, info.texRepeat);
 		p->SetPhysicsProperties(phys, true, 0.0f, info.uniformScale, 0.1f, info.uniformScale);
 		newEntity = p;
 		break;
@@ -52,12 +66,12 @@ EntityHolder* EntityFactory::CreateEntity(EntityCreateInfo& info, Physics* phys,
 
 	dynamic_cast<BaseEntity*>(newEntity)->SetTexture(info.textureID[0]);
 
-	if (holder != nullptr) {
-		return holder->Initialise(newEntity) ? holder : nullptr;
-	}
-	else {
-		EntityHolder* newHolder = new EntityHolder();
-		newHolder->Initialise(newEntity);
-		return newHolder;
-	}
+	_loadedEntities.push_back(newEntity);
+
+	EntityInstance* inst = new EntityInstance();
+	inst->Initialise(info.id, newEntity);
+	inst->SetPosition(info.pos);
+	inst->SetUniformScale(info.uniformScale);
+
+	return inst;
 }

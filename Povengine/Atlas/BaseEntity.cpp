@@ -28,6 +28,8 @@ BaseEntity::BaseEntity(float x, float y, float z, Shader* shader)
 
 void BaseEntity::Reset()
 {
+	_texRepeat = 1;
+
 	if (_initialised) {
 		glDeleteBuffers(1, &_ibaID);
 		glDeleteBuffers(1, &_vbID);
@@ -63,8 +65,6 @@ void BaseEntity::Initialise(DataFormatEnum dataFormat)
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * _numIndices, _indices, GL_STATIC_DRAW);
 	}
 
-	SetVisibility(true);
-
 	_initialised = true;
 }
 
@@ -74,6 +74,11 @@ void BaseEntity::ReloadData()
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (_numVertices * ((int)_dataFormat)), _data, GL_STATIC_DRAW);
+}
+
+void BaseEntity::SetTexture(unsigned int texID)
+{
+	_texID = texID;
 }
 
 BaseEntity::~BaseEntity()
@@ -102,7 +107,7 @@ void BaseEntity::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, 
 	);
 	glEnableVertexAttribArray(0);
 
-	if (_dataFormat == DataFormatEnum::DataColour || _dataFormat == DataFormatEnum::DataColourTex) {
+	if (_dataFormat == DataFormatEnum::DataColour) {
 		// Colour
 		glVertexAttribPointer(
 			1,
@@ -117,14 +122,14 @@ void BaseEntity::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, 
 
 	glUseProgram(_shader->glProgramID);
 
-	if (_dataFormat == DataFormatEnum::DataColourTex || _dataFormat == DataFormatEnum::DataColourTexNorm) {
+	if (_dataFormat == DataFormatEnum::DataTex || _dataFormat == DataFormatEnum::DataTexNorm) {
 		glVertexAttribPointer(
 			2,
 			2,
 			GL_FLOAT,
 			GL_FALSE,
 			format * sizeof(float),
-			(void*)(6 * sizeof(float))
+			(void*)(3 * sizeof(float))
 		);
 		glEnableVertexAttribArray(2);
 
@@ -133,14 +138,14 @@ void BaseEntity::Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, 
 		glUniform1i(_shader->texLoc, 0);
 	}
 
-	if (_dataFormat == DataFormatEnum::DataColourTexNorm) {
+	if (_dataFormat == DataFormatEnum::DataTexNorm) {
 		glVertexAttribPointer(
 			3,
 			3,
 			GL_FLOAT,
 			GL_FALSE,
 			format * sizeof(float),
-			(void*)(8 * sizeof(float)));
+			(void*)(5 * sizeof(float)));
 		glEnableVertexAttribArray(3);
 
 		glActiveTexture(GL_TEXTURE0);
@@ -202,4 +207,13 @@ void BaseEntity::SetIndex(int &indexPos, unsigned short a, unsigned short b, uns
 	_indices[indexPos++] = a;
 	_indices[indexPos++] = b;
 	_indices[indexPos++] = c;
+}
+
+
+void BaseEntity::SetMaterial(Material& mat)
+{
+	_material.diffuseColour = mat.diffuseColour;
+	_material.ambientColour = mat.ambientColour;
+	_material.specularColour = mat.specularColour;
+	_material.shininess = mat.shininess;
 }

@@ -7,6 +7,7 @@
 #include "Physics.h"
 #include "TextureManager.h"
 #include "Fonts.h"
+#include "Geometry.h"
 
 namespace Atlas
 {
@@ -24,5 +25,6 @@ namespace Atlas
 		Physics* _phys;	// Handles physics calculations
 		TextureManager* _texManager; // Handles textures
 		Fonts* _fonts; // Handles fonts
+		Geometry* _geometry;
 	};
 }

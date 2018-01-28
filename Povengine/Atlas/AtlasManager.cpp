@@ -48,6 +48,7 @@ AtlasManager::AtlasManager(AtlasGame* game)
 
 	_subsystems._texManager = new TextureManager(_log);
 	_subsystems._fonts = new Fonts(_log);
+	_subsystems._geometry = new Geometry();
 
 	_lastFrame = std::chrono::high_resolution_clock::now();
 
@@ -62,6 +63,7 @@ AtlasManager::~AtlasManager()
 	_log->Debug("Atlas Engine Stopping");
 
 	delete _currentScene;
+	delete _subsystems._geometry;
 	delete _subsystems._fonts;
 	delete _subsystems._texManager;
 	delete _subsystems._phys;
@@ -160,8 +162,6 @@ bool AtlasManager::Initialise()
 	//toggleMouseLook(true);
 
 	_game->InitialiseGame();
-
-	//BeginSceneChange(_game->GetInitialScene());
 
 	_initialised = true;
 

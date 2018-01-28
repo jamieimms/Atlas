@@ -45,6 +45,7 @@ namespace Atlas
 		static const char* SP_ATTR_X;
 		static const char* SP_ATTR_Y;
 		static const char* SP_ATTR_Z;
+		static const char* SP_ATTR_RPT;
 
 		// 2D Sprite (including text) attributes
 		static const char* SP_ATTR_CONTENT;

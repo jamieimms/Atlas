@@ -13,7 +13,7 @@ Cube::Cube(float size, glm::vec3 pos, Shader* shader)
 
 	_size = size;
 
-	Initialise(DataFormatEnum::DataColourTexNorm);
+	Initialise(DataFormatEnum::DataTexNorm);
 }
 
 Cube::~Cube() {}
@@ -46,36 +46,36 @@ void Cube::InitData()
 	_numVertices = 24;
 	_data = new float[_numVertices * _dataFormat]{
 
-		// X, Y, Z				 R, G, B			Tex U, V		Normal X, Y, Z
-		-_size, -_size, -_size, 1.0f, 0.0f, 0.0f,	0.0f, 0.0f,		0.0f, 0.0f, -1.0f, 	// 0
-		_size, -_size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 0.0f,		0.0f, 0.0f, -1.0f,	// 1
-		_size,  _size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 1.0f,		0.0f, 0.0f, -1.0f,	// 2
-		-_size,  _size, -_size, 1.0f, 0.0f, 0.0f,	0.0f, 1.0f,		0.0f, 0.0f, -1.0f,	// 3
+		// X, Y, Z					Tex U, V		Normal X, Y, Z
+		-_size, -_size, -_size,		0.0f, 0.0f,		0.0f, 0.0f, -1.0f, 	// 0
+		_size, -_size, -_size,  	1.0f, 0.0f,		0.0f, 0.0f, -1.0f,	// 1
+		_size,  _size, -_size,  	1.0f, 1.0f,		0.0f, 0.0f, -1.0f,	// 2
+		-_size,  _size, -_size, 	0.0f, 1.0f,		0.0f, 0.0f, -1.0f,	// 3
 
-		-_size, -_size,  _size,  0.0f, 1.0f, 0.0f,	0.0f, 0.0f,		0.0f, 0.0f, 1.0f,	// 4
-		_size, -_size,  _size,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f,		0.0f, 0.0f, 1.0f,	// 5
-		_size,  _size,  _size,   0.0f, 1.0f, 0.0f,	1.0f, 1.0f,		0.0f, 0.0f, 1.0f,	// 6
-		-_size,  _size,  _size,  0.0f, 1.0f, 0.0f,	0.0f, 1.0f,		0.0f, 0.0f, 1.0f,	// 7
+		-_size, -_size,  _size,  	0.0f, 0.0f,		0.0f, 0.0f, 1.0f,	// 4
+		_size, -_size,  _size,		1.0f, 0.0f,		0.0f, 0.0f, 1.0f,	// 5
+		_size,  _size,  _size,   	1.0f, 1.0f,		0.0f, 0.0f, 1.0f,	// 6
+		-_size,  _size,  _size,  	0.0f, 1.0f,		0.0f, 0.0f, 1.0f,	// 7
 
-		-_size,  _size,  _size, 0.0f, 1.0f, 0.0f,	0.0f, 0.0f,		-1.0f, 0.0f, 0.0f,	// 7 - 8
-		-_size,  _size, -_size, 1.0f, 0.0f, 0.0f,	1.0f, 0.0f,		-1.0f, 0.0f, 0.0f,	// 3 - 9
-		-_size, -_size, -_size, 1.0f, 0.0f, 0.0f,	1.0f, 1.0f,		-1.0f, 0.0f, 0.0f,	// 0 - 10
-		-_size, -_size, _size, 1.0f, 0.0f, 0.0f,	0.0f, 1.0f,		-1.0f, 0.0f, 0.0f,	// 4 - 11
+		-_size,  _size,  _size, 	0.0f, 0.0f,		-1.0f, 0.0f, 0.0f,	// 7 - 8
+		-_size,  _size, -_size, 	1.0f, 0.0f,		-1.0f, 0.0f, 0.0f,	// 3 - 9
+		-_size, -_size, -_size, 	1.0f, 1.0f,		-1.0f, 0.0f, 0.0f,	// 0 - 10
+		-_size, -_size, _size,		0.0f, 1.0f,		-1.0f, 0.0f, 0.0f,	// 4 - 11
 
-		_size,  _size,  _size,  0.0f, 1.0f, 0.0f,	0.0f, 0.0f,		1.0f, 0.0f, 0.0f,	// 6 - 12
-		_size,  _size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 0.0f,		1.0f, 0.0f, 0.0f,	// 2 - 13
-		_size, -_size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 1.0f,		1.0f, 0.0f, 0.0f,	// 1 - 14
-		_size, -_size,  _size,  0.0f, 1.0f, 0.0f,   0.0f, 1.0f,		1.0f, 0.0f, 0.0f,	// 5 - 15
+		_size,  _size,  _size,		0.0f, 0.0f,		1.0f, 0.0f, 0.0f,	// 6 - 12
+		_size,  _size, -_size,  	1.0f, 0.0f,		1.0f, 0.0f, 0.0f,	// 2 - 13
+		_size, -_size, -_size,  	1.0f, 1.0f,		1.0f, 0.0f, 0.0f,	// 1 - 14
+		_size, -_size,  _size,		0.0f, 1.0f,		1.0f, 0.0f, 0.0f,	// 5 - 15
 
-		-_size, -_size, -_size, 1.0f, 0.0f, 0.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f, 	// 0
-		_size, -_size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 0.0f,		0.0f, -1.0f, 0.0f,	// 1
-		_size, -_size,  _size,  0.0f, 1.0f, 0.0f,   1.0f, 1.0f,	    0.0f, -1.0f, 0.0f,	// 5 - 18
-		-_size, -_size, _size, 1.0f, 0.0f, 0.0f,	0.0f, 1.0f,		0.0f, -1.0f, 0.0f,	// 4 - 19
+		-_size, -_size, -_size,		0.0f, 0.0f,		0.0f, -1.0f, 0.0f, 	// 0
+		_size, -_size, -_size,  	1.0f, 0.0f,		0.0f, -1.0f, 0.0f,	// 1
+		_size, -_size,  _size,		1.0f, 1.0f,	    0.0f, -1.0f, 0.0f,	// 5 - 18
+		-_size, -_size, _size,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,	// 4 - 19
 
-		-_size,  _size, -_size,   1.0f, 0.0f, 0.0f,	0.0f, 0.0f,		0.0f, 1.0f, 0.0f,	// 3 - 20
-		_size,  _size, -_size,  1.0f, 0.0f, 0.0f,	1.0f, 0.0f,		0.0f, 1.0f, 0.0f,	// 2 - 21
-		_size,  _size,  _size,   0.0f, 1.0f, 0.0f,	1.0f, 1.0f,		0.0f, 1.0f, 0.0f,	// 6
-		-_size,  _size,  _size,  0.0f, 1.0f, 0.0f,	0.0f, 1.0f,		0.0f, 1.0f, 0.0f,	// 7
+		-_size,  _size, -_size,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,	// 3 - 20
+		_size,  _size, -_size,  	1.0f, 0.0f,		0.0f, 1.0f, 0.0f,	// 2 - 21
+		_size,  _size,  _size,   	1.0f, 1.0f,		0.0f, 1.0f, 0.0f,	// 6
+		-_size,  _size,  _size,  	0.0f, 1.0f,		0.0f, 1.0f, 0.0f,	// 7
 	};
 
 	std::default_random_engine rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());

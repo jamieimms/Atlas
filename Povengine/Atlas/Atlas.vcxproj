@@ -151,9 +151,10 @@
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DataFormatEnum.h" />
-    <ClInclude Include="Entities.h" />
-    <ClInclude Include="EntityFactory.h" />
-    <ClInclude Include="EntityHolder.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="EntityTypes.h" />
+    <ClInclude Include="EntityCreateInfo.h" />
+    <ClInclude Include="EntityInstance.h" />
     <ClInclude Include="EntityTypeEnum.h" />
     <ClInclude Include="FiniteEntity.h" />
     <ClInclude Include="Font.h" />
@@ -195,8 +196,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="EntityFactory.cpp" />
-    <ClCompile Include="EntityHolder.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="EntityCreateInfo.cpp" />
+    <ClCompile Include="EntityInstance.cpp" />
     <ClCompile Include="FiniteEntity.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Fonts.cpp" />

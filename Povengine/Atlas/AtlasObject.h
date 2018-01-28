@@ -11,8 +11,6 @@ namespace Atlas
 		void SetID(std::string& id) { _id = id; }
 
 	protected:
-
-
 		std::string _id;
 	};
 }

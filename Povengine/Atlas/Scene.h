@@ -9,9 +9,10 @@
 #include "Camera.h"
 #include "glm.hpp"
 #include "EntityTypeEnum.h"
-#include "EntityFactory.h"
 #include "Text.h"
 #include "Subsystems.h"
+#include "EntityInstance.h"
+#include "EntityCreateInfo.h"
 
 namespace Atlas
 {
@@ -39,7 +40,7 @@ namespace Atlas
 		bool AddBackgroundMusic(std::string fileName);
 		bool AddSound(std::string fileName);
 		void SetCamera(glm::vec3 pos, glm::vec3 target);
-		void AddEntity(EntityHolder* entity);
+		void AddEntity(EntityInstance* entity);
 		void AddLight(Light* light);
 		void AddMesh(std::string& meshName, EntityCreateInfo& info);
 		void AddText(std::string& id, std::string& text, int x, int y , FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment);
@@ -51,20 +52,25 @@ namespace Atlas
 	protected:
 		Sprite* GetSpriteById(std::string& id);
 		SoundInfo* GetSoundByName(std::string& soundName);
-		//EntityHolder* GetEntityById(std::string& id);
+		EntityInstance* GetEntityById(std::string& id);
+
+		double GetRuntimeMs() { return _sceneClock.GetElapsedMs(); }
+		double GetRuntimeSec() { return _sceneClock.GetElapsedSec(); }
 
 		void PlaySound(unsigned int soundID);
 
-	private:
-
 		bool _isLoaded;
-		bool _initialised;
-		std::vector<EntityHolder*> _entities;	// Entities contained within holders (things that need to be updated regularly but are not rendered, game objects etc.)
-		std::vector<Light*> _lights;
-		std::vector<Sprite*> _spriteEntities;
-		std::vector<SoundInfo*> _loadedSounds;
 
 		Camera _cam;
+	private:
+
+		bool _initialised;
+
+		std::vector<Sprite*> _spriteEntities;
+		std::vector<EntityInstance*> _entities; // Entities contained within instances (things that need to be updated regularly but are not rendered, game objects etc.)
+		std::vector<Light*> _lights;
+		std::vector<SoundInfo*> _loadedSounds;
+
 
 		Subsystems _subsystems;
 

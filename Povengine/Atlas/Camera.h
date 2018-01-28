@@ -1,8 +1,12 @@
 #pragma once
+#include <chrono>
 #include "Transformable.h"
 
 namespace Atlas
 {
+	const float CAM_MIN_SPEED = 0.01f;
+	const float CAM_MOVE_FACTOR = 1.0f;
+	const float DECEL_TIME_SEC = 0.05f;
 	class Camera
 	{
 	public:
@@ -24,6 +28,7 @@ namespace Atlas
 	private:
 
 		void Update();
+		void AdjustSpeed();
 
 		glm::vec3 _camPos;
 		glm::vec3 _camTarget;
@@ -38,8 +43,24 @@ namespace Atlas
 		float _yaw;
 		float _pitch;
 
-		bool _needsUpdate;
 		bool _freeLook;
-		float _speed;
+
+		bool _needsUpdate;
+		float _topSpeed;
+		float _currentStrafeSpeed;
+		float _currentForwardSpeed;
+		float _acceleration;	// Acceleration per second
+
+		bool _strafeLeft;
+		bool _strafeRight;
+		bool _forward;
+		bool _backpedal;
+
+		std::chrono::time_point<std::chrono::high_resolution_clock> _lastUpdate;
+		std::chrono::time_point<std::chrono::high_resolution_clock> _lastStrafe;
+		std::chrono::time_point<std::chrono::high_resolution_clock> _lastForward;
+
+
+
 	};
 }

@@ -29,6 +29,7 @@ const char* SceneParser::SP_ATTR_VAL = "value";
 const char* SceneParser::SP_ATTR_X = "x";
 const char* SceneParser::SP_ATTR_Y = "y";
 const char* SceneParser::SP_ATTR_Z = "z";
+const char* SceneParser::SP_ATTR_RPT = "repeat";
 
 // Sprite attributes
 const char* SceneParser::SP_ATTR_STYLE = "style";
@@ -36,7 +37,6 @@ const char* SceneParser::SP_ATTR_HALIGN = "horizontalalignment";
 const char* SceneParser::SP_ATTR_VALIGN = "verticalalignment";
 const char* SceneParser::SP_ATTR_WIDTH = "width";
 const char* SceneParser::SP_ATTR_HEIGHT = "height";
-
 
 //
 //
@@ -193,6 +193,11 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, Subsystems& sub
 		entityInfo.colour = glm::vec3(child->FloatAttribute("r"), child->FloatAttribute("g"), child->FloatAttribute("b"));
 	}
 
+	const char* id = element->Attribute(SP_ATTR_ID);
+	if (id != nullptr) {
+		entityInfo.id = id;
+	}
+
 	// Textures
 	child = element->FirstChildElement("texture");
 	if (child == nullptr) {
@@ -202,9 +207,11 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, Subsystems& sub
 		std::string texDir = IO::GetTextureDirectory();
 		auto tex = subsystems._texManager->LoadTexture(texDir + child->Attribute(SP_ATTR_NAME));
 		entityInfo.textureID[entityInfo.texCount++] = tex;
+
+		entityInfo.texRepeat = child->IntAttribute(SP_ATTR_RPT, 1);
 	}
 
-	// Get the type
+	// Get the type and perform any type-specific parsing
 	if (strcmp(element->Name(), "origin") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Origin;
 	}
@@ -237,7 +244,9 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, Subsystems& sub
 		entityInfo.shader = subsystems._shaderManager->GetShaderByName("texture");
 		entityInfo.uniformScale = 55;
 		entityInfo.pos = glm::vec3(0, 0, 0);
-		scene->AddEntity(EntityFactory::CreateEntity(entityInfo, subsystems._phys));
+		entityInfo.texRepeat = 1;
+		entityInfo.id = name;
+		scene->AddEntity(subsystems._geometry->CreateEntity(entityInfo, subsystems._phys));
 		return true;
 	}
 	else if (strcmp(element->Name(), "cube") == 0) {
@@ -255,7 +264,7 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, Subsystems& sub
 		return false;
 	}
 
-	scene->AddEntity(EntityFactory::CreateEntity(entityInfo, subsystems._phys));
+	scene->AddEntity(subsystems._geometry->CreateEntity(entityInfo, subsystems._phys));
 
 	return true;
 }

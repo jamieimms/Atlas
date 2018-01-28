@@ -17,7 +17,6 @@ namespace Atlas
 		BaseEntity(float x, float y, float z, Shader* shader);
 		virtual ~BaseEntity();
 
-
 		virtual void Update();
 		virtual void Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights);
 		
@@ -30,7 +29,9 @@ namespace Atlas
 		EntityTypeEnum GetType() { return _entityType; }
 
 		// Setters
-		void SetTexture(unsigned int texID) { _texID = texID; }
+		void SetTexture(unsigned int texID);
+
+		void SetMaterial(Material& mat);
 
 	protected:
 		virtual void Initialise(DataFormatEnum dataFormat);
@@ -47,6 +48,7 @@ namespace Atlas
 		
 		EntityTypeEnum _entityType;
 		DataFormatEnum _dataFormat;
+		unsigned int _texRepeat;
 		
 		int _mode;
 

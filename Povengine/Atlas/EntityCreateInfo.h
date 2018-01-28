@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "glm.hpp"
-#include "Entities.h"
+#include "EntityTypes.h"
 #include "EntityTypeEnum.h"
 #include "Shader.h"
 
@@ -23,13 +23,9 @@ namespace Atlas
 
 		unsigned int texCount;
 		unsigned int textureID[6];
+		unsigned int texRepeat;
+		std::string id;
 
-	};
 
-	class EntityFactory
-	{
-	public:
-
-		static EntityHolder* CreateEntity(EntityCreateInfo& info, Physics* phys, EntityHolder* holder = nullptr);
 	};
 }

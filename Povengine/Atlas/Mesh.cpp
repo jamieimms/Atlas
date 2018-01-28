@@ -6,11 +6,13 @@
 using namespace Atlas;
 
 ///
-Mesh::Mesh(std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* normals, std::vector<unsigned short>* vertexIndices, std::vector<unsigned short>* normalIndices, glm::vec3 pos, glm::vec3 colour, Shader* shader)
+Mesh::Mesh(std::string& meshName, std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* normals, std::vector<unsigned short>* vertexIndices, std::vector<unsigned short>* normalIndices, glm::vec3 colour, Shader* shader)
 	:BaseEntity(0, 3, 0, shader)
 	//:PhysicsEntity(pos, shader)
 {
 	_entityType = EntityTypeEnum::ET_Mesh;
+
+	_id = meshName;
 
 	_size = 1;
 
@@ -18,7 +20,7 @@ Mesh::Mesh(std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* normals, st
 
 	_numVertices = _numIndices;
 	
-	_dataFormat = DataFormatEnum::DataColourTexNorm;
+	_dataFormat = DataFormatEnum::DataTexNorm;
 
 	_data = new float[_numIndices * _dataFormat];
 
@@ -30,11 +32,6 @@ Mesh::Mesh(std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* normals, st
 		_data[index++] = (*vertices)[vIndex].x;
 		_data[index++] = (*vertices)[vIndex].y;
 		_data[index++] = (*vertices)[vIndex].z;
-
-		// Colour
-		_data[index++] = 0.0f;
-		_data[index++] = 0.0f;
-		_data[index++] = 0;
 
 		// Tex
 		_data[index++] = 0.0f;
@@ -49,9 +46,7 @@ Mesh::Mesh(std::vector<glm::vec3>* vertices, std::vector<glm::vec3>* normals, st
 
 	_material.diffuseColour = colour;
 
-	Initialise(DataFormatEnum::DataColourTexNorm);
-
-	SetPosition(pos.x, pos.y, pos.z);
+	Initialise(DataFormatEnum::DataTexNorm);
 }
 
 Mesh::~Mesh() 

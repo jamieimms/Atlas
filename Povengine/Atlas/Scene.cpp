@@ -2,6 +2,7 @@
 #include "glew.h"
 #include "IO.h"
 #include "..\AtlasAPI\AtlasAPIHelper.h"
+#include "EntityInstance.h"
 
 using namespace Atlas;
 
@@ -9,6 +10,7 @@ using namespace Atlas;
 Scene::Scene(std::string name)
 	:_name(name)
 {
+	_isLoaded = false;
 	//AddText(std::string("Atlas Engine Test 2017.12. "), 20, 40, FontStyleEnum::Normal);
 
 	//AddText(std::string("Total entities: "), 20, 60, FontStyleEnum::Normal);
@@ -22,7 +24,6 @@ bool Scene::Initialise( Subsystems subsystems)
 	_identity = glm::mat4();
 	_zeroVec = glm::vec3(0, 0, 0);
 
-	_isLoaded = false;
 
 	return true;
 }
@@ -83,7 +84,7 @@ void Scene::SetCamera(glm::vec3 pos, glm::vec3 target)
 /// <summary>
 /// Add an entity (holder) object to the scene
 /// </summary>
-void Scene::AddEntity(EntityHolder* entity)
+void Scene::AddEntity(EntityInstance* entity)
 {
 	_entities.push_back(entity);
 }
@@ -140,21 +141,37 @@ void Scene::PlaySound(unsigned int soundID)
 ///
 void Scene::AddMesh(std::string& meshName, EntityCreateInfo& info)
 {
-	std::vector<glm::vec3>* verts = new std::vector<glm::vec3>();
-	std::vector<glm::vec3>* norms = new std::vector<glm::vec3>();
-	std::vector<unsigned short>* indices = new std::vector<unsigned short>();
-	std::vector<unsigned short>* normalIndices = new std::vector<unsigned short>();
+	Mesh* mesh = _subsystems._geometry->GetMesh(meshName);
+	Material mat;
+	mat.diffuseColour = info.colour;
 
-	IO::ParseObjFile(IO::GetModelDirectory() + meshName, verts, norms, indices, normalIndices);
-	auto mesh = new Mesh(verts, norms, indices, normalIndices, info.pos, info.colour, _subsystems._shaderManager->GetShaderByName("lighting"));
-	mesh->SetUniformScale(info.uniformScale);
-	auto eh = new EntityHolder();
-	eh->Initialise(mesh);
-	_entities.push_back(eh);
-	delete normalIndices;
-	delete indices;
-	delete norms;
-	delete verts;
+	if (mesh != nullptr) {
+		auto ei = new EntityInstance();
+		ei->Initialise(info.id, mesh);
+		ei->SetPosition(info.pos);
+		ei->SetUniformScale(info.uniformScale);
+		ei->SetMaterial(mat);
+
+		_entities.push_back(ei);
+		return;
+	}
+
+	std::vector<glm::vec3> verts;
+	std::vector<glm::vec3> norms;
+	std::vector<unsigned short> indices;
+	std::vector<unsigned short> normalIndices;
+	
+	IO::ParseObjFile(IO::GetModelDirectory() + meshName, &verts, &norms, &indices, &normalIndices);
+	mesh = new Mesh(meshName, &verts, &norms, &indices, &normalIndices, info.colour, _subsystems._shaderManager->GetShaderByName("lighting"));
+	_subsystems._geometry->AddMesh(mesh);
+	
+	auto ei = new EntityInstance();
+	ei->Initialise(info.id, mesh);
+	ei->SetUniformScale(info.uniformScale);
+	ei->SetPosition(info.pos);
+	ei->SetMaterial(mat);
+
+	_entities.push_back(ei);
 }
 
 ///
@@ -313,7 +330,8 @@ void Scene::DrawScene(glm::mat4 proj, glm::mat4 proj2D)
 			tmp->UpdateFromPhysics(_subsystems._phys);
 		}
 
-		if (entity->IsVisible()) {
+		if (i->IsVisible()) {
+			i->PrepareEntity();
 			entity->Render(view, proj, _cam.GetPosition(), _lights);
 		}
 	}
@@ -341,6 +359,20 @@ Sprite* Scene::GetSpriteById(std::string& id)
 	}
 
 	return nullptr;
+}
+
+EntityInstance* Scene::GetEntityById(std::string& id)
+{
+	for (auto i : _entities)
+	{
+		if (i == nullptr) {
+			continue;
+		}
+
+		if (i->GetID() == id) {
+			return i;
+		}
+	}
 }
 
 

@@ -3,7 +3,7 @@
 using namespace Atlas;
 
 FiniteEntity::FiniteEntity(unsigned int lifeSeconds)
-	:EntityHolder()
+	:EntityInstance()
 {
 	_lifeSeconds = lifeSeconds;
 

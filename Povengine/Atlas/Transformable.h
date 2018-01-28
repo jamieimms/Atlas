@@ -19,6 +19,7 @@ namespace Atlas
 		void SetUniformScale(float scale);
 		void SetScale(float x, float y, float z);
 		void SetPosition(float x, float y, float z);
+		void SetPosition(glm::vec3 pos);
 		void SetRotation(float x, float y, float z);
 
 		glm::mat4 GetTransform();

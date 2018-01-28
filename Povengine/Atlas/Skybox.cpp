@@ -16,26 +16,26 @@ Skybox::Skybox(float size, glm::vec3 pos, Shader* shader, unsigned int* textureI
 	
 	this->SetPosition(pos.x, pos.y, pos.z);
 
-	_bk = new Plane(size, pos.x, pos.y, pos.z - size, shader);
+	_bk = new Plane(size, pos.x, pos.y, pos.z - size, shader, 1);
 	_bk->SetRotation(glm::radians(90.0f), 0, glm::radians(180.0f));
 	_bk->SetTexture(textureIDs[0]);
-	_ft = new Plane(size, pos.x, pos.y, pos.z + size, shader);
+	_ft = new Plane(size, pos.x, pos.y, pos.z + size, shader, 1);
 	_ft->SetRotation(glm::radians(90.0f), 0, 0);
 	_ft->SetTexture(textureIDs[1]);
-	_lt = new Plane(size, pos.x - size, pos.y, pos.z, shader);
+	_lt = new Plane(size, pos.x - size, pos.y, pos.z, shader, 1);
 	_lt->SetRotation(glm::radians(90.0f), 0, glm::radians(90.0f));
 	_lt->SetTexture(textureIDs[2]);
-	_rt = new Plane(size, pos.x + size, pos.y, pos.z, shader);
+	_rt = new Plane(size, pos.x + size, pos.y, pos.z, shader, 1);
 	_rt->SetRotation(glm::radians(90.0f),0,glm::radians(-90.0f));
 	_rt->SetTexture(textureIDs[3]);
-	_up = new Plane(size, pos.x, pos.y + size, pos.z, shader);
+	_up = new Plane(size, pos.x, pos.y + size, pos.z, shader, 1);
 	_up->SetRotation(0, 0, 0);
 	_up->SetTexture(textureIDs[4]);
-	_dn = new Plane(size, pos.x, pos.y - size, pos.z, shader);
+	_dn = new Plane(size, pos.x, pos.y - size, pos.z, shader, 1);
 	_dn->SetRotation(0, 0, glm::radians(180.0f));
 	_dn->SetTexture(textureIDs[5]);
 	
-	Initialise(DataFormatEnum::DataColourTexNorm);
+	Initialise(DataFormatEnum::Data);
 }
 
 Skybox::~Skybox()
@@ -62,8 +62,6 @@ void Skybox::Initialise(DataFormatEnum dataFormat)
 {
 	_dead = false;
 	_dataFormat = dataFormat;
-
-	SetVisibility(true);
 }
 
 
