@@ -172,15 +172,6 @@ void Camera::MoveForward()
 	_forward = true;
 	_backpedal = false;
 	_lastForward = std::chrono::high_resolution_clock::now();
-
-	//_activeMove = true;
-	//Update();
-
-	//glm::vec3 forward(_viewMat[0][2], _viewMat[1][2], _viewMat[2][2]);
-
-	//_camPos += (-CAM_MOVE_FACTOR * forward) * _currentSpeed;
-	//_camTarget += (-CAM_MOVE_FACTOR * forward) * _currentSpeed;
-	//_needsUpdate = true;
 }
 
 /// <summary>
@@ -191,15 +182,6 @@ void Camera::Backpedal()
 	_backpedal = true;
 	_forward = false;
 	_lastForward = std::chrono::high_resolution_clock::now();
-
-	//_activeMove = true;
-	//Update();
-
-	//glm::vec3 forward(_viewMat[0][2], _viewMat[1][2], _viewMat[2][2]);
-
-	//_camPos += (CAM_MOVE_FACTOR * forward) * _currentSpeed;
-	//_camTarget += (CAM_MOVE_FACTOR * forward) * _currentSpeed;
-	//_needsUpdate = true;
 }
 
 /// <summary>

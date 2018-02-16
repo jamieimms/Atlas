@@ -10,5 +10,8 @@ namespace Atlas {
 		Down = 0x28,
 
 		Enter = 0x0D,
+		Shift = 0x10,
+		LShift = 0xA0,
+		RShift = 0xA1,
 	};
 }
