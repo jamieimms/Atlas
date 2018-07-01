@@ -20,12 +20,12 @@ namespace Atlas
 
 		float uniformScale;
 		int quality;
+		float lifetimeMs;
 
 		unsigned int texCount;
 		unsigned int textureID[6];
 		unsigned int texRepeat;
 		std::string id;
-
-
+		int numID;
 	};
 }

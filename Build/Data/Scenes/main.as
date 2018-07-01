@@ -3,14 +3,13 @@
 # Some are optional depending on the entity type, but should be specified in the given order
 # Format = EntityTypeID shaderID [xpos ypos zpos] [size] [quality] [textureID]-->
 <atlasscene name="main.as">
-	<bgmusic>
+	<!-- <bgmusic>
 		<sound file="test01.mp3"/>
-		<sound file="test02.mp3"/>
-	</bgmusic>
+	</bgmusic> -->
 	<script file="main.asc"/>
 	
 	<camera>
-		<position x="0" y="0.0" z="-1.0"/>
+		<position x="0" y="20.0" z="-20.0"/>
 		<target x="0" y="0.0" z="0.0"/>
 	</camera>
 		
@@ -28,21 +27,21 @@
 	
 	<entities>
 		<origin/>
-		<cone>
-			<position x="0" y="5.0" z="0.0"/>
-		</cone>
-		<plane name="ground" id="1">
-			<shader name="littex"/>
-			<position x="0" y="-0.01" z="0"/>
-			<uniformscale value="10"/>
-			<texture name="wall.jpg"/>
+		
+		<cube name="other" id="2"> 
+			<shader name="littex"/> 
+			<position x="0" y="5.0" z="0"/> 
+			<uniformscale value="1"/> 
+			<texture name="crate.jpg"/> 
+		</cube>
+		
+		<plane name="other" id="3"> 
+			<shader name="littex"/> 
+			<position x="0" y="-10.0" z="0"/> 
+			<uniformscale value="10"/> 
+			<texture name="dirt.png"/> 
 		</plane>
-		<!-- <cube name="other" id="2"> -->
-			<!-- <shader name="littex"/> -->
-			<!-- <position x="0" y="5.0" z="0"/> -->
-			<!-- <uniformscale value="1"/> -->
-			<!-- <texture name="crate.jpg"/> -->
-		<!-- </cube> -->
+		
 	</entities>
 </atlasscene>
 

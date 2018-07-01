@@ -1,10 +1,12 @@
 #pragma once
+
 namespace AtlasCheckers
 {
-	enum class MenuItemsEnum
+	enum MainMenuItemsEnum
 	{
 		NewResumeGame,
 		LoadGame,
+		Options,
 		Help,
 		Exit
 	};

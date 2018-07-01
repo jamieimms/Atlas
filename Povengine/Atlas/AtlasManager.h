@@ -46,7 +46,6 @@ namespace Atlas
 
 		std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrame;
 		double _frameDelta;
-		double _fps;
 
 		Scene* _oldScene;
 		Scene* _currentScene;

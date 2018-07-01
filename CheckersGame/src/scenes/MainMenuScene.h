@@ -1,9 +1,11 @@
 #pragma once
 // Atlas includes
-#include "..\Atlas\Scene.h"
+#include "Atlas/Scene.h"
+#include "Atlas/Input.h"
 
 // Game includes
-#include "MenuItemsEnum.h"
+#include "../enums/MainMenuItemsEnum.h"
+//#include "CheckersGameState.h"
 
 namespace AtlasCheckers
 {
@@ -13,13 +15,15 @@ namespace AtlasCheckers
 		MainMenuScene(std::string name);
 
 		// Overidden scene methods
-		virtual void UpdateScene(double& fps);
+		virtual void UpdateScene(double frameDelta);
 		virtual void SceneLoaded();
+		virtual void InputProcessing(Atlas::Input* input);
 
-		// Methods for this scene
 		void UpdateMenuSelection(bool prev);
-		MenuItemsEnum MakeSelection();
 
+		bool IsSelectionPending() { return _selectionPending; }
+		MainMenuItemsEnum GetSelection() { _selectionPending = false; return _currentMenuSelection; }
+		
 	private:
 
 		void SetSelectedLabel(Atlas::Sprite* label, bool isSelected);
@@ -30,13 +34,13 @@ namespace AtlasCheckers
 		Atlas::Sprite* _helpLabel;
 		Atlas::Sprite* _exitLabel;
 
-		MenuItemsEnum _selectedMenu;
-
-		glm::vec3 _activeColour;
-		glm::vec3 _inactiveColour;
-
 		unsigned int _sndPipId;
 		unsigned int _sndSelectId;
+
+		MainMenuItemsEnum _currentMenuSelection;
+
+		bool _selectionPending;
+
 
 	};
 }

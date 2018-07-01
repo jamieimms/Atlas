@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Povengine", "Povengine\Povengine.vcxproj", "{AED368FB-0854-4AD4-B40B-6667D7F00543}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -22,11 +22,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Atlas", "Atlas\Atlas.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AtlasAPI", "AtlasAPI\AtlasAPI.vcxproj", "{099B236C-E340-4D58-83DE-614AE2628E29}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AtlasCheckers", "AtlasCheckers\AtlasCheckers.vcxproj", "{2C759A54-0AE9-41B6-B4C1-EB479402B817}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3584BF6A-2D13-4B3D-B905-8CD6C23FDD4D} = {3584BF6A-2D13-4B3D-B905-8CD6C23FDD4D}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -38,6 +33,7 @@ Global
 		{AED368FB-0854-4AD4-B40B-6667D7F00543}.Debug|x64.ActiveCfg = Debug|x64
 		{AED368FB-0854-4AD4-B40B-6667D7F00543}.Debug|x64.Build.0 = Debug|x64
 		{AED368FB-0854-4AD4-B40B-6667D7F00543}.Debug|x86.ActiveCfg = Debug|Win32
+		{AED368FB-0854-4AD4-B40B-6667D7F00543}.Debug|x86.Build.0 = Debug|Win32
 		{AED368FB-0854-4AD4-B40B-6667D7F00543}.Release|x64.ActiveCfg = Release|x64
 		{AED368FB-0854-4AD4-B40B-6667D7F00543}.Release|x64.Build.0 = Release|x64
 		{AED368FB-0854-4AD4-B40B-6667D7F00543}.Release|x86.ActiveCfg = Release|Win32
@@ -66,16 +62,11 @@ Global
 		{099B236C-E340-4D58-83DE-614AE2628E29}.Release|x64.Build.0 = Release|x64
 		{099B236C-E340-4D58-83DE-614AE2628E29}.Release|x86.ActiveCfg = Release|Win32
 		{099B236C-E340-4D58-83DE-614AE2628E29}.Release|x86.Build.0 = Release|Win32
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Debug|x64.ActiveCfg = Debug|x64
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Debug|x64.Build.0 = Debug|x64
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Debug|x86.ActiveCfg = Debug|Win32
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Debug|x86.Build.0 = Debug|Win32
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Release|x64.ActiveCfg = Release|x64
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Release|x64.Build.0 = Release|x64
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Release|x86.ActiveCfg = Release|Win32
-		{2C759A54-0AE9-41B6-B4C1-EB479402B817}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22804A8B-9D01-4393-9097-600E56F8F3F5}
 	EndGlobalSection
 EndGlobal

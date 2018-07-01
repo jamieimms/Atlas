@@ -1,20 +1,23 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include "..\Atlas\AtlasManager.h"
-#include "..\Atlas\Win32Window.h"
+#include <string>
+#include "Atlas/AtlasManager.h"
+#include "Atlas/Win32Window.h"
+#include "Atlas/AtlasMessageBoxEnums.h"
 #include "CheckersGame.h"
-#include "..\Atlas\AtlasMessageBoxEnums.h"
 
 using namespace Atlas;
 using namespace AtlasCheckers;
+
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
 // loop. Idle time is used to render the scene.
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	std::string title = "Atlas Checkers v0.01";
-	CheckersGame game;
+	std::string title = "Checkers (Alpha)";
+	std::string baseDir = "S:\\Development\\Povengine\\CheckersGame\\";
+	CheckersGame game(baseDir);
 	AtlasManager atlasManager(&game);
 
 	Win32Window* window = (Win32Window*)atlasManager.getWindow();

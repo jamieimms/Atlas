@@ -26,28 +26,28 @@ AtlasManager::AtlasManager(AtlasGame* game)
 	fmt << AtlasAPI::AtlasAPIHelper::GetPathSeparator() << _name << ".log";
 
 	AtlasAPI::AtlasAPIHelper::EnsureDirectory(_mainDir);
-	_log = new AtlasLog(fmt.str(), false, 5);
-
-	_log->Debug("Atlas Engine Starting");
+	_subsystems._log = new AtlasLog(fmt.str(), false, 5);
 
 	_game = game;
 
-	_subsystems._shaderManager = new ShaderManager(_log, _mainDir);
-	_subsystems._input = new Input(_log);
+	_subsystems._log->Debug("Atlas Engine Starting");
+
+	_subsystems._shaderManager = new ShaderManager(_subsystems._log, _mainDir);
+	_subsystems._input = new Input(_subsystems._log);
 	
-	_subsystems._audio = new Audio(_log);
+	_subsystems._audio = new Audio(_subsystems._log);
 	if (!_subsystems._audio->Init()) {
-		_log->Error("Audio manager failed to init.");
+		_subsystems._log->Error("Audio manager failed to init.");
 	}
 
-	_subsystems._phys = new Physics(_log);
+	_subsystems._phys = new Physics(_subsystems._log);
 	if (!_subsystems._phys->initialisePhysicsEngine()) {
 		// fall over in heap. No recovering from this.
-		_log->Error("Atlas init failed.");
+		_subsystems._log->Error("Atlas init failed.");
 	}
 
-	_subsystems._texManager = new TextureManager(_log);
-	_subsystems._fonts = new Fonts(_log);
+	_subsystems._texManager = new TextureManager(_subsystems._log);
+	_subsystems._fonts = new Fonts(_subsystems._log);
 	_subsystems._geometry = new Geometry();
 
 	_lastFrame = std::chrono::high_resolution_clock::now();
@@ -60,7 +60,7 @@ AtlasManager::AtlasManager(AtlasGame* game)
 /// </summary>
 AtlasManager::~AtlasManager()
 {
-	_log->Debug("Atlas Engine Stopping");
+	_subsystems._log->Debug("Atlas Engine Stopping");
 
 	delete _currentScene;
 	delete _subsystems._geometry;
@@ -86,7 +86,7 @@ Window* AtlasManager::getWindow()
 
 	// Get different windows based on platform, currently only Win32
 #ifdef _WIN32
-	_log->Debug("Creating new (Win32) window");
+	_subsystems._log->Debug("Creating new (Win32) window");
 	_applicationWindow = new Win32Window(this);
 #endif
 #ifdef __linux__
@@ -107,7 +107,7 @@ bool AtlasManager::Initialise()
 		return false;
 	}
 
-	_log->Debug("Creating and initialising Atlas Engine");
+	_subsystems._log->Debug("Creating and initialising Atlas Engine");
 
 	_subsystems._renderer = new OpenGLRenderer();
 #ifdef _WIN32
@@ -142,7 +142,7 @@ bool AtlasManager::Initialise()
 	/*      Set the pixel format to the device context*/
 	SetPixelFormat(context, nPixelFormat, &pfd);
 	if (!_subsystems._renderer->Initialise(_applicationWindow->GetWidth(), _applicationWindow->GetHeight(), context)) {
-		_log->Debug("Win32 OpenGL renderer failed to initialise.");
+		_subsystems._log->Debug("Win32 OpenGL renderer failed to initialise.");
 	}
 #endif
 
@@ -190,15 +190,17 @@ void AtlasManager::FinishSceneChange()
 {
 	if (_oldScene != nullptr) {
 		_oldScene->Stop();
-		_oldScene->UnloadScene();
-		delete _oldScene;
+		//_oldScene->UnloadScene();
+		//delete _oldScene;
 		_oldScene = nullptr;
 	}
 
 	_subsystems._audio->StopAllSounds();
 
-	SceneParser::ParseSceneFile(_nextScene, IO::GetSceneDirectory() + _nextScene->GetName(), _subsystems);
-	Scene* temp = _currentScene;
+	if (!_nextScene->IsLoaded()) {
+		SceneParser::ParseSceneFile(_nextScene, IO::GetSceneDirectory() + _nextScene->GetName(), _subsystems);
+	}
+	Scene* temp = _currentScene;	// This is the loading screen at this point
 	
 	_currentScene = _nextScene;
 	_currentScene->Start();
@@ -263,14 +265,12 @@ void AtlasManager::frameProcessing()
 	std::chrono::duration<double> elapsedSec = frameTime - _lastFrame;
 	_frameDelta = elapsedSec.count();
 
-	_fps = 1.0f / _frameDelta;
-
 	// Update game state
 	inputProcessing();
 
-	_game->UpdateGame();
+	_game->UpdateGame(_frameDelta);
 
-	_currentScene->UpdateScene(_fps);
+	_currentScene->UpdateScene(_frameDelta);
 
 	_subsystems._phys->doFrame(_frameDelta);
 
@@ -335,9 +335,9 @@ void AtlasManager::inputProcessing()
 	//if (_subsystems._input->IsToggleKeyPressed(VK_F3)) {
 	//}
 	
-	if (_subsystems._input->IsKeyPressed(VK_ESCAPE)) {
-		exit(0);
-	}
+	//if (_subsystems._input->IsKeyPressed(VK_ESCAPE)) {
+	//	exit(0);
+	//}
 
 	if (_enableMouseLook) {
 		if (camYaw == 0 && camPitch == 0) {

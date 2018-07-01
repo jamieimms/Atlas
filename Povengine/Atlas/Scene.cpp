@@ -11,9 +11,6 @@ Scene::Scene(std::string name)
 	:_name(name)
 {
 	_isLoaded = false;
-	//AddText(std::string("Atlas Engine Test 2017.12. "), 20, 40, FontStyleEnum::Normal);
-
-	//AddText(std::string("Total entities: "), 20, 60, FontStyleEnum::Normal);
 }
 
 bool Scene::Initialise( Subsystems subsystems)
@@ -24,6 +21,15 @@ bool Scene::Initialise( Subsystems subsystems)
 	_identity = glm::mat4();
 	_zeroVec = glm::vec3(0, 0, 0);
 
+	_debugSceneNameTextID = -1;
+	_debugFPSTextID = -1;
+	_debugEntitiesTextID = -1;
+
+	std::string dummy = "dbg1";
+	std::string empty;
+	_debugSceneNameTextID = AddText(dummy, empty, 15, 20, FontStyleEnum::Normal, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top);
+	_debugFPSTextID = AddText(dummy = "dbg2", empty, subsystems._renderer->GetWidth() - 70, 20, FontStyleEnum::Normal, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top);
+	_debugEntitiesTextID = AddText(dummy = "dbg3", empty, 15, 40, FontStyleEnum::Normal, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top);
 
 	return true;
 }
@@ -73,7 +79,6 @@ bool Scene::AddSound(std::string fileName)
 	return true;
 }
 
-
 ///
 void Scene::SetCamera(glm::vec3 pos, glm::vec3 target)
 {
@@ -104,12 +109,15 @@ void Scene::AddLight(Light* light)
 /// <param name="x">x position (screen coordinates) of the text. If x is negative, text will be horizontally centred</param>
 /// <param name="y">y position (screen coordinates) of the text. If y is negative, text will be vertically centred</param>
 /// <param name="style">style of the text</param>
-void Scene::AddText(std::string& id, std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment = TextAlignmentEnum::Left, TextAlignmentEnum verticalAlignment = TextAlignmentEnum::Top)
+/// <returns>Returns the numeric index of the added text</returns>
+int Scene::AddText(std::string& id, std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment = TextAlignmentEnum::Left, TextAlignmentEnum verticalAlignment = TextAlignmentEnum::Top)
 {
 	Text* newText = new Text(text, x, y, _subsystems._fonts->GetFont(style), _subsystems._shaderManager->GetShaderByName("text"), glm::vec3(1.0f, 1.0f, 1.0f), horizontalAlignment, verticalAlignment);
 	newText->SetID(id);
 
 	_spriteEntities.push_back(newText);
+
+	return _spriteEntities.size()-1;
 }
 
 ///
@@ -182,8 +190,7 @@ void Scene::AddSprite(Sprite* sprite)
 }
 
 ///
-//
-//
+
 void Scene::Stop()
 {
 	_subsystems._audio->UnloadSound(_bgMusicId);
@@ -203,6 +210,8 @@ void Scene::RemoveEntity(BaseEntity* entity)
 //
 void Scene::UnloadScene()
 {
+	SceneUnloading();
+
 	Stop();
 
 	for (auto i : _loadedSounds) {
@@ -233,8 +242,31 @@ void Scene::UnloadScene()
 ///
 ///
 //
-void Scene::UpdateScene(double& fps)
+void Scene::UpdateScene(double frameDelta)
 {
+	static int _textClock = 0;
+
+	if (GetRuntimeMs() - _textClock > 500 || _textClock == 0) {
+		// Debug text
+		std::string newText;
+		Text *debugText = (Text*)_spriteEntities[_debugSceneNameTextID];
+		if (debugText != nullptr) {
+			newText = "Scene: " + _name;
+			debugText->SetText(newText);
+		}
+		debugText = (Text*)_spriteEntities[_debugFPSTextID];
+		if (debugText != nullptr) {
+			newText = "FPS: " + std::to_string( 1.0f / frameDelta );
+			debugText->SetText(newText);
+		}
+		debugText = (Text*)_spriteEntities[_debugEntitiesTextID];
+		if (debugText != nullptr) {
+			newText = "Total Entities : " + std::to_string(_entities.size()) + " - Sprites : " + std::to_string(_spriteEntities.size());
+			debugText->SetText(newText);
+		}
+		_textClock = GetRuntimeMs();
+	}
+
 	auto it = _entities.begin();
 	while (it != _entities.end()) {
 		if (*it == nullptr) {
@@ -264,48 +296,6 @@ void Scene::UpdateScene(double& fps)
 			it++;
 		}
 	}
-
-	//if (_sceneClock.GetElapsedMs() > 500) {
-	//	int random = rand() % 10;
-	//	double diff = (rand() % 10) / 10.0;
-	//	
-	//	// Test finite
-	//	EntityCreateInfo ei;
-	//	ei.type = EntityTypeEnum::ET_Cube;
-	//	ei.pos = glm::vec3(random - 5, 15, 0);
-	//	ei.uniformScale = diff;
-	//	ei.textureID[0] = texID;
-	//	ei.shader = _shaderManager->GetShaderByName("littex");
-	//	//FiniteEntity* shortEntity = new FiniteEntity(10);
-	//	//_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
-
-	//	random = rand() % 10;
-	//	diff = (rand() % 10) / 10.0;
-	//	ei.uniformScale = diff;
-	//	ei.pos = glm::vec3(random - 5, 15, 5);
-	//	FiniteEntity* shortEntity = new FiniteEntity(10);
-	//	_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
-
-	//	random = rand() % 10;
-	//	diff = (rand() % 10) / 10.0;
-	//	ei.uniformScale = diff;
-	//	ei.pos = glm::vec3(random - 5, 15, -5);
-	//	shortEntity = new FiniteEntity(10);
-	//	_entities.push_back(EntityFactory::CreateEntity(ei, _physicsManager, shortEntity));
-
-	//	_sceneClock.Reset();
-	//	_sceneClock.Start();
-	//}
-
-	//if (_textClock.GetElapsedMs() > 100) {
-	//	std::string info = "Scene: " + _name + ", FPS: " + std::to_string(fps);
-	//	_textItems[0]->SetText(_titleText + info);
-
-	//	std::string entityInfo = "Total entities: " + std::to_string(_entities.size());
-	//	_textItems[1]->SetText(entityInfo);
-
-	//	_textClock.Restart();
-	//}
 }
 
 ///
@@ -332,6 +322,7 @@ void Scene::DrawScene(glm::mat4 proj, glm::mat4 proj2D)
 
 		if (i->IsVisible()) {
 			i->PrepareEntity();
+			i->Update();
 			entity->Render(view, proj, _cam.GetPosition(), _lights);
 		}
 	}
@@ -391,9 +382,18 @@ SoundInfo* Scene::GetSoundByName(std::string& soundName)
 	return nullptr;
 }
 
-
 void Scene::SceneLoaded()
 {
 	_isLoaded = true;
+
+}
+
+void Scene::SceneUnloading()
+{
+
+}
+
+void Scene::InputProcessing(Input* input)
+{
 
 }

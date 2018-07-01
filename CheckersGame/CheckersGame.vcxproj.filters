@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{f3f970b1-113e-45d1-a729-b348cd705466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\scenes">
+      <UniqueIdentifier>{edd56c5b-d6b5-40ee-93bc-a906ad2de730}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\scenes\MainMenuScene.cpp">
+      <Filter>src\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CheckersGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\GameScene.cpp" />
+    <ClCompile Include="src\CheckersGameState.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\scenes\MainMenuScene.h">
+      <Filter>src\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CheckersGame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enums\MainMenuItemsEnum.h" />
+    <ClInclude Include="src\CheckersGameState.h" />
+    <ClInclude Include="src\enums\GameStatesEnum.h" />
+    <ClInclude Include="src\scenes\GameScene.h" />
+    <ClInclude Include="src\scenes\scenes.h" />
+  </ItemGroup>
+</Project>

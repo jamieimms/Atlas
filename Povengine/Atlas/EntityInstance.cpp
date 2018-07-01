@@ -43,7 +43,7 @@ void EntityInstance::SetMaterial(Material& mat)
 /// </summary>
 void EntityInstance::PrepareEntity()
 {
-	_internalEntity->SetScale(GetScaleX(), GetScaleY(), GetScaleZ());
-	_internalEntity->SetPosition(GetPosition());
+	//_internalEntity->SetScale(GetScaleX(), GetScaleY(), GetScaleZ());
+	//_internalEntity->SetPosition(GetPosition());
 	_internalEntity->SetMaterial(_material);
 }

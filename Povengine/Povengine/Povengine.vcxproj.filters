@@ -21,9 +21,15 @@
     <ClCompile Include="TerraFormaGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TerraFormaGame.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

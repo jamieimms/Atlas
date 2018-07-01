@@ -209,6 +209,9 @@ LRESULT Win32Window::wmSizeHandler(WPARAM wParam, LPARAM lParam)
 	auto height = HIWORD(lParam);
 	auto width = LOWORD(lParam);
 
+	width = width == 0 ? 100 : width;
+	height = height == 0 ? 100 : height;
+
 	_parent->windowSizeChanged(width, height);
 
 	return 0;

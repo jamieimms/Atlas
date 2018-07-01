@@ -68,7 +68,13 @@ EntityInstance* Geometry::CreateEntity(EntityCreateInfo& info, Physics* phys)
 
 	_loadedEntities.push_back(newEntity);
 
-	EntityInstance* inst = new EntityInstance();
+	EntityInstance* inst;
+	if (info.lifetimeMs > 0) {
+		inst = new FiniteEntity(info.lifetimeMs / 1000);
+	}
+	else {
+		inst = new EntityInstance();
+	}
 	inst->Initialise(info.id, newEntity);
 	inst->SetPosition(info.pos);
 	inst->SetUniformScale(info.uniformScale);

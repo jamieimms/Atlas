@@ -23,16 +23,20 @@ namespace Atlas
 
 		bool Initialise(Subsystems subsystems);
 
-		virtual void SceneLoaded();
+		// Methods we expect to be implemented by inheriting classes
+		virtual void SceneLoaded();	// Called after the base scene has loaded
+		virtual void UpdateScene(double frameDelta); // Called per-frame 
+		virtual void SceneUnloading();	// Called prior to scene unloading
+
+		virtual void InputProcessing(Input* input);
+
 		void UnloadScene();
 
 		void Start();
 		void Stop();
 
-		virtual void UpdateScene(double& fps);
 		void DrawScene(glm::mat4 proj, glm::mat4 proj2D);
 
-		//IRenderable* GetEntity(int index) { return _entities[index]; }
 		Camera& GetCamera() { return _cam; }
 
 		void RemoveEntity(BaseEntity* entity);
@@ -43,7 +47,7 @@ namespace Atlas
 		void AddEntity(EntityInstance* entity);
 		void AddLight(Light* light);
 		void AddMesh(std::string& meshName, EntityCreateInfo& info);
-		void AddText(std::string& id, std::string& text, int x, int y , FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment);
+		int AddText(std::string& id, std::string& text, int x, int y , FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment);
 		void AddSprite(Sprite* sprite);
 
 		std::string GetName() { return _name; }
@@ -62,6 +66,9 @@ namespace Atlas
 		bool _isLoaded;
 
 		Camera _cam;
+
+		Subsystems _subsystems;
+
 	private:
 
 		bool _initialised;
@@ -70,9 +77,6 @@ namespace Atlas
 		std::vector<EntityInstance*> _entities; // Entities contained within instances (things that need to be updated regularly but are not rendered, game objects etc.)
 		std::vector<Light*> _lights;
 		std::vector<SoundInfo*> _loadedSounds;
-
-
-		Subsystems _subsystems;
 
 		AtlasUtil::AtlasStopwatch _sceneClock;
 		AtlasUtil::AtlasStopwatch _textClock;
@@ -85,5 +89,9 @@ namespace Atlas
 
 		std::string _name;
 		std::string _titleText;
+
+		int _debugSceneNameTextID;
+		int _debugFPSTextID;
+		int _debugEntitiesTextID;
 	};
 }

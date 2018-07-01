@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseManager.h"
 #include "AtlasKey.h"
+#include "../AtlasUtil/AtlasStopwatch.h"
 
 namespace Atlas
 {
@@ -8,6 +9,8 @@ namespace Atlas
 	{
 		bool pressed;
 		bool hasToggled;
+		AtlasUtil::AtlasStopwatch toggleTimer;
+		double toggleRepeat;
 	};
 
 	class Input : protected BaseManager
@@ -23,7 +26,7 @@ namespace Atlas
 
 		void ResetMouseInput();
 
-		bool IsKeyPressed(const unsigned int keyID) const;
+		bool IsKeyPressed(const unsigned int keyID, double noRepeat = 0);
 		bool IsToggleKeyPressed(const unsigned int keyID);
 
 		int GetMouseX() { return _mouseX; }

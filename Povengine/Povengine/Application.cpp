@@ -13,7 +13,8 @@ using namespace TerraForma;
 //--------------------------------------------------------------------------------------
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-	TerraFormaGame game;
+	std::string baseDir = "S:\\Development\\Povengine\\Build";
+	TerraFormaGame game(baseDir);
 	AtlasManager atlasManager(&game);
 
 	Win32Window* window = (Win32Window*)atlasManager.getWindow();

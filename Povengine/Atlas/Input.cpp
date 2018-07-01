@@ -8,6 +8,8 @@ Input::Input(AtlasUtil::AtlasLog* log)
 	for (int i = 0; i < 256; i++) {
 		_keyStates[i].hasToggled = false;
 		_keyStates[i].pressed = false;
+		_keyStates[i].toggleRepeat = 0;
+		_keyStates[i].toggleTimer.Reset();
 	}
 
 	_sensitivity = 3.0f;
@@ -37,15 +39,37 @@ void Input::HandleKeyPress(unsigned int keyID, bool isDown)
 ///	Get the pressed state of the given key
 /// </summary>
 /// <param name="keyID">ID of the key to set/unset</param>
-/// <param name="isDown">bool indicating if the new key state is down or up</param>
+/// <param name="toggleRepeat">specify in milliseconds when this key can be triggered again (default 0 = immediately)</param>
 /// <returns>true if key is pressed, otherwise false. False if invalid key</returns>
-bool Input::IsKeyPressed(const unsigned int keyID) const
+bool Input::IsKeyPressed(const unsigned int keyID,  double toggleRepeat)
 {
 	if (keyID >= 256) {
 		return false;
 	}
 
-	return _keyStates[keyID].pressed;
+	KeyState* key = &_keyStates[keyID];
+
+	if (!key->pressed) {
+		return false;
+	}
+
+	if (key->toggleTimer.IsRunning()) {
+		if (key->toggleRepeat <= key->toggleTimer.GetElapsedMs()) {
+			key->toggleRepeat = toggleRepeat;
+			key->toggleTimer.Restart();
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	if (toggleRepeat > 0) {
+		key->toggleRepeat = toggleRepeat;
+		key->toggleTimer.Start();
+	}
+
+	return true;
 }
 
 /// <summary>

@@ -13,7 +13,6 @@ const char* SceneParser::SP_EL_UI = "ui";
 const char* SceneParser::SP_EL_LIGHTS = "lights";
 const char* SceneParser::SP_EL_SNDS = "sounds";
 
-
 /// Atlas scene child elements
 const char* SceneParser::SP_EL_TEXT = "text";
 const char* SceneParser::SP_EL_SPRITE = "sprite";
@@ -40,44 +39,53 @@ const char* SceneParser::SP_ATTR_HEIGHT = "height";
 
 //
 //
-Scene* SceneParser::ParseSceneFile(Scene* emptyScene, std::string& path, Subsystems& subsystems)
+//
+Scene* SceneParser::ParseSceneFile(Scene* sceneToFill, std::string& path, Subsystems& subsystems)
 {
+	subsystems._log->Debug("ParseSceneFile: Starting to parse scene file: " + path);
+
 	XMLError returnCode;
 
 	XMLDocument doc;
 	returnCode = doc.LoadFile(path.c_str());
 
 	if (returnCode != XMLError::XML_SUCCESS) {
+		subsystems._log->Error("ParseSceneFile: Failed to load scene file. Not a valid file format.");
 		return nullptr;
 	}
 
 	auto root = doc.FirstChildElement(SP_ASROOT);
 
 	if (root == nullptr) {
-		// Doesn't seem to be an atlas scene file. Bail.
+		subsystems._log->Error("ParseSceneFile: Failed to load scene file. It may be corrupt.");
 		return nullptr;
 	}
 
-	//Scene* newScene = new Scene(root->FirstAttribute()->Value(), subsystems);
-	if (emptyScene == nullptr) {
+	if (sceneToFill == nullptr) {
+		subsystems._log->Error("ParseSceneFile: Failed to load scene. Must supply a scene to fill.");
 		return nullptr;
 	}
 
-	emptyScene->Initialise(subsystems);
+	// TODO: Version the scene file format?
+
+	sceneToFill->Initialise(subsystems);
 	
 	auto sceneElement = root->FirstChildElement();
 
 	while (sceneElement != nullptr) {
-		if (!ParseElement(emptyScene, sceneElement, subsystems)) {
-			// There was an error parsing the scene file. Bail.
+		if (!ParseElement(sceneToFill, sceneElement, subsystems)) {
+			// TODO: This currently will never be hit. Add some error checking into ParseElement
 			return nullptr;
 		}
 		sceneElement = sceneElement->NextSiblingElement();
 	}
 
-	emptyScene->SceneLoaded();
+	sceneToFill->SceneLoaded();
 
-	return emptyScene;
+	subsystems._log->Debug("ParseSceneFile: Scene is loaded.");
+
+
+	return sceneToFill;
 }
 
 /// <summary>

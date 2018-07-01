@@ -25,6 +25,8 @@
 using namespace AtlasAPI;
 using namespace std;
 
+std::string AtlasAPIHelper::basePath = "";
+
 // Time functions
 std::string AtlasAPIHelper::GetCurrentTimeODBC()
 {
@@ -93,17 +95,7 @@ std::string AtlasAPIHelper::GetUserDataPath()
 ///
 std::string AtlasAPIHelper::GetDataPath()
 {
-	string path;
-#ifdef _WIN32
-
-	//path = "S:\\Development\\Povengine\\Build";
-	path = "S:\\Development\\Povengine\\Build\\AtlasCheckers";
-	//wchar_t buf[MAX_PATH];
-	//GetCurrentDirectory(MAX_PATH, buf);
-	//path = ConvertUTF16ToUTF8(buf);
-#endif
-
-	return path + GetPathSeparator() + "Data" + GetPathSeparator();
+	return basePath + GetPathSeparator() + "Data" + GetPathSeparator();
 }
 
 //

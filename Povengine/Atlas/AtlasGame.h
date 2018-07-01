@@ -9,18 +9,16 @@ namespace Atlas
 	class AtlasGame
 	{
 	public:
-		AtlasGame() {}
+		AtlasGame(std::string& baseDirectory);
 		~AtlasGame() {}
 
 		virtual bool InitialiseGame() = 0;
 
 		virtual Scene* GetPendingScene() = 0;
 
-		virtual void InputProcessing(const Input* input) = 0;
+		virtual void InputProcessing(Input* input) = 0;
 
-		virtual void UpdateGame() = 0;
-
-	private:
+		virtual void UpdateGame(double frameDelta) = 0;
 
 	};
 }
