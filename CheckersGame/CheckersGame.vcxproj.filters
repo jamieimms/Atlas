@@ -33,5 +33,6 @@
     <ClInclude Include="src\enums\GameStatesEnum.h" />
     <ClInclude Include="src\scenes\GameScene.h" />
     <ClInclude Include="src\scenes\scenes.h" />
+    <ClInclude Include="src\enums\Direction2D.h" />
   </ItemGroup>
 </Project>

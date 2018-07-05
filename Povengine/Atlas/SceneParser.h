@@ -47,6 +47,10 @@ namespace Atlas
 		static const char* SP_ATTR_Z;
 		static const char* SP_ATTR_RPT;
 
+		// Atlas physics attributes
+		static const char* SP_ATTR_PHYSENABLE;
+		static const char* SP_ATTR_PHYSMASS;
+
 		// 2D Sprite (including text) attributes
 		static const char* SP_ATTR_CONTENT;
 		static const char* SP_ATTR_STYLE;

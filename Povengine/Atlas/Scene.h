@@ -47,16 +47,17 @@ namespace Atlas
 		void AddEntity(EntityInstance* entity);
 		void AddLight(Light* light);
 		void AddMesh(std::string& meshName, EntityCreateInfo& info);
-		int AddText(std::string& id, std::string& text, int x, int y , FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment);
+		int AddText(std::string& id, std::string& text, int x, int y , FontStyleEnum style, TextAlignmentEnum horizontalAlignment, TextAlignmentEnum verticalAlignment, bool visible);
 		void AddSprite(Sprite* sprite);
 
 		std::string GetName() { return _name; }
 		bool IsLoaded() { return _isLoaded; }
 
 	protected:
-		Sprite* GetSpriteById(std::string& id);
-		SoundInfo* GetSoundByName(std::string& soundName);
-		EntityInstance* GetEntityById(std::string& id);
+		Text * GetTextById(const std::string& id);
+		Sprite* GetSpriteById(const std::string& id);
+		SoundInfo* GetSoundByName(const std::string& soundName);
+		EntityInstance* GetEntityById(const std::string& id);
 
 		double GetRuntimeMs() { return _sceneClock.GetElapsedMs(); }
 		double GetRuntimeSec() { return _sceneClock.GetElapsedSec(); }

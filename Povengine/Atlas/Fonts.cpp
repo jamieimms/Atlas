@@ -73,15 +73,21 @@ bool Fonts::LoadFont(std::string fontPath, FontStyleEnum style)
 
 	unsigned int fontSize = 12;
 	switch (style) {
+	case FontStyleEnum::XSmall:
+		fontSize = 6;
+		break;
 	case FontStyleEnum::Small:
 		fontSize = 8;
 		break;
-	case FontStyleEnum::Normal:
+	case FontStyleEnum::Medium:
 		fontSize = 14;
 		break;
-	case FontStyleEnum::Big:
+	case FontStyleEnum::Large:
+		fontSize = 18;
+		break;
+	case FontStyleEnum::XLarge:
 		fontSize = 32;
-			break;
+		break;
 	case FontStyleEnum::Title:
 		fontSize = 64;
 	}
@@ -97,7 +103,7 @@ bool Fonts::LoadFont(std::string fontPath, FontStyleEnum style)
 
 ///
 ///
-void Fonts::StringToGlyph(std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font, unsigned int& width, unsigned int& height)
+void Fonts::StringToGlyph(const std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font, unsigned int& width, unsigned int& height)
 {
 	glyphIndices.clear();
 

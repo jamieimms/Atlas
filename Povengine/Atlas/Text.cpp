@@ -79,7 +79,7 @@ namespace Atlas
 	// Sets the text string of this text object; this is done by converting the string characters into
 	// glyph indices.
 	/// </summary>
-	void Text::SetText(std::string& text)
+	void Text::SetText(const std::string& text)
 	{
 		_totalWidth = 0;
 		_totalHeight = 0;

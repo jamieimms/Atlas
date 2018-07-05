@@ -12,11 +12,11 @@ namespace Atlas
 	public:
 		EntityCreateInfo();
 
-
 		EntityTypeEnum type;
 		glm::vec3 pos;
 		glm::vec3 colour;
 		Shader* shader;
+		bool visible;
 
 		float uniformScale;
 		int quality;
@@ -27,5 +27,9 @@ namespace Atlas
 		unsigned int texRepeat;
 		std::string id;
 		int numID;
+
+		// Physics properties
+		bool enablePhysics;
+		float mass;
 	};
 }

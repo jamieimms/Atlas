@@ -30,6 +30,10 @@ const char* SceneParser::SP_ATTR_Y = "y";
 const char* SceneParser::SP_ATTR_Z = "z";
 const char* SceneParser::SP_ATTR_RPT = "repeat";
 
+// Atlas physics attributes
+const char* SceneParser::SP_ATTR_PHYSENABLE = "enable";
+const char* SceneParser::SP_ATTR_PHYSMASS = "mass";
+
 // Sprite attributes
 const char* SceneParser::SP_ATTR_STYLE = "style";
 const char* SceneParser::SP_ATTR_HALIGN = "horizontalalignment";
@@ -219,6 +223,19 @@ bool SceneParser::ParseEntity(Scene* scene, XMLElement* element, Subsystems& sub
 		entityInfo.texRepeat = child->IntAttribute(SP_ATTR_RPT, 1);
 	}
 
+	// Physics parameters
+	child = element->FirstChildElement("physics");
+	if (child == nullptr) {
+		entityInfo.enablePhysics = true;
+		entityInfo.mass = 1.0f;
+	}
+	else {
+		entityInfo.enablePhysics = child->BoolAttribute(SP_ATTR_PHYSENABLE, true);
+		entityInfo.mass = child->FloatAttribute(SP_ATTR_PHYSMASS, 1.0f);
+	}
+
+	entityInfo.visible = element->BoolAttribute("visible", true);
+
 	// Get the type and perform any type-specific parsing
 	if (strcmp(element->Name(), "origin") == 0) {
 		entityInfo.type = EntityTypeEnum::ET_Origin;
@@ -287,6 +304,7 @@ bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element, Subsystem
 	while (child != nullptr) {
 		if (strcmp(child->Name(), SP_EL_SPRITE) == 0) {
 
+
 			auto sp = new Sprite(child->IntAttribute(SP_ATTR_X), child->IntAttribute(SP_ATTR_Y), child->IntAttribute(SP_ATTR_WIDTH), child->IntAttribute(SP_ATTR_HEIGHT), subsystems._shaderManager->GetShaderByName("texture"));
 			sp->SetID(std::string(child->Attribute(SP_ATTR_ID)));
 
@@ -295,6 +313,8 @@ bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element, Subsystem
 			if (innerChild != nullptr) {
 				sp->SetTexture(subsystems._texManager->LoadTexture(IO::GetTextureDirectory() + innerChild->Attribute(SP_ATTR_NAME)));
 			}
+
+			sp->SetVisibility(child->BoolAttribute("visible", true));
 
 			scene->AddSprite(sp);
 		}
@@ -312,7 +332,7 @@ bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element, Subsystem
 			auto hAlign = hAlignStr == nullptr ? TextAlignmentEnum::Left : ParseAlignment(std::string(hAlignStr));
 			auto vAlign = vAlignStr == nullptr ? TextAlignmentEnum::Top : ParseAlignment(std::string(vAlignStr));
 
-			scene->AddText(std::string(child->Attribute(SP_ATTR_ID)), std::string(child->Attribute(SP_ATTR_VAL)), child->IntAttribute(SP_ATTR_X, 0), child->IntAttribute(SP_ATTR_Y, 0), style, hAlign, vAlign);
+			scene->AddText(std::string(child->Attribute(SP_ATTR_ID)), std::string(child->Attribute(SP_ATTR_VAL)), child->IntAttribute(SP_ATTR_X, 0), child->IntAttribute(SP_ATTR_Y, 0), style, hAlign, vAlign, child->BoolAttribute("visible", true));
 		}
 		child = child->NextSiblingElement();
 	}
@@ -323,16 +343,26 @@ bool SceneParser::ParseUI(Scene* scene, tinyxml2::XMLElement* element, Subsystem
 
 FontStyleEnum SceneParser::ParseTextStyle(std::string& style)
 {
-	if (style == "small") {
+	if (style == "xsmall") {
+		return FontStyleEnum::XSmall;
+	}
+	else if (style == "small") {
 		return FontStyleEnum::Small;
 	}
-	else if (style == "big") {
-		return FontStyleEnum::Big;
+	else if (style == "medium") {
+		return FontStyleEnum::Medium;
+	}
+	else if (style == "large") {
+		return FontStyleEnum::Large;
+	}
+	else if (style == "xlarge") {
+		return FontStyleEnum::XLarge;
 	}
 	else if (style == "title") {
 		return FontStyleEnum::Title;
 	}
-	return FontStyleEnum::Normal;
+
+	return FontStyleEnum::Medium;
 }
 
 TextAlignmentEnum SceneParser::ParseAlignment(std::string& alignment)

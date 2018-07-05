@@ -150,9 +150,11 @@ bool AtlasManager::Initialise()
 	
 	std::string fontName = AtlasAPI::AtlasAPIHelper::GetDataPath() + "Roboto-Regular.ttf";
 
+	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::XSmall);
 	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Small);
-	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Normal);
-	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Big);
+	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Medium);
+	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Large);
+	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::XLarge);
 	_subsystems._fonts->LoadFont(fontName, FontStyleEnum::Title);
 
 	AtlasAPI::AtlasAPIHelper::GetTicks();

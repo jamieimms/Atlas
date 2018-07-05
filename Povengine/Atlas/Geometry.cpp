@@ -39,7 +39,7 @@ EntityInstance* Geometry::CreateEntity(EntityCreateInfo& info, Physics* phys)
 	case EntityTypeEnum::ET_Cube:
 	{
 		auto c = new Cube(info.uniformScale, info.pos, info.shader);
-		c->SetPhysicsProperties(phys, true, 1.0f, info.uniformScale, info.uniformScale, info.uniformScale);
+		c->SetPhysicsProperties(phys, info.enablePhysics, info.mass, info.uniformScale, info.uniformScale, info.uniformScale);
 		newEntity = c;
 		break;
 	}
@@ -49,7 +49,7 @@ EntityInstance* Geometry::CreateEntity(EntityCreateInfo& info, Physics* phys)
 	case EntityTypeEnum::ET_Plane:
 	{
 		auto p = new Plane(info.uniformScale, info.pos.x, info.pos.y, info.pos.z, info.shader, info.texRepeat);
-		p->SetPhysicsProperties(phys, true, 0.0f, info.uniformScale, 0.1f, info.uniformScale);
+		p->SetPhysicsProperties(phys, info.enablePhysics, info.mass, info.uniformScale, 0.1f, info.uniformScale);
 		newEntity = p;
 		break;
 	}

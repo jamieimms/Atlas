@@ -16,7 +16,7 @@ namespace Atlas
 
 		virtual void Render(glm::mat4& view, glm::mat4& proj, glm::vec3& cameraPos, std::vector<Light*>& lights);
 
-		void SetText(std::string& text);
+		void SetText(const std::string& text);
 		void AdjustAlignment(const unsigned int containerWidth, const unsigned int containerHeight);
 
 	private:

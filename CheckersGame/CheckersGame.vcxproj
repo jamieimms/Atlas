@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="src\CheckersGame.h" />
     <ClInclude Include="src\CheckersGameState.h" />
+    <ClInclude Include="src\enums\Direction2D.h" />
     <ClInclude Include="src\enums\GameStatesEnum.h" />
     <ClInclude Include="src\enums\MainMenuItemsEnum.h" />
     <ClInclude Include="src\scenes\GameScene.h" />

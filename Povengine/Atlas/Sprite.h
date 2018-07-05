@@ -21,11 +21,16 @@ namespace Atlas
 
 		void SetColour(glm::vec3 newColour);
 
+		virtual void SetVisibility(bool isVisible) { _visible = isVisible; }
+		bool IsVisible() { return _visible; }
+
 	protected:
 		float _x;
 		float _y;
 
 		float _width;
 		float _height;
+
+		bool _visible;
 	};
 }

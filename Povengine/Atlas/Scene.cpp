@@ -27,9 +27,9 @@ bool Scene::Initialise( Subsystems subsystems)
 
 	std::string dummy = "dbg1";
 	std::string empty;
-	_debugSceneNameTextID = AddText(dummy, empty, 15, 20, FontStyleEnum::Normal, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top);
-	_debugFPSTextID = AddText(dummy = "dbg2", empty, subsystems._renderer->GetWidth() - 70, 20, FontStyleEnum::Normal, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top);
-	_debugEntitiesTextID = AddText(dummy = "dbg3", empty, 15, 40, FontStyleEnum::Normal, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top);
+	_debugSceneNameTextID = AddText(dummy, empty, 15, 20, FontStyleEnum::Medium, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top, true);
+	_debugFPSTextID = AddText(dummy = "dbg2", empty, subsystems._renderer->GetWidth() - 70, 20, FontStyleEnum::Medium, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top, true);
+	_debugEntitiesTextID = AddText(dummy = "dbg3", empty, 15, 40, FontStyleEnum::Medium, Atlas::TextAlignmentEnum::Left, Atlas::TextAlignmentEnum::Top, true);
 
 	return true;
 }
@@ -110,10 +110,12 @@ void Scene::AddLight(Light* light)
 /// <param name="y">y position (screen coordinates) of the text. If y is negative, text will be vertically centred</param>
 /// <param name="style">style of the text</param>
 /// <returns>Returns the numeric index of the added text</returns>
-int Scene::AddText(std::string& id, std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment = TextAlignmentEnum::Left, TextAlignmentEnum verticalAlignment = TextAlignmentEnum::Top)
+int Scene::AddText(std::string& id, std::string& text, int x, int y, FontStyleEnum style, TextAlignmentEnum horizontalAlignment = TextAlignmentEnum::Left, TextAlignmentEnum verticalAlignment = TextAlignmentEnum::Top, bool visible = true)
 {
 	Text* newText = new Text(text, x, y, _subsystems._fonts->GetFont(style), _subsystems._shaderManager->GetShaderByName("text"), glm::vec3(1.0f, 1.0f, 1.0f), horizontalAlignment, verticalAlignment);
 	newText->SetID(id);
+
+	newText->SetVisibility(visible);
 
 	_spriteEntities.push_back(newText);
 
@@ -316,12 +318,13 @@ void Scene::DrawScene(glm::mat4 proj, glm::mat4 proj2D)
 		auto entity = i->GetEntity();
 
 		PhysicsEntity* tmp = dynamic_cast<PhysicsEntity*>(entity);
-		if (tmp != nullptr) {
-			tmp->UpdateFromPhysics(_subsystems._phys);
-		}
 
 		if (i->IsVisible()) {
 			i->PrepareEntity();
+			
+			if (tmp != nullptr && tmp->IsPhysicsEnabled()) {
+				tmp->UpdateFromPhysics(_subsystems._phys);
+			}
 			i->Update();
 			entity->Render(view, proj, _cam.GetPosition(), _lights);
 		}
@@ -333,11 +336,30 @@ void Scene::DrawScene(glm::mat4 proj, glm::mat4 proj2D)
 			continue;
 		}
 
-		i->Render(_identity, proj2D, glm::vec3(0,0,0), _lights);
+		if (i->IsVisible()) {
+			i->Render(_identity, proj2D, glm::vec3(0, 0, 0), _lights);
+		}
 	}
 }
 
-Sprite* Scene::GetSpriteById(std::string& id)
+Text* Scene::GetTextById(const std::string& id)
+{
+	for (auto i : _spriteEntities) {
+		if (i == nullptr) {
+			continue;
+		}
+
+		if (i->GetID() == id) {
+			// Ensure we don't return non-text entities
+			auto textSprite = dynamic_cast<Text*>(i);
+			return textSprite;
+		}
+	}
+
+	return nullptr;
+}
+
+Sprite* Scene::GetSpriteById(const std::string& id)
 {
 	for (auto i : _spriteEntities) {
 		if (i == nullptr) {
@@ -352,7 +374,7 @@ Sprite* Scene::GetSpriteById(std::string& id)
 	return nullptr;
 }
 
-EntityInstance* Scene::GetEntityById(std::string& id)
+EntityInstance* Scene::GetEntityById(const std::string& id)
 {
 	for (auto i : _entities)
 	{
@@ -367,7 +389,7 @@ EntityInstance* Scene::GetEntityById(std::string& id)
 }
 
 
-SoundInfo* Scene::GetSoundByName(std::string& soundName)
+SoundInfo* Scene::GetSoundByName(const std::string& soundName)
 {
 
 	for (auto s : _loadedSounds) {

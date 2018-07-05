@@ -20,7 +20,7 @@ namespace Atlas
 
 		bool LoadFont(std::string fontPath, FontStyleEnum style);
 
-		static void StringToGlyph(std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font, unsigned int& width, unsigned int& height);
+		static void StringToGlyph(const std::string& text, std::vector<unsigned int>& glyphIndices, const Font* font, unsigned int& width, unsigned int& height);
 
 		Font* GetFont(FontStyleEnum style);
 

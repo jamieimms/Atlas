@@ -21,8 +21,6 @@ CheckersGame::CheckersGame(std::string& basePath)
 /// </summary>
 bool CheckersGame::InitialiseGame()
 {
-	//SetState(PlayStateEnum::MainMenu);
-
 	_gameTick.Start();
 	_lastStateCheck = 0;
 
@@ -61,10 +59,7 @@ void CheckersGame::InputProcessing(Input* input)
 		else {
 			_pendingScene = _mainMenuScene;
 		}
-	
 	}
-
-
 }
 
 /// <summary>
@@ -82,6 +77,9 @@ void CheckersGame::UpdateGame(double frameDelta)
 					}
 					_pendingScene = _gameScene;
 					break;
+				case MainMenuItemsEnum::Help:
+					_mainMenuScene->ShowHelp();
+					break;
 				case MainMenuItemsEnum::Exit:
 					exit(0);
 					break;
@@ -90,7 +88,6 @@ void CheckersGame::UpdateGame(double frameDelta)
 		}
 		_lastStateCheck = _gameTick.GetElapsedMs();
 	}
-
 }
 
 
